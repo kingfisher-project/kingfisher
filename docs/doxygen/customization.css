@@ -1,0 +1,221 @@
+/*
+ * Kingfisher customization for Doxygen Awesome.
+ *
+ * Loaded after doxygen-awesome.css and built on its CSS variables. The
+ * palette is taken from docs/logo/logo_kingfisher.svg and matches
+ * docs/source/_static/css/kingfisher.css:
+ *
+ *   teal    #005D82
+ *   navy    #04364A
+ *   orange  #D34305
+ */
+
+/* -- Light mode ----------------------------------------------------------- */
+
+html {
+  --primary-color: #005D82;
+  --primary-dark-color: #04364A;
+  --primary-light-color: #3D8FAE;
+
+  --page-background-color: #FFFFFF;
+  --page-foreground-color: #252525;
+  --page-secondary-foreground-color: #5F6B70;
+  --separator-color: #D5DDE0;
+
+  /* Room for long signatures and template parameters. */
+  --content-maxwidth: 1150px;
+
+  --border-radius-small: 4px;
+  --border-radius-medium: 6px;
+  --border-radius-large: 8px;
+
+  --fragment-background: #F4F8FA;
+  --fragment-foreground: #252525;
+  --code-background: #F4F8FA;
+  --code-foreground: #04364A;
+
+  --tablehead-background: #04364A;
+  --tablehead-foreground: #FFFFFF;
+
+  --side-nav-background: #F4F8FA;
+  --side-nav-foreground: #252525;
+  --searchbar-background: #F4F8FA;
+
+  --blockquote-background: #E6F0F4;
+  --blockquote-foreground: #252525;
+
+  --warning-color: #D34305;
+  --warning-color-dark: #A93604;
+  --warning-color-darker: #7F2803;
+
+  --top-height: 60px;
+}
+
+/* -- Dark mode ------------------------------------------------------------ */
+
+/* Defined twice, as in doxygen-awesome.css: once for the system setting and
+ * once for the toggle. */
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light-mode) {
+    color-scheme: dark;
+
+    --primary-color: #5BB8DA;
+    --primary-dark-color: #8FD0E8;
+    --primary-light-color: #005D82;
+
+    --page-background-color: #0B1A21;
+    --page-foreground-color: #E8EEF0;
+    --page-secondary-foreground-color: #A9B8BE;
+    --separator-color: #23404C;
+
+    --fragment-background: #022633;
+    --fragment-foreground: #E8EEF0;
+    --code-background: #022633;
+    --code-foreground: #E8EEF0;
+
+    --tablehead-background: #04364A;
+    --tablehead-foreground: #FFFFFF;
+
+    --side-nav-background: #04364A;
+    --side-nav-foreground: #E8EEF0;
+    --searchbar-background: #04364A;
+
+    --blockquote-background: #0F2A35;
+    --blockquote-foreground: #E8EEF0;
+
+    --warning-color: #F0703A;
+    --warning-color-dark: #D34305;
+    --warning-color-darker: #A93604;
+  }
+}
+
+html.dark-mode {
+  color-scheme: dark;
+
+  --primary-color: #5BB8DA;
+  --primary-dark-color: #8FD0E8;
+  --primary-light-color: #005D82;
+
+  --page-background-color: #0B1A21;
+  --page-foreground-color: #E8EEF0;
+  --page-secondary-foreground-color: #A9B8BE;
+  --separator-color: #23404C;
+
+  --fragment-background: #022633;
+  --fragment-foreground: #E8EEF0;
+  --code-background: #022633;
+  --code-foreground: #E8EEF0;
+
+  --tablehead-background: #04364A;
+  --tablehead-foreground: #FFFFFF;
+
+  --side-nav-background: #04364A;
+  --side-nav-foreground: #E8EEF0;
+  --searchbar-background: #04364A;
+
+  --blockquote-background: #0F2A35;
+  --blockquote-foreground: #E8EEF0;
+
+  --warning-color: #F0703A;
+  --warning-color-dark: #D34305;
+  --warning-color-darker: #A93604;
+}
+
+/* -- Header --------------------------------------------------------------- */
+
+#top {
+  border-bottom: 4px solid #D34305;
+}
+
+#projectname {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+#projectbrief {
+  opacity: 0.88;
+}
+
+/* The logo has black linework, so give it a light disc in dark mode. */
+#projectlogo img {
+  background: #FFFFFF;
+  border-radius: 50%;
+}
+
+/* -- Typography ----------------------------------------------------------- */
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+h2 {
+  border-bottom: 2px solid var(--separator-color);
+  padding-bottom: 0.35em;
+}
+
+a:hover,
+a:focus {
+  color: var(--warning-color);
+}
+
+/* -- Navigation tree ------------------------------------------------------ */
+
+#nav-tree .selected {
+  border-left: 3px solid #D34305;
+}
+
+/* -- Code and member documentation ---------------------------------------- */
+
+div.fragment,
+.memproto {
+  border-left: 3px solid #D34305;
+}
+
+div.fragment {
+  border-radius: 4px;
+}
+
+.memname,
+.paramname {
+  font-weight: 600;
+}
+
+div.line {
+  line-height: 1.55;
+}
+
+/* Keep theme colors off equations. */
+.MathJax,
+.mjx-chtml,
+mjx-container {
+  color: inherit;
+}
+
+.dotgraph {
+  border-radius: 6px;
+}
+
+/* -- Scrollbar ------------------------------------------------------------ */
+
+/* HTML_EXTRA_STYLESHEET drops Doxygen's default scrollbar styling. */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--side-nav-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5F6B70;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}

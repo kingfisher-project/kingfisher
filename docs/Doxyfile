@@ -1,0 +1,57 @@
+# Doxygen configuration for Kingfisher.
+#
+# Only settings that differ from Doxygen's defaults are listed. Paths are
+# relative to docs/, which is where `pixi run docs-doxygen` runs Doxygen.
+#
+# Output:
+#   _build/html/doxygen  full HTML reference, published at <site>/doxygen/
+#   _build/doxygen-xml   XML read by Breathe for the Sphinx "C++ API" pages
+
+PROJECT_NAME           = Kingfisher
+PROJECT_BRIEF          = "Spectral element radiation transport"
+PROJECT_LOGO           = logo/logo_kingfisher.svg
+PROJECT_ICON           = logo/logo_kingfisher.svg
+OUTPUT_DIRECTORY       = _build
+STRIP_FROM_PATH        = ..
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_PRIV_VIRTUAL   = YES
+
+QUIET                  = YES
+WARN_IF_INCOMPLETE_DOC = YES
+WARN_FORMAT            = "$file:$line: $text"
+WARN_LOGFILE           = _build/doxygen-warnings.log
+
+INPUT                  = ../README.md \
+                         ../include \
+                         ../src
+FILE_PATTERNS          = *.h \
+                         *.hpp \
+                         *.cc \
+                         *.cpp \
+                         *.md
+RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = ../README.md
+
+SOURCE_BROWSER         = YES
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html/doxygen
+HTML_EXTRA_STYLESHEET  = doxygen/doxygen-awesome.css \
+                         doxygen/customization.css
+HTML_COLORSTYLE        = TOGGLE
+DISABLE_INDEX          = YES
+GENERATE_TREEVIEW      = YES
+FULL_SIDEBAR           = YES
+USE_MATHJAX            = YES
+MATHJAX_VERSION        = MathJax_4
+
+GENERATE_LATEX         = NO
+
+GENERATE_XML           = YES
+XML_OUTPUT             = doxygen-xml
+
+HAVE_DOT               = YES
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES

@@ -2,6 +2,11 @@
 Kingfisher is a deterministic spectral element radiation transport code built on [mfem](https://github.com/mfem/mfem/).
 This project is currently being developed by Liam Pohlmann at the University of Illinois Urbana-Champaign.
 
+[![Docs](https://github.com/kingfisher-project/kingfisher/actions/workflows/docs.yml/badge.svg)](https://github.com/kingfisher-project/kingfisher/actions/workflows/docs.yml)
+
+## Documentation
+The documentation is at <https://kingfisher-project.github.io/kingfisher/>. To build it locally, run `pixi run docs` and open `docs/_build/html/index.html`.
+
 ## Installation
 
 ## License

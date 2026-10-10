@@ -66,6 +66,9 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+# documentation build output
+docs/_build/
+
 # pixi environments
 .pixi/*
 !.pixi/config.toml
