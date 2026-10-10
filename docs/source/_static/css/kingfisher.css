@@ -7,13 +7,30 @@
 
 /* -- Sidebar logo --------------------------------------------------------- */
 
-/* The logo has black linework, so it sits on a light disc in both modes. */
-.sidebar-logo {
+/* The logo has black linework, so it sits on a light disc in both modes.
+ * The disc is the container; --kf-logo-scale is the logo's width as a
+ * fraction of the disc's diameter. */
+.sidebar-logo-container {
+  --kf-disc-size: 170px;
+  --kf-logo-scale: 0.9;
+
+  width: var(--kf-disc-size);
+  max-width: 100%;
+  aspect-ratio: 1;
+  margin-left: auto;
+  margin-right: auto;
   background: #FFFFFF;
   border-radius: 50%;
-  box-sizing: border-box;
-  max-width: 160px;
-  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-logo {
+  width: calc(var(--kf-logo-scale) * 100%);
+  margin: 0;
+  /* The artwork sits left of and above center in the file. */
+  transform: translate(3%, 2%);
 }
 
 .sidebar-brand-text {
