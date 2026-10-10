@@ -20,13 +20,13 @@ fmt = ">=12.2.0,<13"
 
 [feature.docs.dependencies]
 sphinx = ">=8.2.3,<9"
-sphinx_rtd_theme = ">=3.1.0,<4"
 myst-parser = ">=5.1.0,<6"
 breathe = ">=5.1.0,<6"
 sphinxcontrib-bibtex = ">=2.7.0,<3"
 sphinx-copybutton = ">=0.5.2,<0.6"
 sphinx-design = ">=0.7.0,<0.8"
 sphinx-autobuild = ">=2025.8.25,<2026"
+furo = ">=2025.12.19,<2026"
 
 [feature.docs.tasks]
 docs-doxygen = { cmd = "dot -c && mkdir -p _build/html && doxygen Doxyfile", cwd = "docs" }

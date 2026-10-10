@@ -75,7 +75,7 @@ bibtex_default_style = "unsrt"
 
 # -- HTML output -------------------------------------------------------------
 
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
 html_title = f"Kingfisher {release} documentation"
 html_logo = "../logo/logo_kingfisher.svg"
 html_favicon = "../logo/logo_kingfisher.svg"
@@ -83,21 +83,50 @@ html_static_path = ["_static"]
 html_css_files = ["css/kingfisher.css"]
 html_show_sphinx = False
 
-html_theme_options = {
-    "logo_only": False,
-    # The logo has black linework, so it sits on a white header.
-    "style_nav_header_background": "#FFFFFF",
-    "collapse_navigation": False,
-    "navigation_depth": 3,
-    "prev_next_buttons_location": "bottom",
-    "style_external_links": True,
-}
+# Palette taken from docs/logo/logo_kingfisher.svg. Furo follows the reader's
+# system light/dark setting and offers a toggle; these are its two palettes.
+# docs/doxygen/customization.css uses the same colors for the Doxygen pages.
+_TEAL = "#005D82"
+_NAVY = "#04364A"
+_ORANGE = "#D34305"
 
-# "Edit on GitHub" link in the top right of every page.
-html_context = {
-    "display_github": True,
-    "github_user": "kingfisher-project",
-    "github_repo": "kingfisher",
-    "github_version": "main",
-    "conf_py_path": "/docs/source/",
+html_theme_options = {
+    "light_css_variables": {
+        "color-brand-primary": _TEAL,
+        "color-brand-content": _TEAL,
+        "color-brand-visited": _TEAL,
+        "color-foreground-primary": "#252525",
+        "color-foreground-secondary": "#5F6B70",
+        "color-background-primary": "#FFFFFF",
+        "color-background-secondary": "#F4F8FA",
+        "color-background-hover": "#E6F0F4",
+        "color-background-border": "#D5DDE0",
+        "color-link--hover": _ORANGE,
+        "color-link-underline--hover": _ORANGE,
+        "color-inline-code-background": "#F4F8FA",
+        "kf-heading": _NAVY,
+        "kf-accent": _ORANGE,
+        "kf-table-head": _NAVY,
+    },
+    "dark_css_variables": {
+        "color-brand-primary": "#5BB8DA",
+        "color-brand-content": "#5BB8DA",
+        "color-brand-visited": "#5BB8DA",
+        "color-foreground-primary": "#E8EEF0",
+        "color-foreground-secondary": "#A9B8BE",
+        "color-background-primary": "#0B1A21",
+        "color-background-secondary": "#06222D",
+        "color-background-hover": "#0F3442",
+        "color-background-border": "#23404C",
+        "color-link--hover": "#F0703A",
+        "color-link-underline--hover": "#F0703A",
+        "color-inline-code-background": "#022633",
+        "kf-heading": "#E8EEF0",
+        "kf-accent": "#F0703A",
+        "kf-table-head": _NAVY,
+    },
+    # "Edit this page" link on every page.
+    "source_repository": "https://github.com/kingfisher-project/kingfisher/",
+    "source_branch": "main",
+    "source_directory": "docs/source/",
 }

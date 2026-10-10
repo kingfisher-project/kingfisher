@@ -1,267 +1,68 @@
 /*
- * Kingfisher overrides for sphinx_rtd_theme.
+ * Kingfisher additions to the Furo theme.
  *
- * The palette is taken from docs/logo/logo_kingfisher.svg. Change a color
- * here and in docs/doxygen/customization.css to keep both sites in step.
+ * Colors come from Furo's variables and the --kf-* variables, which are set
+ * for light and dark mode in html_theme_options in docs/source/conf.py.
  */
 
-:root {
-  --kf-teal: #005D82;        /* bird's back: links, active items, table heads */
-  --kf-navy: #04364A;        /* shadowed plumage: sidebar, headings */
-  --kf-navy-deep: #022633;   /* sidebar hover and nested levels */
-  --kf-orange: #D34305;      /* breast: accents, hover, warnings */
-  --kf-teal-tint: #E6F0F4;   /* note bodies, table stripes */
-  --kf-orange-tint: #FBECE6; /* warning bodies */
-  --kf-text: #252525;
-  --kf-muted: #5F6B70;
-  --kf-rule: #D5DDE0;
-}
+/* -- Sidebar logo --------------------------------------------------------- */
 
-/* -- Page ----------------------------------------------------------------- */
-
-body,
-.rst-content {
-  color: var(--kf-text);
-}
-
-.wy-nav-content {
-  max-width: 900px;
-}
-
-.wy-nav-content-wrap,
-.wy-body-for-nav {
+/* The logo has black linework, so it sits on a light disc in both modes. */
+.sidebar-logo {
   background: #FFFFFF;
+  border-radius: 50%;
+  box-sizing: border-box;
+  max-width: 160px;
+  padding: 6px;
 }
 
-.rst-content h1,
-.rst-content h2,
-.rst-content h3,
-.rst-content h4,
-.rst-content h5,
-.rst-content h6 {
-  color: var(--kf-navy);
-}
-
-.rst-content h2 {
-  border-bottom: 1px solid var(--kf-rule);
-  padding-bottom: 0.3em;
-}
-
-a,
-.rst-content a {
-  color: var(--kf-teal);
-}
-
-a:hover,
-.rst-content a:hover {
-  color: var(--kf-orange);
-}
-
-a:visited,
-.rst-content a:visited {
-  color: var(--kf-teal);
-}
-
-/* -- Sidebar -------------------------------------------------------------- */
-
-.wy-nav-side {
-  background: var(--kf-navy);
-}
-
-.wy-side-nav-search {
-  border-bottom: 4px solid var(--kf-orange);
-}
-
-.wy-side-nav-search > a,
-.wy-side-nav-search > a:visited,
-.wy-side-nav-search .wy-dropdown > a {
-  color: var(--kf-navy);
+.sidebar-brand-text {
+  color: var(--kf-heading);
   font-weight: 700;
-  font-size: 1.25rem;
 }
 
-.wy-side-nav-search > a:hover {
-  background: transparent;
-  color: var(--kf-teal);
+/* -- Headings ------------------------------------------------------------- */
+
+article h1,
+article h2,
+article h3,
+article h4 {
+  color: var(--kf-heading);
 }
 
-.wy-side-nav-search > a img.logo {
-  display: block;
-  width: 150px;
-  max-width: 100%;
-  margin: 0 auto 0.4em;
-}
-
-.wy-side-nav-search > div.version {
-  color: var(--kf-muted);
-}
-
-.wy-side-nav-search input[type="text"] {
-  border: 1px solid var(--kf-rule);
-  border-radius: 4px;
-  box-shadow: none;
-}
-
-.wy-side-nav-search input[type="text"]:focus {
-  border-color: var(--kf-teal);
-}
-
-.wy-menu-vertical a {
-  color: #E3EDF1;
-}
-
-.wy-menu-vertical a:hover {
-  background: var(--kf-navy-deep);
-  color: #FFFFFF;
-}
-
-.wy-menu-vertical p.caption,
-.wy-menu-vertical header {
-  color: #7FC1DB;
-}
-
-.wy-menu-vertical li.current {
-  background: #F4F8FA;
-}
-
-.wy-menu-vertical li.current > a,
-.wy-menu-vertical li.on a {
-  background: #FFFFFF;
-  color: var(--kf-navy);
-  border-left: 4px solid var(--kf-orange);
-  border-top: none;
-  border-bottom: none;
-}
-
-.wy-menu-vertical li.current a {
-  color: var(--kf-navy);
-  border-right: none;
-}
-
-.wy-menu-vertical li.current a:hover {
-  background: var(--kf-teal-tint);
-  color: var(--kf-navy);
-}
-
-.wy-menu-vertical li.toctree-l2.current > a,
-.wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a {
-  background: var(--kf-teal-tint);
-}
-
-/* Top bar shown on narrow screens. */
-.wy-nav-top {
-  background: var(--kf-navy);
-  border-bottom: 3px solid var(--kf-orange);
-}
-
-.wy-nav-top a {
-  color: #FFFFFF;
-}
-
-/* -- Admonitions ---------------------------------------------------------- */
-
-.rst-content .admonition,
-.rst-content .note,
-.rst-content .seealso,
-.rst-content .hint,
-.rst-content .tip,
-.rst-content .important {
-  background: var(--kf-teal-tint);
-}
-
-.rst-content .admonition > .admonition-title,
-.rst-content .note > .admonition-title,
-.rst-content .seealso > .admonition-title,
-.rst-content .hint > .admonition-title,
-.rst-content .tip > .admonition-title,
-.rst-content .important > .admonition-title {
-  background: var(--kf-teal);
-}
-
-.rst-content .warning,
-.rst-content .caution,
-.rst-content .attention,
-.rst-content .danger,
-.rst-content .error {
-  background: var(--kf-orange-tint);
-}
-
-.rst-content .warning > .admonition-title,
-.rst-content .caution > .admonition-title,
-.rst-content .attention > .admonition-title,
-.rst-content .danger > .admonition-title,
-.rst-content .error > .admonition-title {
-  background: var(--kf-orange);
+article h2 {
+  border-bottom: 1px solid var(--color-background-border);
+  padding-bottom: 0.3em;
 }
 
 /* -- Code ----------------------------------------------------------------- */
 
-.rst-content div[class^="highlight"] {
-  border: 1px solid var(--kf-rule);
-  border-left: 3px solid var(--kf-orange);
-  border-radius: 4px;
-}
-
-.rst-content code.literal,
-.rst-content tt.literal {
-  color: var(--kf-navy);
-  background: #F4F8FA;
-  border-color: var(--kf-rule);
-}
-
-/* C++ signatures rendered by Breathe. */
-html.writer-html4 .rst-content dl:not(.docutils) > dt,
-html.writer-html5 .rst-content dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.citation):not(.glossary):not(.simple) > dt {
-  background: var(--kf-teal-tint);
-  color: var(--kf-navy);
-  border-top-color: var(--kf-teal);
+article div[class*="highlight-"] > .highlight {
+  border-left: 3px solid var(--kf-accent);
 }
 
 /* -- Tables --------------------------------------------------------------- */
 
-.rst-content table.docutils thead th,
-.wy-table thead th {
-  background: var(--kf-navy);
+article table.docutils thead th {
+  background: var(--kf-table-head);
   color: #FFFFFF;
-  border-color: var(--kf-navy);
 }
 
-.rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td,
-.wy-table-striped tr:nth-child(2n-1) td {
-  background: #F4F8FA;
-}
-
-/* Let wide tables wrap instead of scrolling sideways. */
-.wy-table-responsive table td,
-.wy-table-responsive table th {
-  white-space: normal;
-}
-
-/* -- Buttons and footer --------------------------------------------------- */
-
-.btn-neutral {
-  background: #F4F8FA !important;
-  color: var(--kf-navy) !important;
-}
-
-.btn-neutral:hover {
-  background: var(--kf-teal-tint) !important;
-}
-
-footer {
-  color: var(--kf-muted);
-}
-
-/* -- Landing page --------------------------------------------------------- */
+/* -- Cards (sphinx-design) ------------------------------------------------ */
 
 .sd-card {
-  border-color: var(--kf-rule);
+  background: var(--color-background-secondary);
+  border-color: var(--color-background-border);
 }
 
 .sd-card:hover {
-  border-color: var(--kf-teal);
+  border-color: var(--color-brand-primary);
 }
 
 .sd-card .sd-card-title {
-  color: var(--kf-navy);
+  color: var(--kf-heading);
+}
+
+.sd-card .sd-card-text {
+  color: var(--color-foreground-primary);
 }

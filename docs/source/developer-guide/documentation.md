@@ -58,4 +58,4 @@ Cite a reference from `references.bib` with `` {cite}`key` ``, and link to a cla
 
 ## Appearance
 
-The site's colors are set in `docs/source/_static/css/kingfisher.css`, and the Doxygen reference's in `docs/doxygen/customization.css`. Both take their palette from the logo; change a color in both files to keep the two in step.
+The site uses the [Furo](https://pradyunsg.me/furo/) theme, which follows the reader's system light or dark setting and has a toggle at the top of each page. Its light and dark palettes are set in `html_theme_options` in `docs/source/conf.py`, with a few additions in `docs/source/_static/css/kingfisher.css`. The Doxygen reference is styled separately in `docs/doxygen/customization.css`. All three take their colors from the logo; change a color in each to keep them in step.
