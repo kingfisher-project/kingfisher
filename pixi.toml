@@ -11,3 +11,9 @@ dev = "cmake --workflow --preset dev"
 release = "cmake --workflow --preset release"
 
 [dependencies]
+cmake = ">=4.4.4,<5"
+ninja = ">=1.13.2,<2"
+doxygen = ">=1.18.0,<2"
+graphviz = ">=14.1.2,<15"
+gtest = ">=1.18.0,<2"
+fmt = ">=12.2.0,<13"
