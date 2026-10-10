@@ -1,0 +1,13 @@
+[workspace]
+authors = ["Liam Pohlmann <liam.pohlmann@gmail.com>"]
+channels = ["conda-forge"]
+name = "kingfisher"
+platforms = ["linux-64","osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+debug = "cmake --workflow --preset build-debug"
+dev = "cmake --workflow --preset dev"
+release = "cmake --workflow --preset release"
+
+[dependencies]
