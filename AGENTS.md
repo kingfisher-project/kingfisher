@@ -46,7 +46,7 @@ in `tests/CMakeLists.txt`.
 - `main` is the integration branch. Pull requests target `main`.
 - Create a feature branch off `main`, open a PR, and fill in
   `.github/pull_request_template.md`.
-- CI runs the build and tests (`ci.yml`), a clang-format check
+- CI runs the build and tests (`ci.yml`), clang-format and clang-tidy checks
   (`format-check.yml`), the docs build (`docs.yml`), and an automatic Claude
   review (`claude-code-review.yml`).
 
@@ -71,6 +71,8 @@ The full style guide is `docs/source/developer-guide/style.md`. In short:
 
 - Formatting is `.clang-format` (Google base style), checked in CI with
   clang-format 18.
+- Naming and common bug and performance problems are checked by `.clang-tidy`,
+  run in CI with clang-tidy 18.
 - Header guards are `KINGFISHER_<PATH>_<FILE>_H_`.
 - Public APIs have Doxygen comments.
 

@@ -9,7 +9,7 @@ How to propose a change to Kingfisher.
 3. Open a pull request against `main` and fill in the template, including the AI Assistance section.
 4. CI then runs automatically:
    - **CI** builds Kingfisher and runs the tests (`cmake --workflow --preset debug`).
-   - **C++ Format Check** checks the changed files with clang-format 18. Add the `cpp-format-suggest` label to get the fixes as inline suggestions.
+   - **C++ Format and Lint Check** checks the changed files with clang-format 18 and clang-tidy 18. Add the `cpp-format-suggest` label to get the fixes as inline suggestions.
    - **Docs** builds the documentation.
    - **Claude Code Review** posts a review once the pull request is opened or marked ready for review. The review criteria are in `.claude/skills/reviewing-kingfisher-code/SKILL.md`.
 5. Address the review comments. To get a new Claude review after pushing changes, comment `@claude review` on the pull request.

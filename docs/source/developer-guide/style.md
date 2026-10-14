@@ -12,6 +12,22 @@ $ clang-format -i src/*.cc include/kingfisher/*.h tests/*.cc
 
 Most editors can run clang-format on save using the same `.clang-format` file.
 
+## Linting
+
+The `.clang-tidy` file at the root of the repository enforces the [naming](#naming) rules below and catches common bugs and performance problems, such as a loop variable or parameter that is copied when a reference would do. CI runs clang-tidy 18 on the changed files of every pull request. To run it locally, install clang-tidy 18 (for example `sudo apt install clang-tidy-18`) and point it at a configured build directory:
+
+```console
+$ clang-tidy -p build/dev src/sweep_operator.cc
+```
+
+clang-tidy can't tell an accessor from any other method, so it accepts `snake_case` for all methods. Only use `snake_case` for accessors and mutators, as in the table below.
+
+If a warning is wrong for a particular line, silence that check alone and say why:
+
+```cpp
+double* data = buffer.GetData();  // NOLINT(bugprone-...): reason
+```
+
 ## Naming
 
 | Kind | Convention | Example |

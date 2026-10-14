@@ -96,7 +96,10 @@ Every change in behavior must be tested. Missing tests for new behavior is a
   state or fixed file paths outside `TEST_DIR`)?
 
 ### C++ Style (Google C++ Style Guide)
-- Naming:
+- Naming. CI runs clang-tidy (`.clang-tidy`), which checks the case of most
+  names, so focus on what it can't check: whether `snake_case` methods are
+  really simple accessors or mutators, file names, header guards, and whether
+  names are clear and consistent with the rest of the codebase.
   - `PascalCase` for types and for functions and methods.
   - `snake_case` for variables and parameters.
   - `snake_case_` (trailing underscore) for class data members; plain
@@ -105,7 +108,8 @@ Every change in behavior must be tested. Missing tests for new behavior is a
   - `snake_case` for namespaces; `KINGFISHER_UPPER_CASE` for macros.
   - `snake_case.cc` / `snake_case.h` file names; tests are `*_test.cc`.
 - Header guards are `KINGFISHER_<PATH>_<FILE>_H_`.
-- Is the code clang-format clean (`.clang-format`, Google base style)?
+- Is the code clang-format clean (`.clang-format`, Google base style)? Are
+  `NOLINT` comments limited to one check and justified?
 - C++20 idioms where they help (`std::span`, concepts, ranges, designated
   initializers), without novelty for its own sake.
 - Are the changes (API design, naming, abstractions, file organization)
