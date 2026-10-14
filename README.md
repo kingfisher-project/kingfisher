@@ -1,4 +1,6 @@
 [![Docs](https://github.com/kingfisher-project/kingfisher/actions/workflows/docs.yml/badge.svg)](https://github.com/kingfisher-project/kingfisher/actions/workflows/docs.yml)
+[![C++ Format and Lint](https://github.com/kingfisher-project/kingfisher/actions/workflows/format-check.yml/badge.svg)](https://github.com/kingfisher-project/kingfisher/actions/workflows/format-check.yml)
+[![Build and Test](https://github.com/kingfisher-project/kingfisher/actions/workflows/ci.yml/badge.svg)](https://github.com/kingfisher-project/kingfisher/actions/workflows/ci.yml)
 
 # Kingfisher: Spectral Element Radiation Transport Code
 Kingfisher is a deterministic spectral element radiation transport code built on [mfem](https://github.com/mfem/mfem/).
