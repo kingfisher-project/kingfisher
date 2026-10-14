@@ -28,9 +28,9 @@ To build it locally, you need a C++ compiler plus the following packages:
 All of them are in the conda environment `docs/environment.yml`. The Python packages alone are also in `docs/requirements.txt` for pip. Then build the site:
 
 ```console
-$ conda env create -f docs/environment.yml
-$ conda activate kingfisher-docs
-$ cmake --workflow --preset docs
+conda env create -f docs/environment.yml
+conda activate kingfisher-docs
+cmake --workflow --preset docs
 ```
 
 and open `build/docs/docs/html/index.html`.
