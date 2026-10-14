@@ -19,6 +19,8 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
     )
 endif()
 
+include(cmake/CPM.cmake)
+
 include(CTest)
 enable_testing()
 

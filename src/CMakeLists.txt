@@ -1,7 +1,7 @@
 # src/CMakeLists.txt
 
-find_package(fmt REQUIRED)
-find_package(rapidyaml REQUIRED)
+CPMAddPackage("gh:fmtlib/fmt#12.2.0")
+CPMAddPackage("gh:biojppm/rapidyaml@0.16.0")
 
 add_library(
 	kingfisher_lib
@@ -18,5 +18,5 @@ target_sources(kingfisher_lib PRIVATE ${SOURCES})
 add_executable(kingfisher main.cc)
 target_compile_features(kingfisher PRIVATE cxx_std_20)
 target_include_directories(kingfisher PRIVATE ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(kingfisher PRIVATE kingfisher_lib fmt::fmt rapidyaml::rapidyaml)
+target_link_libraries(kingfisher PRIVATE kingfisher_lib fmt::fmt ryml::ryml)
 
