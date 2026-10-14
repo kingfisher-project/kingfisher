@@ -25,19 +25,15 @@ jobs:
       # here. A future build-and-test workflow (cmake --workflow --preset
       # debug) should set CPM_SOURCE_CACHE and cache that directory with
       # actions/cache so MFEM isn't downloaded on every run.
-      - uses: actions/setup-python@v5
+      # The same conda environment as for local builds; see docs/environment.yml.
+      - uses: mamba-org/setup-micromamba@v2
         with:
-          python-version: "3.12"
-          cache: pip
-          cache-dependency-path: docs/requirements.txt
+          environment-file: docs/environment.yml
+          cache-environment: true
 
-      - name: Install documentation tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y doxygen graphviz ninja-build
-          pip install -r docs/requirements.txt
-
+      # A login shell is needed for the environment to be active.
       - name: Build docs
+        shell: bash -el {0}
         run: cmake --workflow --preset docs
 
       - name: Upload artifact

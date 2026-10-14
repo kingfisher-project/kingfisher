@@ -1,7 +1,8 @@
 # Python packages for building the documentation:
 #   pip install -r docs/requirements.txt
 # Doxygen and Graphviz are also needed; install them with the system package
-# manager.
+# manager. docs/environment.yml has these packages too, along with Doxygen,
+# Graphviz, CMake, and Ninja, for conda. Keep the versions in the two files in step.
 sphinx>=8.2.3,<9
 myst-parser>=5.1.0,<6
 breathe>=5.1.0,<6

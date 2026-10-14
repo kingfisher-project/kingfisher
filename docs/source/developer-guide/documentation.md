@@ -4,13 +4,39 @@ This site is built with [Sphinx](https://www.sphinx-doc.org) from the Markdown f
 
 ## Building locally
 
-Building the docs is optional and needs a few tools that the code build doesn't. Install the Python packages into a virtual environment or conda environment:
+Building the docs is optional and needs a few tools that the code build doesn't:
+
+| Package | Version |
+|---|---|
+| [CMake](https://cmake.org) | ≥ 3.25 |
+| [Ninja](https://ninja-build.org) | ≥ 1.13.2 |
+| [Doxygen](https://www.doxygen.nl) | ≥ 1.18.0 |
+| [Graphviz](https://graphviz.org) | ≥ 14.1.2 |
+| [Python](https://www.python.org) | ≥ 3.11 |
+| [Sphinx](https://www.sphinx-doc.org) | ≥ 8.2.3, < 9 |
+| [myst-parser](https://myst-parser.readthedocs.io) | ≥ 5.1.0, < 6 |
+| [breathe](https://breathe.readthedocs.io) | ≥ 5.1.0, < 6 |
+| [sphinxcontrib-bibtex](https://sphinxcontrib-bibtex.readthedocs.io) | ≥ 2.7.0, < 3 |
+| [sphinx-copybutton](https://sphinx-copybutton.readthedocs.io) | ≥ 0.5.2, < 0.6 |
+| [sphinx-design](https://sphinx-design.readthedocs.io) | ≥ 0.7.0, < 0.8 |
+| [sphinx-autobuild](https://github.com/sphinx-doc/sphinx-autobuild) | ≥ 2025.8.25 |
+| [furo](https://pradyunsg.me/furo/) | ≥ 2025.12.19 |
+
+A C++ compiler is also needed, because CMake checks for one when configuring. The Doxygen theme, [doxygen-awesome-css](https://github.com/jothepro/doxygen-awesome-css), is downloaded by CPM.
+
+The easiest way to get all of these is the conda environment in `docs/environment.yml`:
+
+```console
+$ conda env create -f docs/environment.yml
+$ conda activate kingfisher-docs
+```
+
+Alternatively, install the Python packages with pip, into a virtual environment for example, and the rest with your system package manager:
 
 ```console
 $ pip install -r docs/requirements.txt
+$ sudo apt install doxygen graphviz   # or: brew install doxygen graphviz
 ```
-
-and [Doxygen](https://www.doxygen.nl) and [Graphviz](https://graphviz.org) with your system package manager (for example `apt install doxygen graphviz` or `brew install doxygen graphviz`). The Doxygen theme, [doxygen-awesome-css](https://github.com/jothepro/doxygen-awesome-css), is downloaded by CPM.
 
 Then build the site:
 

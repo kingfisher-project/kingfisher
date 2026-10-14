@@ -1,0 +1,26 @@
+# Conda environment with everything needed to build the documentation:
+#   conda env create -f docs/environment.yml
+#   conda activate kingfisher-docs
+#   cmake --workflow --preset docs
+#
+# Keep the Python package versions in step with docs/requirements.txt.
+name: kingfisher-docs
+channels:
+  - conda-forge
+dependencies:
+  # Build tools
+  - cmake >=3.25
+  - ninja >=1.13.2
+  # API reference
+  - doxygen >=1.18.0
+  - graphviz >=14.1.2
+  # Sphinx and its extensions
+  - python >=3.11
+  - sphinx >=8.2.3,<9
+  - myst-parser >=5.1.0,<6
+  - breathe >=5.1.0,<6
+  - sphinxcontrib-bibtex >=2.7.0,<3
+  - sphinx-copybutton >=0.5.2,<0.6
+  - sphinx-design >=0.7.0,<0.8
+  - sphinx-autobuild >=2025.8.25
+  - furo >=2025.12.19
