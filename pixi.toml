@@ -17,6 +17,7 @@ doxygen = ">=1.18.0,<2"
 graphviz = ">=14.1.2,<15"
 gtest = ">=1.18.0,<2"
 fmt = ">=12.2.0,<13"
+rapidyaml = ">=0.15.0,<0.16"
 
 [feature.docs.dependencies]
 sphinx = ">=8.2.3,<9"
