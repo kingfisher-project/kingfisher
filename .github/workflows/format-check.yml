@@ -1,0 +1,55 @@
+name: C++ Format Check
+
+# Adapted from OpenMC's format-check.yml. Checks the changed C++ files against
+# .clang-format. Add the cpp-format-suggest label to a PR to get the fixes as
+# inline review suggestions.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    branches: [main]
+
+jobs:
+  cpp-linter:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: file
+          files-changed-only: true
+          tidy-checks: '-*'
+          version: '18' # clang-format version; keep in sync with style.md
+          format-review: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'cpp-format-suggest') }}
+          passive-reviews: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'cpp-format-suggest') }}
+          file-annotations: true
+          step-summary: true
+          extensions: 'cc,h'
+
+      - name: Comment with suggestion instructions
+        if: steps.linter.outputs.checks-failed > 0 && github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'cpp-format-suggest')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: context.payload.pull_request.number,
+              body: "C++ formatting checks failed. Run `clang-format -i` (version 18) on the changed files, or add the `cpp-format-suggest` label to this PR for inline formatting suggestions on the next run."
+            });
+
+      - name: Failure check
+        if: steps.linter.outputs.checks-failed > 0
+        run: |
+          echo "Some files failed the formatting check."
+          echo "See the job summary and file annotations for details."
+          exit 1
