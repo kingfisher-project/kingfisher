@@ -3,15 +3,20 @@
 # Every third-party library Kingfisher builds against comes from CPM here. Set
 # CPM_SOURCE_CACHE (for example to ~/.cache/CPM) so that all build directories
 # share one copy of each download instead of fetching MFEM again for each preset.
+#
+# Every package is added with SYSTEM YES, so its headers are included with
+# -isystem. That keeps compiler warnings and clang-tidy (see .clang-tidy) from
+# reporting problems in third-party code.
 
-CPMAddPackage("gh:fmtlib/fmt#12.2.0")
-CPMAddPackage("gh:biojppm/rapidyaml@0.16.0")
+CPMAddPackage(URI "gh:fmtlib/fmt#12.2.0" SYSTEM YES)
+CPMAddPackage(URI "gh:biojppm/rapidyaml@0.16.0" SYSTEM YES)
 
 if(KINGFISHER_BUILD_TESTS)
     CPMAddPackage(
         NAME googletest
         GITHUB_REPOSITORY google/googletest
         GIT_TAG v1.17.0
+        SYSTEM YES
         OPTIONS "INSTALL_GTEST OFF" "gtest_force_shared_crt ON"
     )
 endif()
@@ -37,6 +42,7 @@ CPMAddPackage(
     NAME mfem
     GITHUB_REPOSITORY mfem/mfem
     GIT_TAG v4.10
+    SYSTEM YES
     OPTIONS
         "MFEM_USE_MPI OFF"
         "MFEM_USE_METIS OFF"

@@ -1,0 +1,77 @@
+# clang-tidy configuration for Kingfisher. CI runs clang-tidy 18 on the changed
+# files of every pull request (.github/workflows/format-check.yml).
+#
+# readability-identifier-naming enforces the naming table in
+# docs/source/developer-guide/style.md (Google C++ style). The performance-*
+# checks catch accidental copies, which matter in hot loops.
+---
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  modernize-make-unique,
+  modernize-use-nullptr,
+  modernize-use-override,
+  modernize-use-using,
+  performance-*,
+  -performance-enum-size,
+  readability-identifier-naming
+WarningsAsErrors: ''
+# Only report problems in Kingfisher's own headers. Dependency headers are
+# skipped because cmake/Dependencies.cmake adds every package with SYSTEM YES
+# (clang-tidy ignores system headers); this regex alone would also match them.
+HeaderFilterRegex: '.*/(src|include|tests)/.*'
+FormatStyle: file
+CheckOptions:
+  # Types
+  - { key: readability-identifier-naming.ClassCase, value: CamelCase }
+  - { key: readability-identifier-naming.StructCase, value: CamelCase }
+  - { key: readability-identifier-naming.UnionCase, value: CamelCase }
+  - { key: readability-identifier-naming.EnumCase, value: CamelCase }
+  - { key: readability-identifier-naming.TypeAliasCase, value: CamelCase }
+  - { key: readability-identifier-naming.TypedefCase, value: CamelCase }
+  - { key: readability-identifier-naming.TypeTemplateParameterCase, value: CamelCase }
+  - { key: readability-identifier-naming.ConceptCase, value: CamelCase }
+
+  # Functions. Free functions are always CamelCase (except main). Methods may
+  # also be snake_case, because Google allows that for accessors and mutators
+  # (num_groups(), set_num_groups()); clang-tidy can't tell an accessor from
+  # any other method, so the reviewer checks that part.
+  - { key: readability-identifier-naming.FunctionCase, value: CamelCase }
+  - { key: readability-identifier-naming.FunctionIgnoredRegexp, value: '^main$' }
+  - { key: readability-identifier-naming.MethodCase, value: CamelCase }
+  - { key: readability-identifier-naming.MethodIgnoredRegexp, value: '^[a-z][a-z0-9_]*$' }
+
+  # Variables and parameters
+  - { key: readability-identifier-naming.VariableCase, value: lower_case }
+  - { key: readability-identifier-naming.ParameterCase, value: lower_case }
+  - { key: readability-identifier-naming.LocalVariableCase, value: lower_case }
+  - { key: readability-identifier-naming.LocalConstantCase, value: lower_case }
+  - { key: readability-identifier-naming.TemplateParameterCase, value: CamelCase }
+  - { key: readability-identifier-naming.ValueTemplateParameterCase, value: CamelCase }
+
+  # Data members: class members get a trailing underscore, struct members don't.
+  - { key: readability-identifier-naming.PrivateMemberCase, value: lower_case }
+  - { key: readability-identifier-naming.PrivateMemberSuffix, value: _ }
+  - { key: readability-identifier-naming.ProtectedMemberCase, value: lower_case }
+  - { key: readability-identifier-naming.ProtectedMemberSuffix, value: _ }
+  - { key: readability-identifier-naming.PublicMemberCase, value: lower_case }
+
+  # Constants: kCamelCase. Every constexpr variable, local ones included, is
+  # kCamelCase (Google). Only local non-constexpr const variables may be
+  # ordinary snake_case.
+  - { key: readability-identifier-naming.ConstexprVariableCase, value: CamelCase }
+  - { key: readability-identifier-naming.ConstexprVariablePrefix, value: k }
+  - { key: readability-identifier-naming.GlobalConstantCase, value: CamelCase }
+  - { key: readability-identifier-naming.GlobalConstantPrefix, value: k }
+  - { key: readability-identifier-naming.StaticConstantCase, value: CamelCase }
+  - { key: readability-identifier-naming.StaticConstantPrefix, value: k }
+  - { key: readability-identifier-naming.ClassConstantCase, value: CamelCase }
+  - { key: readability-identifier-naming.ClassConstantPrefix, value: k }
+  - { key: readability-identifier-naming.EnumConstantCase, value: CamelCase }
+  - { key: readability-identifier-naming.EnumConstantPrefix, value: k }
+
+  # Namespaces and macros
+  - { key: readability-identifier-naming.NamespaceCase, value: lower_case }
+  - { key: readability-identifier-naming.MacroDefinitionCase, value: UPPER_CASE }
+...

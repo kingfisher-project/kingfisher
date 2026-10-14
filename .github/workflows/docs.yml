@@ -22,9 +22,7 @@ jobs:
       - uses: actions/checkout@v4
 
       # The docs preset doesn't compile Kingfisher, so MFEM is never fetched
-      # here. A future build-and-test workflow (cmake --workflow --preset
-      # debug) should set CPM_SOURCE_CACHE and cache that directory with
-      # actions/cache so MFEM isn't downloaded on every run.
+      # here. The build and tests run in ci.yml.
       # The same conda environment as for local builds; see docs/environment.yml.
       - uses: mamba-org/setup-micromamba@v2
         with:

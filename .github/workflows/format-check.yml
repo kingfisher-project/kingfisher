@@ -1,0 +1,77 @@
+name: C++ Format and Lint Check
+
+# Adapted from OpenMC's format-check.yml. Checks the changed C++ files against
+# .clang-format and .clang-tidy. Add the cpp-format-suggest label to a PR to get
+# the fixes as inline review suggestions.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    branches: [main]
+
+jobs:
+  cpp-linter:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ninja
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      # Same cache as ci.yml, so MFEM is downloaded once for both.
+      - uses: actions/cache@v4
+        with:
+          path: .cpm-cache
+          key: cpm-${{ runner.os }}-${{ hashFiles('cmake/Dependencies.cmake', 'cmake/CPM.cmake') }}
+
+      # clang-tidy needs compile_commands.json and the dependency headers, which
+      # configuring provides. Nothing is compiled.
+      - name: Configure
+        run: cmake --preset debug
+
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: file
+          tidy-checks: '' # use .clang-tidy
+          database: build/debug
+          ignore: 'build|.cpm-cache'
+          files-changed-only: true
+          version: '18' # clang-format and clang-tidy version; keep in sync with style.md
+          format-review: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'cpp-format-suggest') }}
+          tidy-review: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'cpp-format-suggest') }}
+          passive-reviews: ${{ github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'cpp-format-suggest') }}
+          file-annotations: true
+          step-summary: true
+          extensions: 'cc,h'
+
+      # On PRs from forks GITHUB_TOKEN is read-only and this comment fails;
+      # don't let that hide the real lint failure below.
+      - name: Comment with suggestion instructions
+        continue-on-error: true
+        if: steps.linter.outputs.checks-failed > 0 && github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'cpp-format-suggest')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: context.payload.pull_request.number,
+              body: "C++ format or lint checks failed. Run `clang-format -i` and `clang-tidy -p build/<preset>` (version 18) on the changed files, or add the `cpp-format-suggest` label to this PR for inline suggestions on the next run."
+            });
+
+      - name: Failure check
+        if: steps.linter.outputs.checks-failed > 0
+        run: |
+          echo "Some files failed the format or lint check."
+          echo "See the job summary and file annotations for details."
+          exit 1
