@@ -36,9 +36,10 @@ jobs:
 
             Read CLAUDE.md, AGENTS.md, and
             .claude/skills/reviewing-kingfisher-code/SKILL.md, then review this
-            pull request by following that skill. Use `gh pr diff` and
-            `gh pr view` to get the changes; the repository is checked out at
-            the PR head for reading surrounding code.
+            pull request by following that skill. Get the changes with
+            `gh pr diff` and `gh pr view`, not `git diff`: the repository is a
+            shallow checkout of the PR's merge commit, there for reading the
+            surrounding code.
 
             Post the full structured report from the skill as a single PR
             comment with `gh pr comment`. For findings tied to specific lines,

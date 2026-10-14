@@ -14,7 +14,7 @@ Most editors can run clang-format on save using the same `.clang-format` file.
 
 ## Linting
 
-The `.clang-tidy` file at the root of the repository enforces the [naming](#naming) rules below and catches common bugs and performance problems, such as a loop variable or parameter that is copied when a reference would do. CI runs clang-tidy 18 on the changed files of every pull request. To run it locally, install clang-tidy 18 (for example `sudo apt install clang-tidy-18`) and point it at a configured build directory:
+The `.clang-tidy` file at the root of the repository enforces the [naming](#naming) rules below and catches common bugs and performance problems, such as a loop variable or parameter that is copied when a reference would do. CI runs clang-tidy 18 on the changed files of every pull request. To run it locally, install clang-tidy 18 (for example `sudo apt install clang-tidy-18`) and point it at the build directory of any preset you have configured, for example `build/dev`:
 
 ```console
 $ clang-tidy -p build/dev src/sweep_operator.cc
@@ -38,7 +38,8 @@ double* data = buffer.GetData();  // NOLINT(bugprone-...): reason
 | Variables and parameters | `snake_case` | `num_groups` |
 | Class data members | `snake_case_` | `angular_flux_` |
 | Struct data members | `snake_case` | `weights` |
-| Constants and enumerators | `kPascalCase` | `kMaxOrder`, `kVacuum` |
+| Constants (`constexpr`, including local ones, and namespace- or class-scope `const`) and enumerators | `kPascalCase` | `kMaxOrder`, `kVacuum` |
+| Local non-`constexpr` `const` variables | `snake_case` | `const int num_dofs = ...` |
 | Namespaces | `snake_case` | `kingfisher::transport` |
 | Macros | `KINGFISHER_UPPER_CASE` | `KINGFISHER_USE_MPI` |
 | Files | `snake_case.cc`, `snake_case.h` | `sweep_operator.cc` |
