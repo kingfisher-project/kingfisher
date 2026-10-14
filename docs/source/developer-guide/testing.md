@@ -1,7 +1,24 @@
 # Testing
 
-How Kingfisher is tested. Unit tests use [GoogleTest](https://google.github.io/googletest/).
+Unit tests use [GoogleTest](https://google.github.io/googletest/), which CPM downloads along with the other dependencies.
 
-:::{note}
-This page is a placeholder. It will cover running the tests, adding a test, and what continuous integration checks.
-:::
+## Running the tests
+
+Build and run every test with either development workflow:
+
+```console
+$ cmake --workflow --preset debug
+$ cmake --workflow --preset dev
+```
+
+After the first build, rebuild and rerun without reconfiguring:
+
+```console
+$ cmake --build --preset dev && ctest --preset dev
+```
+
+To run only some tests, filter by name with a regular expression:
+
+```console
+$ ctest --preset dev -R AlwaysTrue
+```

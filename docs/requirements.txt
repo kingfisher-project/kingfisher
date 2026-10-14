@@ -1,0 +1,12 @@
+# Python packages for building the documentation:
+#   pip install -r docs/requirements.txt
+# Doxygen and Graphviz are also needed; install them with the system package
+# manager.
+sphinx>=8.2.3,<9
+myst-parser>=5.1.0,<6
+breathe>=5.1.0,<6
+sphinxcontrib-bibtex>=2.7.0,<3
+sphinx-copybutton>=0.5.2,<0.6
+sphinx-design>=0.7.0,<0.8
+sphinx-autobuild>=2025.8.25
+furo>=2025.12.19

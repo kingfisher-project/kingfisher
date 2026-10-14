@@ -4,19 +4,29 @@ This site is built with [Sphinx](https://www.sphinx-doc.org) from the Markdown f
 
 ## Building locally
 
+Building the docs is optional and needs a few tools that the code build doesn't. Install the Python packages into a virtual environment or conda environment:
+
 ```console
-$ pixi run docs
+$ pip install -r docs/requirements.txt
 ```
 
-This runs Doxygen and then Sphinx, and writes the site to `docs/_build/html/`. Sphinx warnings are treated as errors, as they are in continuous integration.
+and [Doxygen](https://www.doxygen.nl) and [Graphviz](https://graphviz.org) with your system package manager (for example `apt install doxygen graphviz` or `brew install doxygen graphviz`). The Doxygen theme, [doxygen-awesome-css](https://github.com/jothepro/doxygen-awesome-css), is downloaded by CPM.
+
+Then build the site:
+
+```console
+$ cmake --workflow --preset docs
+```
+
+This runs Doxygen and then Sphinx, and writes the site to `build/docs/docs/html/`. Sphinx warnings are treated as errors, as they are in continuous integration. The `docs` preset doesn't compile Kingfisher or download its libraries.
 
 While writing, use the live preview instead. It serves the site locally and rebuilds a page when its source file is saved:
 
 ```console
-$ pixi run docs-serve
+$ cmake --build --preset docs --target docs-serve
 ```
 
-`docs-serve` runs Doxygen once at startup. After changing Doxygen comments, run `pixi run docs-doxygen` to refresh the API reference.
+`docs-serve` runs Doxygen once at startup. After changing Doxygen comments, run `cmake --build --preset docs --target docs-doxygen` to refresh the API reference.
 
 ## Where things go
 

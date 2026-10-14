@@ -5,7 +5,7 @@ Kingfisher is a deterministic spectral element radiation transport code built on
 This project is currently being developed by Liam Pohlmann at the University of Illinois Urbana-Champaign.
 
 ## Documentation
-The documentation is at <https://kingfisher-project.github.io/kingfisher/>. To build it locally, run `pixi run docs` and open `docs/_build/html/index.html`.
+The documentation is at <https://kingfisher-project.github.io/kingfisher/>. To build it locally, install the tools listed in `docs/requirements.txt` along with [Doxygen](https://www.doxygen.nl) and [Graphviz](https://graphviz.org), run `cmake --workflow --preset docs`, and open `build/docs/docs/html/index.html`.
 
 ## Installation
 See the documentation's [Getting Started](https://kingfisher-project.github.io/kingfisher/getting-started/index.html) page.

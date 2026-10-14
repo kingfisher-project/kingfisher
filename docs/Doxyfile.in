@@ -1,0 +1,59 @@
+# Doxygen configuration template for Kingfisher.
+#
+# docs/CMakeLists.txt fills in the @-delimited variables and writes the
+# result to the build directory as Doxyfile. Only settings that differ from
+# Doxygen's defaults are listed.
+#
+# Output, under @DOCS_BUILD_DIR@:
+#   html/doxygen  full HTML reference, published at <site>/doxygen/
+#   doxygen-xml   XML read by Breathe for the Sphinx "C++ API" pages
+
+PROJECT_NAME           = Kingfisher
+PROJECT_BRIEF          = "Spectral element radiation transport"
+PROJECT_NUMBER         = @PROJECT_VERSION@
+PROJECT_LOGO           = @DOCS_SOURCE_DIR@/logo/logo_kingfisher.svg
+PROJECT_ICON           = @DOCS_SOURCE_DIR@/logo/logo_kingfisher.svg
+OUTPUT_DIRECTORY       = @DOCS_BUILD_DIR@
+STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_PRIV_VIRTUAL   = YES
+
+QUIET                  = YES
+WARN_IF_INCOMPLETE_DOC = YES
+WARN_FORMAT            = "$file:$line: $text"
+WARN_LOGFILE           = @DOCS_BUILD_DIR@/doxygen-warnings.log
+
+INPUT                  = @PROJECT_SOURCE_DIR@/README.md \
+                         @PROJECT_SOURCE_DIR@/include \
+                         @PROJECT_SOURCE_DIR@/src
+FILE_PATTERNS          = *.h \
+                         *.hpp \
+                         *.cc \
+                         *.cpp \
+                         *.md
+RECURSIVE              = YES
+USE_MDFILE_AS_MAINPAGE = @PROJECT_SOURCE_DIR@/README.md
+
+SOURCE_BROWSER         = YES
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html/doxygen
+HTML_EXTRA_STYLESHEET  = @DOXYGEN_AWESOME_DIR@/doxygen-awesome.css \
+                         @DOCS_SOURCE_DIR@/doxygen/customization.css
+HTML_COLORSTYLE        = TOGGLE
+DISABLE_INDEX          = YES
+GENERATE_TREEVIEW      = YES
+FULL_SIDEBAR           = YES
+USE_MATHJAX            = YES
+MATHJAX_VERSION        = MathJax_4
+
+GENERATE_LATEX         = NO
+
+GENERATE_XML           = YES
+XML_OUTPUT             = doxygen-xml
+
+HAVE_DOT               = YES
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES

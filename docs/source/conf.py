@@ -1,6 +1,6 @@
 """Sphinx configuration for the Kingfisher documentation."""
 
-import tomllib
+import re
 from datetime import date
 from pathlib import Path
 
@@ -9,13 +9,14 @@ REPO_DIR = DOCS_DIR.parent
 
 # -- Project information -----------------------------------------------------
 
-with open(REPO_DIR / "pixi.toml", "rb") as f:
-    _workspace = tomllib.load(f)["workspace"]
+# The version is set once, in the project() call of the top-level CMakeLists.txt.
+_cmakelists = (REPO_DIR / "CMakeLists.txt").read_text()
+_version = re.search(r"project\s*\([^)]*\bVERSION\s+([0-9][0-9.]*)", _cmakelists)
 
 project = "Kingfisher"
 author = "Liam Pohlmann"
 copyright = f"{date.today().year}, {author}"
-release = _workspace["version"]
+release = _version.group(1)
 version = ".".join(release.split(".")[:2])
 
 # -- General configuration ---------------------------------------------------
@@ -63,8 +64,9 @@ mathjax3_config = {
 
 # -- Breathe (C++ API from Doxygen XML) --------------------------------------
 
-# Written by `pixi run docs-doxygen`; see docs/Doxyfile.
-breathe_projects = {"kingfisher": str(DOCS_DIR / "_build" / "doxygen-xml")}
+# Written by the docs-doxygen CMake target; see docs/CMakeLists.txt, which
+# passes the real path with -D. The default matches the "docs" preset.
+breathe_projects = {"kingfisher": str(REPO_DIR / "build" / "docs" / "docs" / "doxygen-xml")}
 breathe_default_project = "kingfisher"
 breathe_default_members = ("members", "undoc-members")
 

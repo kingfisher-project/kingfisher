@@ -1,5 +1,10 @@
 {
   "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
   "configurePresets": [
     {
       "name": "base",
@@ -13,119 +18,134 @@
     {
       "name": "debug",
       "displayName": "Debug",
+      "description": "Serial build with no optimization and full debug info, plus tests. For MPI, see NOTE(parallel) in cmake/Dependencies.cmake.",
       "inherits": "base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "KINGFISHER_BUILD_TESTS": "ON"
+      }
+    },
+    {
+      "name": "dev",
+      "displayName": "Development",
+      "description": "Serial optimized build with debug info, plus tests. For MPI, see NOTE(parallel) in cmake/Dependencies.cmake.",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "KINGFISHER_BUILD_TESTS": "ON"
       }
     },
     {
       "name": "release",
       "displayName": "Release",
+      "description": "Serial fully optimized build of the kingfisher executable, without tests. For MPI, see NOTE(parallel) in cmake/Dependencies.cmake.",
       "inherits": "base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "KINGFISHER_BUILD_TESTS": "OFF"
       }
     },
     {
-      "name": "pixi",
-      "displayName": "Pixi Environment",
-      "description": "Build using tools installed by Pixi",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build",
-      "environment": {
-        "PATH": "${sourceDir}/.pixi/envs/default/bin:$PENVS{PATH}"
-      },
+      "name": "docs",
+      "displayName": "Documentation",
+      "description": "Doxygen and Sphinx documentation only. Needs the tools in docs/requirements.txt plus doxygen and graphviz.",
+      "inherits": "base",
       "cacheVariables": {
-        "CMAKE_MAKE_PROGRAM": "${sourceDir}/.pixi/envs/default/bin/ninja"
+        "KINGFISHER_BUILD_DOCS": "ON",
+        "KINGFISHER_BUILD_TESTS": "OFF"
       }
     }
   ],
   "buildPresets": [
-    {
-      "name": "release",
-      "displayName": "Release",
-      "configurePreset": "release",
-      "targets": [
-        "hummingbird"
-      ]
-    },
     {
       "name": "debug",
       "displayName": "Debug",
       "configurePreset": "debug"
     },
     {
-      "name": "test",
-      "displayName": "Build Tests",
-      "configurePreset": "debug",
+      "name": "dev",
+      "displayName": "Development",
+      "configurePreset": "dev"
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "configurePreset": "release",
       "targets": [
-        "test_hummingbird"
+        "kingfisher"
+      ]
+    },
+    {
+      "name": "docs",
+      "displayName": "Documentation",
+      "configurePreset": "docs",
+      "targets": [
+        "docs"
       ]
     }
   ],
   "testPresets": [
     {
-      "name": "test-all",
-      "displayName": "Test All",
-      "configurePreset": "debug",
+      "name": "base",
+      "hidden": true,
       "output": {
         "outputOnFailure": true
       },
       "execution": {
-        "stopOnFailure": true
+        "noTestsAction": "error"
       }
+    },
+    {
+      "name": "debug",
+      "displayName": "Debug",
+      "inherits": "base",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "dev",
+      "displayName": "Development",
+      "inherits": "base",
+      "configurePreset": "dev"
     }
   ],
   "workflowPresets": [
     {
-      "name": "dev",
-      "displayName": "Development Pipeline",
-      "description": "Configures, builds, and tests the project.",
+      "name": "debug",
+      "displayName": "Debug",
+      "description": "Configure, build, and test in Debug mode.",
       "steps": [
-        {
-          "type": "configure",
-          "name": "debug"
-        },
-        {
-          "type": "build",
-          "name": "debug"
-        },
-        {
-          "type": "test",
-          "name": "test-all"
-        }
+        { "type": "configure", "name": "debug" },
+        { "type": "build", "name": "debug" },
+        { "type": "test", "name": "debug" }
       ]
     },
     {
-      "name": "build-debug",
-      "displayName": "Debugging Build Pipeline",
-      "description": "Configures and builds in debug mode.",
+      "name": "dev",
+      "displayName": "Development",
+      "description": "Configure, build, and test in RelWithDebInfo mode.",
       "steps": [
-        {
-          "type": "configure",
-          "name": "debug"
-        },
-        {
-          "type": "build",
-          "name": "debug"
-        }
+        { "type": "configure", "name": "dev" },
+        { "type": "build", "name": "dev" },
+        { "type": "test", "name": "dev" }
       ]
     },
     {
       "name": "release",
-      "displayName": "Release Build Pipeline",
-      "description": "Configures and builds in opt mode.",
+      "displayName": "Release",
+      "description": "Configure and build the optimized kingfisher executable.",
       "steps": [
-        {
-          "type": "configure",
-          "name": "release"
-        },
-        {
-          "type": "build",
-          "name": "release"
-        }
+        { "type": "configure", "name": "release" },
+        { "type": "build", "name": "release" }
+      ]
+    },
+    {
+      "name": "docs",
+      "displayName": "Documentation",
+      "description": "Configure and build the documentation into build/docs/docs/html.",
+      "steps": [
+        { "type": "configure", "name": "docs" },
+        { "type": "build", "name": "docs" }
       ]
     }
   ]
 }
-
