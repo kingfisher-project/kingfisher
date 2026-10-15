@@ -7,7 +7,7 @@ Kingfisher's C++ follows the [Google C++ Style Guide](https://google.github.io/s
 Formatting is defined by the `.clang-format` file at the root of the repository, which uses the Google base style. CI checks every pull request with clang-format 18. Format your changes before committing:
 
 ```console
-$ find src include tests -name '*.cc' -o -name '*.h' | xargs clang-format -i
+$ clang-format -i src/*.cc include/kingfisher/*.h tests/*.cc
 ```
 
 Most editors can run clang-format on save using the same `.clang-format` file.
@@ -17,7 +17,7 @@ Most editors can run clang-format on save using the same `.clang-format` file.
 The `.clang-tidy` file at the root of the repository enforces the [naming](#naming) rules below and catches common bugs and performance problems, such as a loop variable or parameter that is copied when a reference would do. CI runs clang-tidy 18 on the changed files of every pull request. To run it locally, install clang-tidy 18 (for example `sudo apt install clang-tidy-18`) and point it at the build directory of any preset you have configured, for example `build/dev`:
 
 ```console
-$ clang-tidy -p build/dev src/transport/sweep.cc
+$ clang-tidy -p build/dev src/sweep_operator.cc
 ```
 
 clang-tidy can't tell an accessor from any other method, so it accepts `snake_case` for all methods. Only use `snake_case` for accessors and mutators, as in the table below.
@@ -41,7 +41,7 @@ double* data = buffer.GetData();  // NOLINT(bugprone-...): reason
 | Constants (`constexpr`, including local ones, and namespace- or class-scope `const`) | `kPascalCase` | `kMaxOrder` |
 | Enumerators | `PascalCase` | `BoundaryCondition::Vacuum` |
 | Local non-`constexpr` `const` variables | `snake_case` | `const int num_dofs = ...` |
-| Namespaces | `snake_case` | `kingfisher` |
+| Namespaces | `snake_case` | `kingfisher::transport` |
 | Macros | `KINGFISHER_UPPER_CASE` | `KINGFISHER_USE_MPI` |
 | Files | `snake_case.cc`, `snake_case.h` | `sweep_operator.cc` |
 | Test files | `snake_case_test.cc` | `sweep_operator_test.cc` |
@@ -50,26 +50,9 @@ Always declare enums as `enum class`, never as a plain `enum`. A scoped enum's e
 
 ## Files and headers
 
-Code is grouped into one subdirectory per subsystem, for example `angular/`, `spatial/`, `transport/`, `materials/`, and `io/`. Public headers, sources, and tests use the same subdirectories:
-
-```text
-include/kingfisher/angular/quadrature.h
-src/angular/quadrature.cc
-tests/angular/quadrature_test.cc
-```
-
-- Put a subsystem's data structs in the same directory as the free functions that work on them. Don't divide code by kind, such as a `data/` directory and a `kernels/` directory, and don't add a catch-all `utils/` directory.
-- Create a subdirectory when its first file is added, not ahead of time. `src/main.cc` stays at the top of `src/`.
-- Sources are `.cc` files in `src/`. Public headers are `.h` files in `include/kingfisher/`, and are included with their full path from there, as in `#include "kingfisher/angular/quadrature.h"`.
-- Header guards are `KINGFISHER_<PATH>_<FILE>_H_`, where `<PATH>` is the path under `include/kingfisher/`. For example, `include/kingfisher/angular/quadrature.h` uses `KINGFISHER_ANGULAR_QUADRATURE_H_`.
+- Sources are `.cc` files in `src/`. Public headers are `.h` files in `include/kingfisher/`, and are included as `#include "kingfisher/sweep_operator.h"`.
+- Header guards are `KINGFISHER_<PATH>_<FILE>_H_`, for example `KINGFISHER_SWEEP_OPERATOR_H_`.
 - Includes are ordered as in the Google guide: the related header, C system headers, the C++ standard library, other libraries (MFEM, fmt, rapidyaml), then Kingfisher headers. clang-format sorts within each group.
-
-## Namespaces
-
-All Kingfisher code is in the single namespace `kingfisher`, as all of MFEM is in `mfem`. Subdirectories organize files and are not mirrored by sub-namespaces.
-
-- Put helpers that are used in only one `.cc` file in an anonymous namespace in that file.
-- Add a sub-namespace only when a group of free functions has generic names, such as `Initialize()` or `Apply()`, that would otherwise need a prefix to be clear. Functions that take different struct types can share a name through overloading and don't need one.
 
 ## Data-oriented design
 

@@ -67,7 +67,7 @@ The full style guide is `docs/source/developer-guide/style.md`. In short:
 | Constants (`constexpr`, including local) | `kPascalCase` | `kMaxOrder` |
 | Enumerators (`enum class` only) | `PascalCase` | `BoundaryCondition::Vacuum` |
 | Local non-`constexpr` `const` variables | `snake_case` | `num_dofs` |
-| Namespaces | `snake_case` | `kingfisher` |
+| Namespaces | `snake_case` | `kingfisher::transport` |
 | Macros | `KINGFISHER_UPPER_CASE` | `KINGFISHER_USE_MPI` |
 | Files | `snake_case.cc`, `.h` | `sweep_operator.cc` |
 
@@ -77,13 +77,7 @@ The full style guide is `docs/source/developer-guide/style.md`. In short:
   run in CI with clang-tidy 18.
 - Enums are always `enum class`, never a plain `enum`. clang-tidy 18 can't
   check this, so it is checked in review.
-- One subdirectory per subsystem (`angular/`, `spatial/`, `transport/`, ...),
-  used the same way in `include/kingfisher/`, `src/`, and `tests/`. A subsystem's
-  data structs live next to the free functions that work on them.
-- All code is in the single namespace `kingfisher`. Subdirectories are not
-  mirrored by sub-namespaces. File-local helpers go in an anonymous namespace.
-- Header guards are `KINGFISHER_<PATH>_<FILE>_H_`, where `<PATH>` is the path
-  under `include/kingfisher/`, for example `KINGFISHER_ANGULAR_QUADRATURE_H_`.
+- Header guards are `KINGFISHER_<PATH>_<FILE>_H_`.
 - Public APIs have Doxygen comments.
 
 ### Data-oriented design
