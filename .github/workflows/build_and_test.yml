@@ -12,21 +12,28 @@ concurrency:
 
 jobs:
   build-and-test:
-    runs-on: [ubuntu-latest, macos-26]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     env:
-      # One shared download of each CPM package (MFEM in particular), cached
-      # between runs below.
       CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Ninja
+      - name: Install Ninja (Linux)
+        if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ninja
 
       - uses: actions/cache@v4
         with:
           path: .cpm-cache
-          key: cpm-${{ runner.os }}-${{ hashFiles('cmake/Dependencies.cmake', 'cmake/CPM.cmake') }}
+          key: cpm-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('cmake/Dependencies.cmake', 'cmake/CPM.cmake') }}
 
       - name: Configure, build, and test
         run: cmake --workflow --preset dev
