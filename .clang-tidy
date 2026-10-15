@@ -60,6 +60,11 @@ CheckOptions:
   # Constants: kCamelCase. Every constexpr variable, local ones included, is
   # kCamelCase (Google). Only local non-constexpr const variables may be
   # ordinary snake_case.
+  #
+  # Enumerators: CamelCase with no k prefix (BoundaryCondition::Vacuum).
+  # Plain enums are banned; always use enum class. clang-tidy 18 has no check
+  # for that, so review enforces it. Enable cppcoreguidelines-use-enum-class
+  # once CI moves to a clang-tidy that has it.
   - { key: readability-identifier-naming.ConstexprVariableCase, value: CamelCase }
   - { key: readability-identifier-naming.ConstexprVariablePrefix, value: k }
   - { key: readability-identifier-naming.GlobalConstantCase, value: CamelCase }
@@ -69,7 +74,6 @@ CheckOptions:
   - { key: readability-identifier-naming.ClassConstantCase, value: CamelCase }
   - { key: readability-identifier-naming.ClassConstantPrefix, value: k }
   - { key: readability-identifier-naming.EnumConstantCase, value: CamelCase }
-  - { key: readability-identifier-naming.EnumConstantPrefix, value: k }
 
   # Namespaces and macros
   - { key: readability-identifier-naming.NamespaceCase, value: lower_case }

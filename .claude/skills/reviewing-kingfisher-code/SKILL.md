@@ -104,11 +104,20 @@ Every change in behavior must be tested. Missing tests for new behavior is a
   - `snake_case` for variables and parameters.
   - `snake_case_` (trailing underscore) for class data members; plain
     `snake_case` for struct data members.
-  - `kPascalCase` for constants (every `constexpr`, local ones included) and
-    enumerators; only local non-`constexpr` `const` variables are `snake_case`.
+  - `kPascalCase` for constants (every `constexpr`, local ones included); only
+    local non-`constexpr` `const` variables are `snake_case`.
+  - `enum class` only; flag any plain `enum` declared in Kingfisher, since
+    clang-tidy 18 can't check this. Enumerators are `PascalCase` with no `k`
+    (`BoundaryCondition::Vacuum`).
   - `snake_case` for namespaces; `KINGFISHER_UPPER_CASE` for macros.
   - `snake_case.cc` / `snake_case.h` file names; tests are `*_test.cc`.
-- Header guards are `KINGFISHER_<PATH>_<FILE>_H_`.
+- Header guards are `KINGFISHER_<PATH>_<FILE>_H_`, with `<PATH>` the path under
+  `include/kingfisher/` (`KINGFISHER_ANGULAR_QUADRATURE_H_`).
+- Files go in a per-subsystem subdirectory, the same in `include/kingfisher/`,
+  `src/`, and `tests/`. Flag `data/` vs `kernels/` splits and `utils/` dumping
+  grounds.
+- All code is in namespace `kingfisher`; flag sub-namespaces that just mirror a
+  directory. File-local helpers belong in an anonymous namespace.
 - Is the code clang-format clean (`.clang-format`, Google base style)? Are
   `NOLINT` comments limited to one check and justified?
 - C++20 idioms where they help (`std::span`, concepts, ranges, designated
