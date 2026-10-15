@@ -38,12 +38,15 @@ double* data = buffer.GetData();  // NOLINT(bugprone-...): reason
 | Variables and parameters | `snake_case` | `num_groups` |
 | Class data members | `snake_case_` | `angular_flux_` |
 | Struct data members | `snake_case` | `weights` |
-| Constants (`constexpr`, including local ones, and namespace- or class-scope `const`) and enumerators | `kPascalCase` | `kMaxOrder`, `kVacuum` |
+| Constants (`constexpr`, including local ones, and namespace- or class-scope `const`) | `kPascalCase` | `kMaxOrder` |
+| Enumerators | `PascalCase` | `BoundaryCondition::Vacuum` |
 | Local non-`constexpr` `const` variables | `snake_case` | `const int num_dofs = ...` |
 | Namespaces | `snake_case` | `kingfisher::transport` |
 | Macros | `KINGFISHER_UPPER_CASE` | `KINGFISHER_USE_MPI` |
 | Files | `snake_case.cc`, `snake_case.h` | `sweep_operator.cc` |
 | Test files | `snake_case_test.cc` | `sweep_operator_test.cc` |
+
+Always declare enums as `enum class`, never as a plain `enum`. A scoped enum's enumerators don't leak into the enclosing scope and don't convert implicitly to `int`. Because every enumerator is written after its type, as in `BoundaryCondition::Vacuum`, it doesn't need Google's `k` prefix. This rule covers the enums Kingfisher declares. Using plain enums from MFEM or other libraries is fine. clang-tidy 18 can't check this rule, so reviewers do.
 
 ## Files and headers
 

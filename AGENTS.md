@@ -64,7 +64,8 @@ The full style guide is `docs/source/developer-guide/style.md`. In short:
 | Variables and parameters | `snake_case` | `num_groups` |
 | Class data members | `snake_case_` | `angular_flux_` |
 | Struct data members | `snake_case` | `weights` |
-| Constants (`constexpr`, including local) and enumerators | `kPascalCase` | `kMaxOrder`, `kVacuum` |
+| Constants (`constexpr`, including local) | `kPascalCase` | `kMaxOrder` |
+| Enumerators (`enum class` only) | `PascalCase` | `BoundaryCondition::Vacuum` |
 | Local non-`constexpr` `const` variables | `snake_case` | `num_dofs` |
 | Namespaces | `snake_case` | `kingfisher::transport` |
 | Macros | `KINGFISHER_UPPER_CASE` | `KINGFISHER_USE_MPI` |
@@ -74,6 +75,8 @@ The full style guide is `docs/source/developer-guide/style.md`. In short:
   clang-format 18.
 - Naming and common bug and performance problems are checked by `.clang-tidy`,
   run in CI with clang-tidy 18.
+- Enums are always `enum class`, never a plain `enum`. clang-tidy 18 can't
+  check this, so it is checked in review.
 - Header guards are `KINGFISHER_<PATH>_<FILE>_H_`.
 - Public APIs have Doxygen comments.
 
