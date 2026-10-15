@@ -24,3 +24,7 @@ dependencies:
   - sphinx-design >=0.7.0,<0.8
   - sphinx-autobuild >=2025.8.25
   - furo >=2025.12.19
+  - pip
+  # Not on conda-forge; installed from PyPI
+  - pip:
+      - sphinx-licenseinfo >=0.7.0,<0.8

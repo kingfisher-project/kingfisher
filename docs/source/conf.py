@@ -29,6 +29,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_licenseinfo",
 ]
 
 source_suffix = {".md": "markdown", ".rst": "restructuredtext"}
