@@ -1,0 +1,19 @@
+---
+# Example: 2D Monoenergetic Lathrop Problem, as described in "Remedies for Ray Effects" by K. D. Lathrop.
+
+mesh:
+
+materials:
+  - name: "source_material"
+    total_xs: [0.75]
+    scatter_xs: [0.5]
+  -
+
+sources:
+
+angular:
+
+spatial:
+
+solver:
+...
