@@ -1,19 +1,45 @@
 ---
 # Example: 2D Monoenergetic Lathrop Problem, as described in "Remedies for Ray Effects" by K. D. Lathrop.
 
+problem:
+  name: lathrop
+  mode: fixed_source
+
 mesh:
+  filename: "lathrop.msh"
+
+boundary_conditions:
+  - boundary: "outer_wall"
+    type: "vacuum"
+  - boundary: "reflective_wall"
+    type: "reflective"
 
 materials:
-  - name: "source_material"
-    total_xs: [0.75]
-    scatter_xs: [0.5]
-  -
+  - name: "lathrop_material"
+    total_xs: [0.75] # braces for group structure
+    scatter_xs: [[0.5]] # braces for group structure
 
 sources:
+  - name: "square_source"
+    type: "volumetric"
+    # problem specifies a flat, isotropic source
+    expression: ["1.0/4.0/pi"] # braces for group structure
 
 angular:
+  type: "discrete_ordinates"
+  polar_quad_set: { type: "gauss_legendre", n_directions: 4 }
+  azimuthal_quad_set: { type: "trapezoid", n_directions: 4 }
 
 spatial:
+  node_placement: "gll"
+  nodes_per_axis: 3
 
 solver:
+  source_iterations:
+    tolerance: 1e-8
+    max_iterations: 50
+
+output:
+  format: "vtkhdf"
+  export_values: [scalar_flux, angular_flux]
 ...
