@@ -17,14 +17,20 @@ boundary_conditions:
 
 materials:
   - name: lathrop_material
-    total_xs: [0.75] # braces for group structure
-    scatter_xs: [[0.5]] # braces for group structure
+    total_xs: [0.75]
+    scatter_xs: [[0.5]]
 
 sources:
   - name: square_source
     type: volumetric
-    # problem specifies a flat, isotropic source
-    expression: ["1.0/4.0/pi"] # braces for group structure
+    expression: ["1.0/4.0/pi"]
+
+regions:
+  - name: square_source_region
+    source: square_source
+    material: lathrop_material
+  - name: source_free_region
+    material: lathrop_material
 
 angular:
   type: discrete_ordinates
