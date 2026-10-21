@@ -23,7 +23,7 @@ materials:
 sources:
   - name: square_source
     type: volumetric
-    {expression: ["1.0/4.0/pi"]}
+    expression: ["1.0/4.0/pi"]
 
 regions:
   - name: square_source_region
