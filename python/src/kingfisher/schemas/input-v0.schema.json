@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Kingfisher Input File Schema",
+  "description": "What the software is able to do.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "problem",
+    "mesh",
+    "boundary_conditions",
+    "materials",
+    "regions",
+    "angular",
+    "spatial",
+    "solver",
+    "output"
+  ],
+
+  "$defs": {
+    "name": {
+      "description": "...",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+
+  "properties": {
+    "problem": {
+      "description": "Type and name of problem to run.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "mode"],
+      "properties": {
+        "name": {
+          "description": "The name of the simulation.",
+          "type": "string"
+        },
+        "mode": {
+          "description": "The type of simulation to run.",
+          "enum": ["fixed_source"]
+        }
+      }
+    },
+    "mesh": {
+      "description": "Problem spatial domain mesh.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename"],
+      "properties": {
+        "file": {
+          "description": "File name with relative path from input file.",
+          "type": "string"
+        }
+      }
+    },
+    "boundary_conditions": {
+      "description": "Boundary conditions of the simulation.",
+      "type": "array",
+      "additionalProperties": false,
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "description": "The name of the boundary in the mesh.",
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of boundary condition to be applied.",
+            "enum": ["vacuum", "reflective"]
+          }
+        }
+      }
+    }
+  }
+}
