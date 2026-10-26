@@ -7,7 +7,8 @@ https://kingfisher-project.github.io/kingfisher/developer-guide/contributing.htm
 
 Summarize the change and the motivation for it.
 
-Fixes # (issue)
+# Issue(s) Addressed:
+- closes #(issue #)
 
 # AI Assistance
 
