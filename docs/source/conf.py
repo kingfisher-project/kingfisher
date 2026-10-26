@@ -36,7 +36,10 @@ extensions = [
     "sphinx_design",
     "sphinx_licenseinfo",
     "schema_doc",
+    "sphinx.ext.autosectionlabel",
 ]
+
+autosectionlabel_prefix_document = True
 
 source_suffix = {".md": "markdown", ".rst": "restructuredtext"}
 root_doc = "index"
