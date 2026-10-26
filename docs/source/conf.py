@@ -1,11 +1,15 @@
 """Sphinx configuration for the Kingfisher documentation."""
 
 import re
+import sys
 from datetime import date
 from pathlib import Path
 
 DOCS_DIR = Path(__file__).resolve().parent.parent
 REPO_DIR = DOCS_DIR.parent
+
+# Local Sphinx extensions.
+sys.path.insert(0, str(Path(__file__).resolve().parent / "_ext"))
 
 # -- Project information -----------------------------------------------------
 
@@ -30,6 +34,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_licenseinfo",
+    "schema_doc",
 ]
 
 source_suffix = {".md": "markdown", ".rst": "restructuredtext"}
@@ -62,6 +67,12 @@ mathjax3_config = {
         }
     }
 }
+
+# -- Input file schema --------------------------------------------------------
+
+# The JSON Schema that the {schema-block} directive (docs/source/_ext/schema_doc.py)
+# builds the input file tables from.
+schema_path = str(REPO_DIR / "python" / "src" / "kingfisher" / "schemas" / "input-v0.schema.json")
 
 # -- Breathe (C++ API from Doxygen XML) --------------------------------------
 
