@@ -2,6 +2,8 @@
 # Example: 2D Monoenergetic Lathrop Problem, as described in "Remedies for Ray Effects" by K. D. Lathrop.
 # Note that this model uses quarter symmetry with reflective boundary conditions.
 
+version: 0
+
 problem:
   name: lathrop
   mode: fixed_source
@@ -18,7 +20,7 @@ boundary_conditions:
 materials:
   - name: lathrop_material
     total_xs: [0.75]
-    scatter_xs: [[0.5]]
+    scatter_xs: [[[0.5]]]
 
 sources:
   - name: square_source
@@ -33,7 +35,8 @@ regions:
     material: lathrop_material
 
 angular:
-  type: discrete_ordinates
+  model: discrete_ordinates
+  type: "tensor_product"
   polar_quad_set: { type: gauss_legendre, n_directions: 4 }
   azimuthal_quad_set: { type: trapezoid, n_directions: 4 }
 
@@ -43,7 +46,7 @@ spatial:
 
 solver:
   source_iterations:
-    tolerance: 1e-8
+    tolerance: 1.0e-8
     max_iterations: 50
 
 output:

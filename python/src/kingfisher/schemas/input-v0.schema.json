@@ -1,10 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kingfisher-project.github.io/schemas/input-v0.schema.json",
   "title": "Kingfisher Input File Schema",
-  "description": "What the software is able to do.",
+  "description": "Schema for Kingfisher's YAML input file, format version 0. Cross-references (region materials and sources, unique names) and group-count consistency are checked by the code, not by this schema.",
   "type": "object",
   "additionalProperties": false,
   "required": [
+    "version",
     "problem",
     "mesh",
     "boundary_conditions",
@@ -18,13 +20,35 @@
 
   "$defs": {
     "name": {
-      "description": "...",
+      "description": "Identifier in snake_case. Must not contain a colon, because the mesh stores names as 'boundary:<name>' and 'region:<name>'.",
       "type": "string",
-      "minLength": 1
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "quad_set": {
+      "description": "A one-dimensional quadrature set.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "n_directions"],
+      "properties": {
+        "type": {
+          "description": "The quadrature rule.",
+          "enum": ["gauss_legendre", "trapezoid"]
+        },
+        "n_directions": {
+          "description": "The number of directions in the set.",
+          "type": "integer",
+          "minimum": 1
+        }
+      }
     }
   },
 
   "properties": {
+    "version": {
+      "description": "Input format version.",
+      "type": "integer",
+      "const": 0
+    },
     "problem": {
       "description": "Type and name of problem to run.",
       "type": "object",
@@ -33,7 +57,7 @@
       "properties": {
         "name": {
           "description": "The name of the simulation.",
-          "type": "string"
+          "$ref": "#/$defs/name"
         },
         "mode": {
           "description": "The type of simulation to run.",
@@ -47,16 +71,16 @@
       "additionalProperties": false,
       "required": ["filename"],
       "properties": {
-        "file": {
+        "filename": {
           "description": "File name with relative path from input file.",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         }
       }
     },
     "boundary_conditions": {
-      "description": "Boundary conditions of the simulation.",
+      "description": "Boundary conditions of the simulation. Names must be unique and match 'boundary:<name>' in the mesh.",
       "type": "array",
-      "additionalProperties": false,
       "minItems": 1,
       "items": {
         "type": "object",
@@ -65,12 +89,188 @@
         "properties": {
           "name": {
             "description": "The name of the boundary in the mesh.",
-            "type": "string"
+            "$ref": "#/$defs/name"
           },
           "type": {
             "description": "The type of boundary condition to be applied.",
             "enum": ["vacuum", "reflective"]
           }
+        }
+      }
+    },
+    "materials": {
+      "description": "Materials and their physical properties. Names must be unique, and the array lengths must match the number of energy groups.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "total_xs", "scatter_xs"],
+        "properties": {
+          "name": {
+            "description": "The name of the material.",
+            "$ref": "#/$defs/name"
+          },
+          "total_xs": {
+            "description": "Group-wise total cross section values in 1/cm. Values must be ordered from highest energy to lowest.",
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "number", "minimum": 0 }
+          },
+          "scatter_xs": {
+            "description": "Group-wise Legendre scattering moments in 1/cm. Values are indexed as [Moment Number][From Group][To Group].",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "number", "minimum": 0 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "description": "Sources of particles. Names must be unique.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type", "expression"],
+        "properties": {
+          "name": {
+            "description": "The name of the source.",
+            "$ref": "#/$defs/name"
+          },
+          "type": {
+            "description": "The type of source.",
+            "enum": ["volumetric"]
+          },
+          "expression": {
+            "description": "Group-wise source strength expressions in terms of position. Values must be ordered from highest energy to lowest.",
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "regions": {
+      "description": "Assignment of materials and sources to mesh regions. Names must match 'region:<name>' in the mesh.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "material"],
+        "properties": {
+          "name": {
+            "description": "The name of the region in the mesh.",
+            "$ref": "#/$defs/name"
+          },
+          "material": {
+            "description": "The name of the material filling the region.",
+            "$ref": "#/$defs/name"
+          },
+          "source": {
+            "description": "The name of the source in the region. Omit for a source-free region.",
+            "$ref": "#/$defs/name"
+          }
+        }
+      }
+    },
+    "angular": {
+      "description": "Angular discretization.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "type"],
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "tensor_product" } } },
+          "then": { "required": ["polar_quad_set", "azimuthal_quad_set"] }
+        }
+      ],
+      "properties": {
+        "model": {
+          "description": "The angular discretization method.",
+          "enum": ["discrete_ordinates"]
+        },
+        "type": {
+          "description": "The quadrature layout. A 'lebedev' option is planned alongside 'tensor_product'.",
+          "enum": ["tensor_product"]
+        },
+        "polar_quad_set": {
+          "description": "Quadrature over the polar angle.",
+          "$ref": "#/$defs/quad_set"
+        },
+        "azimuthal_quad_set": {
+          "description": "Quadrature over the azimuthal angle.",
+          "$ref": "#/$defs/quad_set"
+        }
+      }
+    },
+    "spatial": {
+      "description": "Spatial discretization.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_placement", "nodes_per_axis"],
+      "properties": {
+        "node_placement": {
+          "description": "Placement of nodes within each element.",
+          "enum": ["gauss_lobatto_legendre"]
+        },
+        "nodes_per_axis": {
+          "description": "Number of nodes along each axis of an element.",
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "solver": {
+      "description": "Solver settings.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_iterations"],
+      "properties": {
+        "source_iterations": {
+          "description": "Source iteration settings.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tolerance", "max_iterations"],
+          "properties": {
+            "tolerance": {
+              "description": "Convergence tolerance.",
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "max_iterations": {
+              "description": "Maximum number of iterations.",
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+    "output": {
+      "description": "Output settings.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "export_values"],
+      "properties": {
+        "format": {
+          "description": "The output file format.",
+          "enum": ["vtkhdf"]
+        },
+        "export_values": {
+          "description": "The quantities to write to the output file.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["scalar_flux", "angular_flux"] }
         }
       }
     }
