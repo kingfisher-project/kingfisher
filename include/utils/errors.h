@@ -14,7 +14,11 @@
 
 namespace kingfisher {
 
-/** The exception thrown by KingfisherError() and KINGFISHER_ASSERT(). */
+/**
+ * @brief The exceptions thrown in Kingfisher. Includes commonly-used
+ * KingfisherError() and KINGFISHER_ASSERT()
+ *
+ */
 class Error : public std::runtime_error {
  public:
   /** @param message The full message, including the source location. */
