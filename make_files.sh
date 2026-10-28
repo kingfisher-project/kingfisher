@@ -1,6 +1,6 @@
-# SPDX-License-Identifier: Unlicense
-
 #!/usr/bin/env bash
+
+# SPDX-License-Identifier: Unlicense
 
 set -e
 
