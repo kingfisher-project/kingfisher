@@ -78,4 +78,6 @@ CheckOptions:
   # Namespaces and macros
   - { key: readability-identifier-naming.NamespaceCase, value: lower_case }
   - { key: readability-identifier-naming.MacroDefinitionCase, value: UPPER_CASE }
+  # Google style header guards end in an underscore (KINGFISHER_UTILS_ERRORS_H_).
+  - { key: readability-identifier-naming.MacroDefinitionIgnoredRegexp, value: '^KINGFISHER_[A-Z0-9_]+_H_$' }
 ...
