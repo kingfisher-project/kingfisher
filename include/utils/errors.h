@@ -71,6 +71,7 @@ namespace detail {
 #define KINGFISHER_ASSERT(condition, message) \
   do {                                        \
     (void)sizeof(condition);                  \
+    (void)sizeof(message);                    \
   } while (false)
 #endif
 
