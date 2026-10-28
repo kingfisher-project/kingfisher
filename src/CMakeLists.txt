@@ -7,7 +7,6 @@
 # with the library sources once there are some.
 add_library(
 	kingfisher_lib
-	main.cc
 	utils/errors.cc
 )
 
