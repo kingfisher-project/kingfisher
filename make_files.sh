@@ -40,7 +40,7 @@ cat > "src/${NAME}.cc" <<EOF
 
 EOF
 
-cat > "tests/${NAME}_tests.cc" <<EOF
+cat > "tests/${NAME}_test.cc" <<EOF
 #include <gtest/gtest.h>
 
 #include "${NAME}.h"
