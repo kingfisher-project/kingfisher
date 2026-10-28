@@ -1,17 +1,22 @@
 """Sphinx configuration for the Kingfisher documentation."""
 
 import re
+import sys
 from datetime import date
 from pathlib import Path
 
 DOCS_DIR = Path(__file__).resolve().parent.parent
 REPO_DIR = DOCS_DIR.parent
 
+# Local Sphinx extensions.
+sys.path.insert(0, str(Path(__file__).resolve().parent / "_ext"))
+
 # -- Project information -----------------------------------------------------
 
 # The version is set once, in the project() call of the top-level CMakeLists.txt.
 _cmakelists = (REPO_DIR / "CMakeLists.txt").read_text()
-_version = re.search(r"project\s*\([^)]*\bVERSION\s+([0-9][0-9.]*)", _cmakelists)
+_version = re.search(
+    r"project\s*\([^)]*\bVERSION\s+([0-9][0-9.]*)", _cmakelists)
 
 project = "Kingfisher"
 author = "Liam Pohlmann"
@@ -30,7 +35,11 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_licenseinfo",
+    "schema_doc",
+    "sphinx.ext.autosectionlabel",
 ]
+
+autosectionlabel_prefix_document = True
 
 source_suffix = {".md": "markdown", ".rst": "restructuredtext"}
 root_doc = "index"
@@ -63,11 +72,19 @@ mathjax3_config = {
     }
 }
 
+# -- Input file schema --------------------------------------------------------
+
+# The JSON Schema that the {schema-block} directive (docs/source/_ext/schema_doc.py)
+# builds the input file tables from.
+schema_path = str(REPO_DIR / "python" / "src" /
+                  "kingfisher" / "schemas" / "input-v0.schema.json")
+
 # -- Breathe (C++ API from Doxygen XML) --------------------------------------
 
 # Written by the docs-doxygen CMake target; see docs/CMakeLists.txt, which
 # passes the real path with -D. The default matches the "docs" preset.
-breathe_projects = {"kingfisher": str(REPO_DIR / "build" / "docs" / "docs" / "doxygen-xml")}
+breathe_projects = {"kingfisher": str(
+    REPO_DIR / "build" / "docs" / "docs" / "doxygen-xml")}
 breathe_default_project = "kingfisher"
 breathe_default_members = ("members", "undoc-members")
 

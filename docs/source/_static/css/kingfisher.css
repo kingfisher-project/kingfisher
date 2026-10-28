@@ -65,6 +65,24 @@ article table.docutils thead th {
   color: #FFFFFF;
 }
 
+/* Option tables built from the input schema (docs/source/_ext/schema_doc.py). */
+article table.kf-schema-table {
+  width: 100%;
+}
+
+article table.kf-schema-table td p {
+  margin: 0 0 0.25em;
+}
+
+article table.kf-schema-table td:first-child {
+  white-space: nowrap;
+}
+
+article table.kf-schema-table td p.kf-required {
+  color: var(--kf-accent);
+  font-weight: 600;
+}
+
 /* -- Cards (sphinx-design) ------------------------------------------------ */
 
 .sd-card {
