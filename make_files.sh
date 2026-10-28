@@ -1,7 +1,8 @@
-# SPDX-License-Identifier: Unlicense
-
 #!/usr/bin/env bash
 
+# SPDX-License-Identifier: Unlicense
+
+>>>>>>> errors
 set -e
 
 if [ "$#" -ne 1 ]; then
@@ -40,7 +41,7 @@ cat > "src/${NAME}.cc" <<EOF
 
 EOF
 
-cat > "tests/${NAME}_tests.cc" <<EOF
+cat > "tests/${NAME}_test.cc" <<EOF
 #include <gtest/gtest.h>
 
 #include "${NAME}.h"

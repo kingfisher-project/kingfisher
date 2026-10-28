@@ -8,6 +8,7 @@
 add_library(
 	kingfisher_lib
 	main.cc
+	utils/errors.cc
 )
 
 target_compile_features(kingfisher_lib PUBLIC cxx_std_20)
