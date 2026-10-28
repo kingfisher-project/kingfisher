@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: BSD-3-Clause
 // Copyright (c) 2026, kingfisher-project
 
+#include "utils/errors.h"
+
 #include <gtest/gtest.h>
 
 #include <string>
-
-#include "utils/errors.h"
 
 namespace kingfisher {
 namespace {
@@ -25,7 +25,7 @@ TEST(Errors, KingfisherErrorMessageHasTextAndLocation) {
   } catch (const Error& e) {
     const std::string what = e.what();
     EXPECT_NE(what.find("bad input"), std::string::npos);
-    EXPECT_NE(what.find("errors_tests.cc"), std::string::npos);
+    EXPECT_NE(what.find("errors_test.cc"), std::string::npos);
   }
 }
 
