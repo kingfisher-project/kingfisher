@@ -105,17 +105,34 @@ Flat buffers indexed by group, angle, and element (with the layout documented ne
 
 **Stay device-ready.** Use MFEM's memory model (`Read()`, `Write()`, `ReadWrite()`, `mfem::forall`) for bulk data, so that GPU execution remains possible later.
 
-## Documentation comments
+## Error handling
 
-Public classes, functions, and their parameters have Doxygen comments, which become the [C++ API](../api/index.md) reference. Use `///` comments:
+Report errors through `utils/errors.h`, not with a bare `throw`, `assert`, or `MFEM_ABORT`. Both functions throw `kingfisher::Error`, whose message starts with the source file and line.
+
+- `KingfisherError(condition, message)` throws when `condition` is **true**. Use it for user input and other conditions that can fail in a correct program. It is always active.
+- `KINGFISHER_ASSERT(condition, message)` throws when `condition` is **false**. Use it for internal invariants. It is active only in builds without `NDEBUG` and does not evaluate its arguments otherwise.
 
 ```cpp
-/// Computes the scalar flux by integrating the angular flux over all
-/// ordinates.
-///
-/// @param quadrature The angular quadrature set.
-/// @param angular_flux Angular flux, indexed by ordinate then degree of freedom.
-/// @param[out] scalar_flux Scalar flux, one entry per degree of freedom.
+KingfisherError(num_groups <= 0,
+                fmt::format("num_groups must be positive, got {}", num_groups));
+KINGFISHER_ASSERT(flux.Size() == num_dofs, "flux has the wrong size");
+```
+
+`KINGFISHER_ASSERT` is a macro, so that it can compile to nothing, and it is the one name that doesn't follow the function naming rule. Don't use either one inside hot loops.
+
+## Documentation comments
+
+Public classes, functions, and their parameters have Doxygen comments, which become the [C++ API](../api/index.md) reference. Use `/** */` comments:
+
+```cpp
+/**
+ * Computes the scalar flux by integrating the angular flux over all
+ * ordinates.
+ *
+ * @param quadrature The angular quadrature set.
+ * @param angular_flux Angular flux, indexed by ordinate then degree of freedom.
+ * @param[out] scalar_flux Scalar flux, one entry per degree of freedom.
+ */
 void ComputeScalarFlux(const AngularQuadrature& quadrature,
                        const mfem::Vector& angular_flux,
                        mfem::Vector& scalar_flux);
