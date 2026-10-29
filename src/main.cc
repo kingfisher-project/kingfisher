@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2026, kingfisher-project
+
 #include <fmt/core.h>
 #include <fmt/ostream.h>
 
