@@ -36,7 +36,7 @@ regions:
 
 angular:
   model: discrete_ordinates
-  type: "tensor_product"
+  type: tensor_product
   polar_quad_set: { type: gauss_legendre, n_directions: 4 }
   azimuthal_quad_set: { type: trapezoid, n_directions: 4 }
 
