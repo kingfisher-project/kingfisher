@@ -99,10 +99,28 @@ struct AngularParams {
   SphericalQuadType quad_type;
 
   /// @brief Polar quadrature set
-  QuadSet polar_quad_set;
+  QuadSetParams polar_quad_set;
 
   /// @brief Azimuthal quadrature set
-  QuadSet azimuthal_quad_set;
+  QuadSetParams azimuthal_quad_set;
+};
+
+/**
+ * @brief Quadrature set parameters
+ *
+ */
+struct QuadSetParams {
+  /// @brief Type of quadrature set
+  QuadSet type;
+
+  /// @brief Number of points in set
+  size_t n_points;
+
+  /// @brief Minimum value (integrate from value)
+  double min;
+
+  /// @brief Maximum value (integrate to value)
+  double max;
 };
 
 /**
