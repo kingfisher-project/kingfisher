@@ -70,11 +70,9 @@ struct SourceParams {
   std::string name;
   SourceType type = SourceType::kVolumetric;
 
-  /// @brief Source strength in n/cm^3/s/str as an expression in terms of
-  /// position.
-  /// TODO: the YAML gives one expression per group; this holds a single string
-  /// until the source parsing is written.
-  std::string expression;
+  /// @brief Source strength per group in n/cm^3/s/str, as expressions in terms
+  /// of position, ordered highest energy to lowest.
+  std::vector<std::string> expression;
 };
 
 /**
