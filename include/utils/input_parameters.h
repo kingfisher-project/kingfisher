@@ -4,6 +4,7 @@
 #ifndef KINGFISHER_UTILS_INPUT_PARAMETERS_H_
 #define KINGFISHER_UTILS_INPUT_PARAMETERS_H_
 
+#include <cstddef>
 #include <string>
 #include <vector>
 
@@ -16,8 +17,11 @@ namespace kingfisher {
  *
  */
 struct ProblemParams {
+  /// @brief Name of the problem
   std::string name;
-  RunMode run_mode;
+
+  /// @brief Run mode of simulation
+  RunMode run_mode = RunMode::kFixedSource;
 };
 
 /**
@@ -33,8 +37,11 @@ struct MeshParams {
  *
  */
 struct BoundaryParams {
+  /// @brief Must match the prefix-free boundary group name in the mesh.
   std::string name;
-  BoundaryType type;
+
+  /// @brief Boundary type
+  BoundaryType type = BoundaryType::kVacuum;
 };
 
 /**
@@ -43,7 +50,15 @@ struct BoundaryParams {
  */
 struct MaterialParams {
   std::string name;
+
+  /// @brief Total cross section per group in 1/cm, ordered highest energy to
+  /// lowest.
   std::vector<double> total_xs;
+
+  /// @brief Legendre scattering moments in 1/cm, flattened from the YAML
+  /// `scatter_xs[moment][from_group][to_group]` in that order (row-major), so
+  /// the entry is `scatter_matrix[(moment * G + from) * G + to]` with `G` =
+  /// `total_xs.size()`. Holds `G * G` entries per listed moment.
   std::vector<double> scatter_matrix;
 };
 
@@ -53,7 +68,12 @@ struct MaterialParams {
  */
 struct SourceParams {
   std::string name;
-  SourceType type;
+  SourceType type = SourceType::kVolumetric;
+
+  /// @brief Source strength in n/cm^3/s/str as an expression in terms of
+  /// position.
+  /// TODO: the YAML gives one expression per group; this holds a single string
+  /// until the source parsing is written.
   std::string expression;
 };
 
@@ -62,8 +82,11 @@ struct SourceParams {
  *
  */
 struct SourceIterParams {
-  double tolerance;
-  unsigned int max_iterations;
+  /// @brief Convergence tolerance for the source iteration.
+  double tolerance = 1.0e-8;
+
+  /// Maximum number of source iterations.
+  unsigned int max_iterations = 100;
 };
 
 /**
@@ -71,8 +94,11 @@ struct SourceIterParams {
  *
  */
 struct SpatialParams {
-  SENodePlacement se_node_placement;
-  size_t nodes_per_axis;
+  /// @brief Node placement strategy within spectral elements
+  SENodePlacement se_node_placement = SENodePlacement::kGaussLobattoLegendre;
+
+  /// Number of nodes along each axis of an element (at least 1).
+  std::size_t nodes_per_axis = 0;
 };
 
 /**
@@ -80,6 +106,7 @@ struct SpatialParams {
  *
  */
 struct SolverParams {
+  /// @brief Source iteration parameters
   SourceIterParams source_iter_params;
 };
 
@@ -88,7 +115,10 @@ struct SolverParams {
  *
  */
 struct OutputParams {
-  OutputFormat output_format;
+  /// @brief Output format
+  OutputFormat output_format = OutputFormat::kVTKHDF;
+
+  /// @brief Values to be export at the end of the simulation
   std::vector<ExportValues> export_values;
 };
 
@@ -122,7 +152,28 @@ struct InputParameters {
   OutputParams output_params;
 };
 
-void ReadInput(const std::string filename);
+/**
+ * @brief Parses YAML input text.
+ *
+ * Only checks that required keys are present and enum spellings are known;
+ * it does not validate the values.
+ *
+ * @param yaml The YAML input. Taken by value because the parser edits it.
+ * @return The parsed input parameters.
+ * @throws Error If the text is not valid YAML or is missing a required key.
+ */
+InputParameters ParseInputString(std::string yaml);
+
+/**
+ * @brief Reads and parses a YAML input file.
+ *
+ * @param filename Path to the YAML input file.
+ * @return The parsed input parameters.
+ * @throws Error If the file cannot be opened or ParseInputString() fails. The
+ *   message is prefixed with `filename`.
+ */
+InputParameters ReadInputFile(const std::string& filename);
+
 void CheckInputFileVersion();
 
 }  // namespace kingfisher
