@@ -39,7 +39,7 @@ enum class BoundaryType { VACUUM, REFLECTIVE };
  * @brief Available independent source types.
  *
  */
-enum class SOURCE_TYPE { VOLUMETRIC };
+enum class SourceType { VOLUMETRIC };
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_UTILS_ENUMS_H_
