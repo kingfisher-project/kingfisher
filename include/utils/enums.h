@@ -5,7 +5,29 @@
 #define KINGFISHER_UTILS_ENUMS_H_
 
 namespace kingfisher {
-enum class RunMode { FIXED_SOURCE }
-}
+/**
+ * @brief Available run modes.
+ *
+ */
+enum class RunMode { FIXED_SOURCE };
+
+/**
+ * @brief Available spectral element ("SE") node placement choices.
+ *
+ */
+enum class SENodePlacement { GaussLegendreLobatto };
+
+/**
+ * @brief Available output file formats.
+ *
+ */
+enum class OutputFormat { VTKHDF };
+
+/**
+ * @brief Available values to be exported from the simulation.
+ *
+ */
+enum class ExportValues { SCALAR_FLUX, ANGULAR_FLUX };
+}  // namespace kingfisher
 
 #endif  // KINGFISHER_UTILS_ENUMS_H_
