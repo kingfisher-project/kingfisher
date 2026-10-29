@@ -97,13 +97,28 @@ struct OutputParams {
  *
  */
 struct InputParameters {
+  /// @brief Problem parameters
   ProblemParams problem_params;
+
+  /// @brief Mesh parameters
   MeshParams mesh_params;
+
+  /// @brief Set of all materials in simulation
   std::vector<MaterialParams> materials;
+
+  /// @brief Set of all sources in simulation
   std::vector<SourceParams> sources;
+
+  /// @brief Set of all boundaries in simulation
   std::vector<BoundaryParams> boundaries;
+
+  /// @brief Spatial spectral element parameters
   SpatialParams spatial_params;
+
+  /// @brief Solver parameters
   SolverParams solver_params;
+
+  /// @brief Output parameters
   OutputParams output_params;
 };
 
