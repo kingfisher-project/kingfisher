@@ -116,7 +116,7 @@ ryml::ConstNodeRef Require(const ryml::ConstNodeRef& node,
 }
 
 // Throws unless `node` is a YAML list.
-void RequireSeq(const ryml::ConstNodeRef& node) {
+void RequireSequence(const ryml::ConstNodeRef& node) {
   if (!node.is_seq()) throw Error("'" + KeyName(node) + "' must be a list.");
 }
 
@@ -174,7 +174,7 @@ void ReadOutput(const ryml::ConstNodeRef& root, OutputParams& output) {
       ParseEnum(Require(root, {"output", "format"}), kOutputFormats);
 
   const ryml::ConstNodeRef values = Require(root, {"output", "export_values"});
-  RequireSeq(values);
+  RequireSequence(values);
   for (const ryml::ConstNodeRef value : values.children()) {
     output.export_values.push_back(ParseEnum(value, kExportValues));
   }
@@ -183,7 +183,7 @@ void ReadOutput(const ryml::ConstNodeRef& root, OutputParams& output) {
 void ReadBoundaries(const ryml::ConstNodeRef& root,
                     std::vector<BoundaryParams>& boundaries) {
   const ryml::ConstNodeRef list = Require(root, {"boundary_conditions"});
-  RequireSeq(list);
+  RequireSequence(list);
   for (const ryml::ConstNodeRef entry : list.children()) {
     BoundaryParams& boundary = boundaries.emplace_back();
     Require(entry, {"name"}).load(&boundary.name);
@@ -216,7 +216,7 @@ std::vector<double> FlattenScatter(
 void ReadMaterials(const ryml::ConstNodeRef& root,
                    std::vector<MaterialParams>& materials) {
   const ryml::ConstNodeRef list = Require(root, {"materials"});
-  RequireSeq(list);
+  RequireSequence(list);
   for (const ryml::ConstNodeRef entry : list.children()) {
     MaterialParams& material = materials.emplace_back();
     Require(entry, {"name"}).load(&material.name);
@@ -234,7 +234,7 @@ void ReadSources(const ryml::ConstNodeRef& root,
                  std::vector<SourceParams>& sources) {
   if (!root.has_child("sources")) return;
   const ryml::ConstNodeRef list = Require(root, {"sources"});
-  RequireSeq(list);
+  RequireSequence(list);
   for (const ryml::ConstNodeRef entry : list.children()) {
     SourceParams& source = sources.emplace_back();
     Require(entry, {"name"}).load(&source.name);
