@@ -9,37 +9,37 @@ namespace kingfisher {
  * @brief Available run modes.
  *
  */
-enum class RunMode { kFixedSource };
+enum class RunMode { FixedSource };
 
 /**
  * @brief Available spectral element ("SE") node placement choices.
  *
  */
-enum class SENodePlacement { kGaussLobattoLegendre };
+enum class SENodePlacement { GaussLobattoLegendre };
 
 /**
  * @brief Available output file formats.
  *
  */
-enum class OutputFormat { kVTKHDF };
+enum class OutputFormat { VTKHDF };
 
 /**
  * @brief Available values to be exported from the simulation.
  *
  */
-enum class ExportValues { kScalarFlux, kAngularFlux };
+enum class ExportValues { ScalarFlux, AngularFlux };
 
 /**
  * @brief Available boundary condition types.
  *
  */
-enum class BoundaryType { kVacuum, kReflective };
+enum class BoundaryType { Vacuum, Reflective };
 
 /**
  * @brief Available independent source types.
  *
  */
-enum class SourceType { kVolumetric };
+enum class SourceType { Volumetric };
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_UTILS_ENUMS_H_

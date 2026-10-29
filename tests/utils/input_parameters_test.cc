@@ -71,7 +71,7 @@ std::string ParseErrorMessage(const std::string& yaml) {
 TEST(InputParameters, ReadsProblemAndMesh) {
   const InputParameters input = ParseInputString(kValidYaml);
   EXPECT_EQ(input.problem_params.name, "lathrop");
-  EXPECT_EQ(input.problem_params.run_mode, RunMode::kFixedSource);
+  EXPECT_EQ(input.problem_params.run_mode, RunMode::FixedSource);
   EXPECT_EQ(input.mesh_params.filename, "lathrop.msh");
 }
 
@@ -79,17 +79,17 @@ TEST(InputParameters, ReadsNumbers) {
   const InputParameters input = ParseInputString(kValidYaml);
   EXPECT_EQ(input.spatial_params.nodes_per_axis, 3u);
   EXPECT_EQ(input.spatial_params.se_node_placement,
-            SENodePlacement::kGaussLobattoLegendre);
+            SENodePlacement::GaussLobattoLegendre);
   EXPECT_DOUBLE_EQ(input.solver_params.source_iter_params.tolerance, 1.0e-6);
   EXPECT_EQ(input.solver_params.source_iter_params.max_iterations, 50u);
 }
 
 TEST(InputParameters, ReadsExportValuesInOrder) {
   const InputParameters input = ParseInputString(kValidYaml);
-  EXPECT_EQ(input.output_params.output_format, OutputFormat::kVTKHDF);
+  EXPECT_EQ(input.output_params.output_format, OutputFormat::VTKHDF);
   ASSERT_EQ(input.output_params.export_values.size(), 2u);
-  EXPECT_EQ(input.output_params.export_values[0], ExportValues::kScalarFlux);
-  EXPECT_EQ(input.output_params.export_values[1], ExportValues::kAngularFlux);
+  EXPECT_EQ(input.output_params.export_values[0], ExportValues::ScalarFlux);
+  EXPECT_EQ(input.output_params.export_values[1], ExportValues::AngularFlux);
 }
 
 TEST(InputParameters, BadExportValueNamesTheList) {
@@ -111,9 +111,9 @@ TEST(InputParameters, ReadsBoundariesInOrder) {
   const InputParameters input = ParseInputString(kValidYaml);
   ASSERT_EQ(input.boundaries.size(), 2u);
   EXPECT_EQ(input.boundaries[0].name, "outer_wall");
-  EXPECT_EQ(input.boundaries[0].type, BoundaryType::kVacuum);
+  EXPECT_EQ(input.boundaries[0].type, BoundaryType::Vacuum);
   EXPECT_EQ(input.boundaries[1].name, "reflective_wall");
-  EXPECT_EQ(input.boundaries[1].type, BoundaryType::kReflective);
+  EXPECT_EQ(input.boundaries[1].type, BoundaryType::Reflective);
 }
 
 TEST(InputParameters, ReadsMaterialsAndFlattensScatter) {
@@ -146,7 +146,7 @@ TEST(InputParameters, ReadsSources) {
   const InputParameters input = ParseInputString(kValidYaml);
   ASSERT_EQ(input.sources.size(), 1u);
   EXPECT_EQ(input.sources[0].name, "square_source");
-  EXPECT_EQ(input.sources[0].type, SourceType::kVolumetric);
+  EXPECT_EQ(input.sources[0].type, SourceType::Volumetric);
   EXPECT_EQ(input.sources[0].expression,
             (std::vector<std::string>{"1.0/4.0/pi", "0"}));
 }

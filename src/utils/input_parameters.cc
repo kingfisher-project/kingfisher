@@ -59,24 +59,24 @@ template <typename E>
 using Entry = std::pair<std::string_view, E>;
 
 constexpr std::array kRunModeNames = {
-    Entry<RunMode>{"fixed_source", RunMode::kFixedSource}};
+    Entry<RunMode>{"fixed_source", RunMode::FixedSource}};
 
 constexpr std::array kBoundaryTypes = {
-    Entry<BoundaryType>{"vacuum", BoundaryType::kVacuum},
-    Entry<BoundaryType>{"reflective", BoundaryType::kReflective}};
+    Entry<BoundaryType>{"vacuum", BoundaryType::Vacuum},
+    Entry<BoundaryType>{"reflective", BoundaryType::Reflective}};
 
 constexpr std::array kSENodePlacementStrats = {Entry<SENodePlacement>{
-    "gauss_lobatto_legendre", SENodePlacement::kGaussLobattoLegendre}};
+    "gauss_lobatto_legendre", SENodePlacement::GaussLobattoLegendre}};
 
 constexpr std::array kOutputFormats = {
-    Entry<OutputFormat>{"vtkhdf", OutputFormat::kVTKHDF}};
+    Entry<OutputFormat>{"vtkhdf", OutputFormat::VTKHDF}};
 
 constexpr std::array kExportValues = {
-    Entry<ExportValues>{"scalar_flux", ExportValues::kScalarFlux},
-    Entry<ExportValues>{"angular_flux", ExportValues::kAngularFlux}};
+    Entry<ExportValues>{"scalar_flux", ExportValues::ScalarFlux},
+    Entry<ExportValues>{"angular_flux", ExportValues::AngularFlux}};
 
 constexpr std::array kSourceTypes = {
-    Entry<SourceType>{"volumetric", SourceType::kVolumetric}};
+    Entry<SourceType>{"volumetric", SourceType::Volumetric}};
 
 // The name to use for `node` in messages: its key, or for a list entry the key
 // of the list it is in.

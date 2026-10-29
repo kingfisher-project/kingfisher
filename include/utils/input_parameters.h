@@ -21,7 +21,7 @@ struct ProblemParams {
   std::string name;
 
   /// @brief Run mode of simulation
-  RunMode run_mode = RunMode::kFixedSource;
+  RunMode run_mode = RunMode::FixedSource;
 };
 
 /**
@@ -41,7 +41,7 @@ struct BoundaryParams {
   std::string name;
 
   /// @brief Boundary type
-  BoundaryType type = BoundaryType::kVacuum;
+  BoundaryType type = BoundaryType::Vacuum;
 };
 
 /**
@@ -68,7 +68,7 @@ struct MaterialParams {
  */
 struct SourceParams {
   std::string name;
-  SourceType type = SourceType::kVolumetric;
+  SourceType type = SourceType::Volumetric;
 
   /// @brief Source strength per group in n/cm^3/s/str, as expressions in terms
   /// of position, ordered highest energy to lowest.
@@ -93,7 +93,7 @@ struct SourceIterParams {
  */
 struct SpatialParams {
   /// @brief Node placement strategy within spectral elements
-  SENodePlacement se_node_placement = SENodePlacement::kGaussLobattoLegendre;
+  SENodePlacement se_node_placement = SENodePlacement::GaussLobattoLegendre;
 
   /// Number of nodes along each axis of an element (at least 1).
   std::size_t nodes_per_axis = 2;
@@ -114,7 +114,7 @@ struct SolverParams {
  */
 struct OutputParams {
   /// @brief Output format
-  OutputFormat output_format = OutputFormat::kVTKHDF;
+  OutputFormat output_format = OutputFormat::VTKHDF;
 
   /// @brief Values to be export at the end of the simulation
   std::vector<ExportValues> export_values;
