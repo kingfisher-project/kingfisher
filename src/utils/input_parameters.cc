@@ -9,13 +9,13 @@
 namespace kingfisher {
 void ReadInputFile(const std::string filename) {
   std::ifstream input_file(filename, std::ios::binary);
-  KingfisherError(!input_file.is_open(), "Failed to open yaml input file.");
+  KingfisherError(!input_file, "Failed to open yaml input file.");
 
   std::stringstream buffer;
   buffer << input_file.rdbuf();
   std::string contents = buffer.str();
 
-  ryml::Tree tree = ryml::parse_in_arena(filename, ryml::to_csubstr(contents));
+  ryml::Tree tree = ryml::parse_in_place(contents);
 }
 void CheckInputFileVersion() {}
 }  // namespace kingfisher
