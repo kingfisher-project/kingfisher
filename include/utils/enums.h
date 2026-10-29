@@ -28,6 +28,18 @@ enum class OutputFormat { VTKHDF };
  *
  */
 enum class ExportValues { SCALAR_FLUX, ANGULAR_FLUX };
+
+/**
+ * @brief Available boundary condition types.
+ *
+ */
+enum class BoundaryType { VACUUM, REFLECTIVE };
+
+/**
+ * @brief Available independent source types.
+ *
+ */
+enum class SOURCE_TYPE { VOLUMETRIC };
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_UTILS_ENUMS_H_
