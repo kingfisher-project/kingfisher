@@ -12,7 +12,6 @@
 #include "utils/errors.h"
 
 namespace kingfisher {
-namespace {
 
 // A complete two-group input.
 constexpr char kValidYaml[] = R"(version: 0
@@ -267,5 +266,4 @@ TEST(InputParameters, MissingFileThrows) {
                Error);
 }
 
-}  // namespace
 }  // namespace kingfisher
