@@ -29,6 +29,35 @@ struct MeshParams {
 };
 
 /**
+ * @brief Individual boundaries.
+ *
+ */
+struct BoundaryParams {
+  std::string name;
+  BoundaryType type;
+};
+
+/**
+ * @brief Individual material properties.
+ *
+ */
+struct MaterialParams {
+  std::string name;
+  std::vector<double> total_xs;
+  std::vector<double> scatter_matrix;
+};
+
+/**
+ * @brief Individual source properties.
+ *
+ */
+struct SourceParams {
+  std::string name;
+  SourceType type;
+  std::string expression;
+};
+
+/**
  * @brief `spatial` block parameters.
  *
  */
@@ -70,6 +99,9 @@ struct OutputParams {
 struct InputParameters {
   ProblemParams problem_params;
   MeshParams mesh_params;
+  std::vector<MaterialParams> materials;
+  std::vector<SourceParams> sources;
+  std::vector<BoundaryParams> boundaries;
   SpatialParams spatial_params;
   SolverParams solver_params;
   OutputParams output_params;
