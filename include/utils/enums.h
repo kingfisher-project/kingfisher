@@ -40,6 +40,24 @@ enum class BoundaryType { Vacuum, Reflective };
  *
  */
 enum class SourceType { Volumetric };
+
+/**
+ * @brief Available angular treatment models.
+ *
+ */
+enum class AngularModel { DiscreteOrdinates };
+
+/**
+ * @brief Available spherical quadrature types.
+ *
+ */
+enum class SphericalQuadType { TensorProduct };
+
+/**
+ * @brief Available generic quadrature sets.
+ *
+ */
+enum class QuadSet { GaussLegendre, Trapezoid };
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_UTILS_ENUMS_H_
