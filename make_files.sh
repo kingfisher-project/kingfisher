@@ -2,7 +2,6 @@
 
 # SPDX-License-Identifier: Unlicense
 
->>>>>>> errors
 set -e
 
 if [ "$#" -ne 1 ]; then
