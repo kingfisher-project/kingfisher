@@ -58,6 +58,15 @@ struct SourceParams {
 };
 
 /**
+ * @brief `source_iterations` sub-block parameters.
+ *
+ */
+struct SourceIterParams {
+  double tolerance;
+  unsigned int max_iterations;
+};
+
+/**
  * @brief `spatial` block parameters.
  *
  */
@@ -72,15 +81,6 @@ struct SpatialParams {
  */
 struct SolverParams {
   SourceIterParams source_iter_params;
-};
-
-/**
- * @brief `source_iterations` sub-block parameters.
- *
- */
-struct SourceIterParams {
-  double tolerance;
-  unsigned int max_iterations;
 };
 
 /**
