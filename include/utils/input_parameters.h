@@ -12,18 +12,6 @@
 namespace kingfisher {
 
 /**
- * @brief Input parameters for simulation from the user.
- *
- */
-struct InputParameters {
-  ProblemParams problem_params;
-  MeshParams mesh_params;
-  SpatialParams spatial_params;
-  SolverParams solver_params;
-  OutputParams output_params;
-};
-
-/**
  * @brief `problem` block parameters.
  *
  */
@@ -73,6 +61,18 @@ struct SourceIterParams {
 struct OutputParams {
   OutputFormat output_format;
   std::vector<ExportValues> export_values;
+};
+
+/**
+ * @brief Input parameters for simulation from the user.
+ *
+ */
+struct InputParameters {
+  ProblemParams problem_params;
+  MeshParams mesh_params;
+  SpatialParams spatial_params;
+  SolverParams solver_params;
+  OutputParams output_params;
 };
 
 void ReadInput(const std::string filename);
