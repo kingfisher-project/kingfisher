@@ -95,7 +95,7 @@ struct SpatialParams {
   /// @brief Node placement strategy within spectral elements
   SENodePlacement se_node_placement = SENodePlacement::GaussLobattoLegendre;
 
-  /// Number of nodes along each axis of an element (at least 1).
+  /// @brief Number of nodes along each axis of an element (at least 1).
   std::size_t nodes_per_axis = 2;
 };
 
@@ -116,7 +116,7 @@ struct OutputParams {
   /// @brief Output format
   OutputFormat output_format = OutputFormat::VTKHDF;
 
-  /// @brief Values to be export at the end of the simulation
+  /// @brief Values to be exported at the end of the simulation
   std::vector<ExportValues> export_values;
 };
 
