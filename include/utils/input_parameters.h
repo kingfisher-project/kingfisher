@@ -98,7 +98,7 @@ struct SpatialParams {
   SENodePlacement se_node_placement = SENodePlacement::kGaussLobattoLegendre;
 
   /// Number of nodes along each axis of an element (at least 1).
-  std::size_t nodes_per_axis = 0;
+  std::size_t nodes_per_axis = 2;
 };
 
 /**
@@ -173,8 +173,6 @@ InputParameters ParseInputString(std::string yaml);
  *   message is prefixed with `filename`.
  */
 InputParameters ReadInputFile(const std::string& filename);
-
-void CheckInputFileVersion();
 
 }  // namespace kingfisher
 
