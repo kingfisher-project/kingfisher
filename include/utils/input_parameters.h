@@ -88,6 +88,24 @@ struct SourceIterParams {
 };
 
 /**
+ * @brief `angular` block parameters.
+ *
+ */
+struct AngularParams {
+  /// @brief Angular treatment model
+  AngularModel model;
+
+  /// @brief Type of spherical quadrature set
+  SphericalQuadType quad_type;
+
+  /// @brief Polar quadrature set
+  QuadSet polar_quad_set;
+
+  /// @brief Azimuthal quadrature set
+  QuadSet azimuthal_quad_set;
+};
+
+/**
  * @brief `spatial` block parameters.
  *
  */
