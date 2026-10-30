@@ -29,6 +29,7 @@ struct ProblemParams {
  *
  */
 struct MeshParams {
+  /// @brief File name of mesh with relative path
   std::string filename;
 };
 
