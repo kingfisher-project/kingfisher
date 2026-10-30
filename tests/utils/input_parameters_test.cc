@@ -6,6 +6,8 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <initializer_list>
+#include <limits>
 #include <numbers>
 #include <string>
 #include <vector>
@@ -319,6 +321,187 @@ TEST(InputParameters, RejectsMultipleDocuments) {
 TEST(InputParameters, MissingFileThrows) {
   EXPECT_THROW(ReadInputFile(testing::TempDir() + "does_not_exist.yaml"),
                Error);
+}
+
+// ---- Value checks ----
+
+// Expects parsing `yaml` to throw an Error whose message contains each of
+// `parts`.
+void ExpectParseErrorContains(const std::string& yaml,
+                              std::initializer_list<std::string> parts) {
+  const std::string what = ParseErrorMessage(yaml);
+  for (const std::string& part : parts) {
+    EXPECT_NE(what.find(part), std::string::npos)
+        << "missing '" << part << "' in: " << what;
+  }
+}
+
+TEST(InputChecks, DuplicateBoundaryNameThrows) {
+  ExpectParseErrorContains(
+      Modified("name: reflective_wall", "name: outer_wall"),
+      {"Duplicate name 'outer_wall'", "boundary_conditions"});
+}
+
+TEST(InputChecks, DuplicateMaterialNameThrows) {
+  ExpectParseErrorContains(Modified("name: moderator", "name: fuel"),
+                           {"Duplicate name 'fuel'", "materials"});
+}
+
+TEST(InputChecks, DuplicateSourceNameThrows) {
+  ExpectParseErrorContains(
+      Modified("    expression: [\"1.0/4.0/pi\", \"0\"]\n",
+               "    expression: [\"1.0/4.0/pi\", \"0\"]\n"
+               "  - name: square_source\n    type: volumetric\n"
+               "    expression: [\"1\", \"1\"]\n"),
+      {"Duplicate name 'square_source'", "sources"});
+}
+
+TEST(InputChecks, InvalidNamesThrow) {
+  ExpectParseErrorContains(Modified("name: fuel", "name: Fuel"),
+                           {"Invalid name 'Fuel'", "materials"});
+  // The mesh stores names as 'boundary:<name>', so a colon is not allowed.
+  ExpectParseErrorContains(Modified("name: outer_wall", "name: \"outer:wall\""),
+                           {"Invalid name 'outer:wall'"});
+  ExpectParseErrorContains(Modified("name: fuel", "name: 1fuel"),
+                           {"Invalid name '1fuel'"});
+  ExpectParseErrorContains(Modified("name: fuel", "name: \"\""),
+                           {"Invalid name ''"});
+}
+
+TEST(InputChecks, NegativeTotalXsNamesMaterialAndGroup) {
+  ExpectParseErrorContains(
+      Modified("total_xs: [0.75, 1.5]", "total_xs: [0.75, -1.5]"),
+      {"Material 'fuel'", "total_xs[1]", "must be finite and >= 0"});
+}
+
+TEST(InputChecks, NegativeScatterNamesMaterialAndIndex) {
+  ExpectParseErrorContains(
+      Modified("[[[0.1, 0.2], [0.3, 0.4]]]", "[[[0.1, 0.2], [0.3, -0.4]]]"),
+      {"Material 'fuel'", "scatter_xs[0][1][1]"});
+}
+
+TEST(InputChecks, MaterialsMustHaveTheSameNumberOfGroups) {
+  ExpectParseErrorContains(
+      Modified("    total_xs: [2.0, 3.0]\n"
+               "    scatter_xs: [[[0.5, 0.6], [0.7, 0.8]]]\n",
+               "    total_xs: [2.0]\n    scatter_xs: [[[0.5]]]\n"),
+      {"Material 'moderator'", "same number of groups"});
+}
+
+TEST(InputChecks, SourceExpressionCountMustMatchGroups) {
+  ExpectParseErrorContains(
+      Modified("expression: [\"1.0/4.0/pi\", \"0\"]",
+               "expression: [\"1.0/4.0/pi\"]"),
+      {"Source 'square_source'", "1 expressions", "2 energy groups"});
+}
+
+TEST(InputChecks, EmptySourceExpressionThrows) {
+  ExpectParseErrorContains(
+      Modified("expression: [\"1.0/4.0/pi\", \"0\"]",
+               "expression: [\"1.0/4.0/pi\", \"\"]"),
+      {"Source 'square_source'", "expression[1] must not be empty"});
+}
+
+TEST(InputChecks, TooFewNodesPerAxisThrows) {
+  ExpectParseErrorContains(Modified("nodes_per_axis: 3", "nodes_per_axis: 1"),
+                           {"nodes_per_axis", "at least 2"});
+}
+
+TEST(InputChecks, InvalidSolverSettingsThrow) {
+  ExpectParseErrorContains(Modified("tolerance: 1.0e-6", "tolerance: 0"),
+                           {"tolerance", "greater than 0"});
+  ExpectParseErrorContains(Modified("tolerance: 1.0e-6", "tolerance: -1.0e-6"),
+                           {"tolerance", "greater than 0"});
+  ExpectParseErrorContains(Modified("max_iterations: 50", "max_iterations: 0"),
+                           {"max_iterations", "at least 1"});
+}
+
+TEST(InputChecks, ValidInputPassesEveryCheck) {
+  const InputParameters input = ParseInputString(kValidYaml);
+  EXPECT_NO_THROW(CheckInputParameters(input));
+  EXPECT_NO_THROW(CheckBoundaryParams(input.boundaries));
+  EXPECT_NO_THROW(CheckMaterialParams(input.materials));
+  EXPECT_NO_THROW(CheckSourceParams(input.sources));
+  EXPECT_NO_THROW(CheckSpatialParams(input.spatial_params));
+  EXPECT_NO_THROW(CheckSolverParams(input.solver_params));
+}
+
+// The tests below build structs directly, for values the YAML reader can not
+// easily produce.
+
+MaterialParams MakeMaterial(const std::string& name) {
+  MaterialParams material;
+  material.name = name;
+  material.total_xs = {1.0};
+  material.scatter_matrix = {0.5};
+  return material;
+}
+
+TEST(InputChecks, NonFiniteCrossSectionsThrow) {
+  const double nan = std::numeric_limits<double>::quiet_NaN();
+  const double inf = std::numeric_limits<double>::infinity();
+
+  MaterialParams material = MakeMaterial("m");
+  material.total_xs = {nan};
+  EXPECT_THROW(CheckMaterialParams({material}), Error);
+  material.total_xs = {inf};
+  EXPECT_THROW(CheckMaterialParams({material}), Error);
+
+  material = MakeMaterial("m");
+  material.scatter_matrix = {nan};
+  EXPECT_THROW(CheckMaterialParams({material}), Error);
+  material.scatter_matrix = {inf};
+  EXPECT_THROW(CheckMaterialParams({material}), Error);
+}
+
+TEST(InputChecks, ZeroCrossSectionsAreAllowed) {
+  MaterialParams material = MakeMaterial("void_like");
+  material.total_xs = {0.0};
+  material.scatter_matrix = {0.0};
+  EXPECT_NO_THROW(CheckMaterialParams({material}));
+}
+
+TEST(InputChecks, MaterialNeedsGroupsAndMoments) {
+  MaterialParams material = MakeMaterial("m");
+  material.total_xs.clear();
+  EXPECT_THROW(CheckMaterialParams({material}), Error);
+
+  material = MakeMaterial("m");
+  material.scatter_matrix.clear();
+  EXPECT_THROW(CheckMaterialParams({material}), Error);
+}
+
+TEST(InputChecks, EmptyListsAreValidForNamedBlocks) {
+  EXPECT_NO_THROW(CheckBoundaryParams({}));
+  EXPECT_NO_THROW(CheckMaterialParams({}));
+  EXPECT_NO_THROW(CheckSourceParams({}));
+}
+
+TEST(InputChecks, SourceNeedsAnExpression) {
+  SourceParams source;
+  source.name = "s";
+  EXPECT_THROW(CheckSourceParams({source}), Error);
+  source.expression = {"1"};
+  EXPECT_NO_THROW(CheckSourceParams({source}));
+}
+
+TEST(InputChecks, SpatialNodesPerAxisBoundary) {
+  SpatialParams spatial;
+  spatial.nodes_per_axis = 0;
+  EXPECT_THROW(CheckSpatialParams(spatial), Error);
+  spatial.nodes_per_axis = 1;
+  EXPECT_THROW(CheckSpatialParams(spatial), Error);
+  spatial.nodes_per_axis = 2;
+  EXPECT_NO_THROW(CheckSpatialParams(spatial));
+}
+
+TEST(InputChecks, NonFiniteToleranceThrows) {
+  SolverParams solver;
+  solver.source_iter_params.tolerance =
+      std::numeric_limits<double>::quiet_NaN();
+  EXPECT_THROW(CheckSolverParams(solver), Error);
+  solver.source_iter_params.tolerance = std::numeric_limits<double>::infinity();
+  EXPECT_THROW(CheckSolverParams(solver), Error);
 }
 
 }  // namespace kingfisher

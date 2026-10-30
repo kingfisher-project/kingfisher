@@ -4,6 +4,7 @@
 #include "utils/input_parameters.h"
 
 #include <array>
+#include <cmath>
 #include <cstddef>
 #include <fstream>
 #include <initializer_list>
@@ -13,6 +14,7 @@
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -312,6 +314,8 @@ InputParameters ParseInputString(std::string yaml) {
   ReadSolver(root, input_params.solver_params);
   ReadOutput(root, input_params.output_params);
 
+  CheckInputParameters(input_params);
+
   return input_params;
 }
 
@@ -328,6 +332,144 @@ InputParameters ReadInputFile(const std::string& filename) {
   } catch (const Error& e) {
     throw Error(filename + ": " + e.what());
   }
+}
+
+namespace {
+
+bool IsNameStart(char c) { return c >= 'a' && c <= 'z'; }
+bool IsNameChar(char c) {
+  return IsNameStart(c) || (c >= '0' && c <= '9') || c == '_';
+}
+
+// Names are stored in the mesh as 'boundary:<name>' and 'region:<name>', so
+// they cannot contain a colon.
+void CheckName(std::string_view block, const std::string& name) {
+  bool valid = !name.empty() && IsNameStart(name.front());
+  for (const char c : name) valid = valid && IsNameChar(c);
+  KingfisherError(!valid, "Invalid name '" + name + "' in '" +
+                              std::string(block) +
+                              "'. Names must start with a lowercase letter and "
+                              "contain only lowercase letters, digits, and "
+                              "underscores.");
+}
+
+// Checks every name in `entries` and that none is repeated.
+template <typename T>
+void CheckNames(std::string_view block, const std::vector<T>& entries) {
+  std::unordered_set<std::string_view> seen_names;
+  for (const T& entry : entries) {
+    CheckName(block, entry.name);
+    KingfisherError(
+        !seen_names.insert(entry.name).second,
+        "Duplicate name '" + entry.name + "' in '" + std::string(block) + "'.");
+  }
+}
+
+// NaN compares false against everything, so test for the valid range instead
+// of the invalid one.
+void CheckFiniteNonNegative(const std::string& what, double value) {
+  KingfisherError(
+      !(std::isfinite(value) && value >= 0.0),
+      what + " = " + std::to_string(value) + " must be finite and >= 0.");
+}
+
+}  // namespace
+
+void CheckInputParameters(const InputParameters& input_parameters) {
+  CheckBoundaryParams(input_parameters.boundaries);
+  CheckMaterialParams(input_parameters.materials);
+  CheckSourceParams(input_parameters.sources);
+  CheckSpatialParams(input_parameters.spatial_params);
+  CheckSolverParams(input_parameters.solver_params);
+
+  // The materials fix the number of energy groups: sources need one expression
+  // for each.
+  if (input_parameters.materials.empty()) return;
+  const std::size_t num_groups =
+      input_parameters.materials.front().total_xs.size();
+  for (const SourceParams& source : input_parameters.sources) {
+    KingfisherError(source.expression.size() != num_groups,
+                    "Source '" + source.name + "' has " +
+                        std::to_string(source.expression.size()) +
+                        " expressions, but the materials have " +
+                        std::to_string(num_groups) +
+                        " energy groups. One expression per group is "
+                        "required.");
+  }
+}
+
+void CheckBoundaryParams(const std::vector<BoundaryParams>& boundary_params) {
+  CheckNames("boundary_conditions", boundary_params);
+}
+
+void CheckMaterialParams(const std::vector<MaterialParams>& material_params) {
+  CheckNames("materials", material_params);
+
+  for (const MaterialParams& material : material_params) {
+    const std::string prefix = "Material '" + material.name + "': ";
+    const std::size_t num_groups = material.total_xs.size();
+    KingfisherError(num_groups == 0,
+                    prefix + "total_xs must have at least one group.");
+    KingfisherError(material.scatter_matrix.empty(),
+                    prefix + "scatter_xs must have at least one moment.");
+
+    for (std::size_t group = 0; group < num_groups; ++group) {
+      CheckFiniteNonNegative(prefix + "total_xs[" + std::to_string(group) + "]",
+                             material.total_xs[group]);
+    }
+
+    // scatter_matrix is [moment][from][to], flattened (see MaterialParams).
+    for (std::size_t i = 0; i < material.scatter_matrix.size(); ++i) {
+      CheckFiniteNonNegative(prefix + "scatter_xs[" +
+                                 std::to_string(i / (num_groups * num_groups)) +
+                                 "][" +
+                                 std::to_string((i / num_groups) % num_groups) +
+                                 "][" + std::to_string(i % num_groups) + "]",
+                             material.scatter_matrix[i]);
+    }
+
+    KingfisherError(
+        num_groups != material_params.front().total_xs.size(),
+        prefix + "has " + std::to_string(num_groups) + " energy groups, but '" +
+            material_params.front().name + "' has " +
+            std::to_string(material_params.front().total_xs.size()) +
+            ". All materials must have the same number of groups.");
+  }
+}
+
+void CheckSourceParams(const std::vector<SourceParams>& source_params) {
+  CheckNames("sources", source_params);
+
+  for (const SourceParams& source : source_params) {
+    const std::string prefix = "Source '" + source.name + "': ";
+    KingfisherError(source.expression.empty(),
+                    prefix + "expression must have at least one group.");
+    for (std::size_t group = 0; group < source.expression.size(); ++group) {
+      KingfisherError(source.expression[group].empty(),
+                      prefix + "expression[" + std::to_string(group) +
+                          "] must not be empty.");
+    }
+  }
+}
+
+void CheckSpatialParams(const SpatialParams& spatial_params) {
+  KingfisherError(
+      spatial_params.nodes_per_axis < 2,
+      "`spatial.nodes_per_axis` is " +
+          std::to_string(spatial_params.nodes_per_axis) +
+          ", but at least 2 nodes per axis are required per spectral element.");
+}
+
+void CheckSolverParams(const SolverParams& solver_params) {
+  const SourceIterParams& source_iter = solver_params.source_iter_params;
+  KingfisherError(
+      !(std::isfinite(source_iter.tolerance) && source_iter.tolerance > 0.0),
+      "`solver.source_iterations.tolerance` = " +
+          std::to_string(source_iter.tolerance) +
+          " must be finite and greater than 0.");
+  KingfisherError(source_iter.max_iterations < 1,
+                  "`solver.source_iterations.max_iterations` must be at "
+                  "least 1.");
 }
 
 }  // namespace kingfisher

@@ -135,7 +135,7 @@ struct SpatialParams {
   /// @brief Node placement strategy within spectral elements
   SENodePlacement se_node_placement = SENodePlacement::GaussLobattoLegendre;
 
-  /// @brief Number of nodes along each axis of an element (at least 1).
+  /// @brief Number of nodes along each axis of an element (at least 2).
   std::size_t nodes_per_axis = 2;
 };
 
@@ -214,6 +214,81 @@ InputParameters ParseInputString(std::string yaml);
  *   message is prefixed with `filename`.
  */
 InputParameters ReadInputFile(const std::string& filename);
+
+/**
+ * @brief Checks the values of a parsed input.
+ *
+ * ParseInputString() calls this after reading every block, so a returned
+ * InputParameters has already passed it. Run it again after editing an
+ * InputParameters by hand.
+ *
+ * Checks each block (see the Check*Params() functions below), then checks that
+ * every source has one expression for each energy group of the materials.
+ *
+ * @param input_parameters The parameters to check.
+ * @throws Error If any value is invalid. The message names the offending block
+ *   and entry.
+ */
+void CheckInputParameters(const InputParameters& input_parameters);
+
+/**
+ * @brief Checks the `boundary_conditions` entries.
+ *
+ * Names must be unique and start with a lowercase letter followed by lowercase
+ * letters, digits, and underscores (the mesh stores them as
+ * `boundary:<name>`).
+ *
+ * @param boundary_params The boundaries to check.
+ * @throws Error If a name is invalid or repeated.
+ */
+void CheckBoundaryParams(const std::vector<BoundaryParams>& boundary_params);
+
+/**
+ * @brief Checks the `materials` entries.
+ *
+ * Names must be valid and unique (see CheckBoundaryParams()). Each material
+ * needs at least one energy group and one scattering moment, and every cross
+ * section must be finite and non-negative. All materials must have the same
+ * number of energy groups.
+ *
+ * @param material_params The materials to check.
+ * @throws Error If any of the above is violated.
+ */
+void CheckMaterialParams(const std::vector<MaterialParams>& material_params);
+
+/**
+ * @brief Checks the `sources` entries.
+ *
+ * Names must be valid and unique (see CheckBoundaryParams()). Each source needs
+ * at least one expression and no expression may be empty. The expression count
+ * is compared with the materials' group count by CheckInputParameters().
+ *
+ * @param source_params The sources to check.
+ * @throws Error If any of the above is violated.
+ */
+void CheckSourceParams(const std::vector<SourceParams>& source_params);
+
+/**
+ * @brief Checks the `spatial` block.
+ *
+ * Gauss-Lobatto-Legendre elements need at least 2 nodes per axis, because the
+ * element end points are nodes.
+ *
+ * @param spatial_params The spatial parameters to check.
+ * @throws Error If `nodes_per_axis` is less than 2.
+ */
+void CheckSpatialParams(const SpatialParams& spatial_params);
+
+/**
+ * @brief Checks the `solver` block.
+ *
+ * The tolerance must be finite and positive, and at least one iteration must be
+ * allowed.
+ *
+ * @param solver_params The solver parameters to check.
+ * @throws Error If the tolerance or iteration limit is invalid.
+ */
+void CheckSolverParams(const SolverParams& solver_params);
 
 }  // namespace kingfisher
 
