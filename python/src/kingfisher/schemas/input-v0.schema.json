@@ -226,7 +226,7 @@
         "nodes_per_axis": {
           "description": "Number of nodes along each axis of an element.",
           "type": "integer",
-          "minimum": 1
+          "minimum": 2
         }
       }
     },
