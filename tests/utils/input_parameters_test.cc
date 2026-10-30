@@ -88,12 +88,12 @@ TEST(InputParameters, ReadsAngularTensorProduct) {
   EXPECT_EQ(angular.model, AngularModel::DiscreteOrdinates);
   EXPECT_EQ(angular.quad_type, SphericalQuadType::TensorProduct);
 
-  EXPECT_EQ(angular.polar_quad_set.type, QuadSet::GaussLegendre);
+  EXPECT_EQ(angular.polar_quad_set.type, QuadSetType::GaussLegendre);
   EXPECT_EQ(angular.polar_quad_set.n_points, 4u);
   EXPECT_DOUBLE_EQ(angular.polar_quad_set.min, -1.0);
   EXPECT_DOUBLE_EQ(angular.polar_quad_set.max, 1.0);
 
-  EXPECT_EQ(angular.azimuthal_quad_set.type, QuadSet::Trapezoid);
+  EXPECT_EQ(angular.azimuthal_quad_set.type, QuadSetType::Trapezoid);
   EXPECT_EQ(angular.azimuthal_quad_set.n_points, 6u);
   EXPECT_DOUBLE_EQ(angular.azimuthal_quad_set.min, 0.0);
   EXPECT_DOUBLE_EQ(angular.azimuthal_quad_set.max, 2.0 * std::numbers::pi);

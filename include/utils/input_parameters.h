@@ -98,7 +98,7 @@ struct SourceIterParams {
  */
 struct QuadSetParams {
   /// @brief Type of quadrature set
-  QuadSet type = QuadSet::GaussLegendre;
+  QuadSetType type = QuadSetType::GaussLegendre;
 
   /// @brief Number of points in set (`n_directions` in the YAML)
   std::size_t n_points = 0;
