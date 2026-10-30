@@ -6,6 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <numbers>
 #include <string>
 #include <vector>
 
@@ -36,6 +37,11 @@ sources:
   - name: square_source
     type: volumetric
     expression: ["1.0/4.0/pi", "0"]
+angular:
+  model: discrete_ordinates
+  type: tensor_product
+  polar_quad_set: { type: gauss_legendre, n_directions: 4 }
+  azimuthal_quad_set: { type: trapezoid, n_directions: 6 }
 spatial:
   node_placement: gauss_lobatto_legendre
   nodes_per_axis: 3
@@ -73,6 +79,53 @@ TEST(InputParameters, ReadsProblemAndMesh) {
   EXPECT_EQ(input.problem_params.name, "lathrop");
   EXPECT_EQ(input.problem_params.run_mode, RunMode::FixedSource);
   EXPECT_EQ(input.mesh_params.filename, "lathrop.msh");
+}
+
+TEST(InputParameters, ReadsAngularTensorProduct) {
+  const AngularParams& angular = ParseInputString(kValidYaml).angular_params;
+  EXPECT_EQ(angular.model, AngularModel::DiscreteOrdinates);
+  EXPECT_EQ(angular.quad_type, SphericalQuadType::TensorProduct);
+
+  EXPECT_EQ(angular.polar_quad_set.type, QuadSet::GaussLegendre);
+  EXPECT_EQ(angular.polar_quad_set.n_points, 4u);
+  EXPECT_DOUBLE_EQ(angular.polar_quad_set.min, -1.0);
+  EXPECT_DOUBLE_EQ(angular.polar_quad_set.max, 1.0);
+
+  EXPECT_EQ(angular.azimuthal_quad_set.type, QuadSet::Trapezoid);
+  EXPECT_EQ(angular.azimuthal_quad_set.n_points, 6u);
+  EXPECT_DOUBLE_EQ(angular.azimuthal_quad_set.min, 0.0);
+  EXPECT_DOUBLE_EQ(angular.azimuthal_quad_set.max, 2.0 * std::numbers::pi);
+}
+
+TEST(InputParameters, TensorProductRequiresBothQuadSets) {
+  const std::string polar = ParseErrorMessage(Modified(
+      "  polar_quad_set: { type: gauss_legendre, n_directions: 4 }\n", ""));
+  EXPECT_NE(polar.find("'angular.polar_quad_set'"), std::string::npos) << polar;
+
+  const std::string azimuthal = ParseErrorMessage(Modified(
+      "  azimuthal_quad_set: { type: trapezoid, n_directions: 6 }\n", ""));
+  EXPECT_NE(azimuthal.find("'angular.azimuthal_quad_set'"), std::string::npos)
+      << azimuthal;
+}
+
+TEST(InputParameters, UnknownQuadSetTypeListsAvailableValues) {
+  const std::string what =
+      ParseErrorMessage(Modified("type: trapezoid", "type: bogus"));
+  EXPECT_NE(what.find("bogus"), std::string::npos) << what;
+  EXPECT_NE(what.find("gauss_legendre, trapezoid"), std::string::npos) << what;
+}
+
+TEST(InputParameters, QuadSetNeedsAtLeastOneDirection) {
+  EXPECT_THROW(ParseInputString(Modified("n_directions: 4", "n_directions: 0")),
+               Error);
+  EXPECT_THROW(
+      ParseInputString(Modified("n_directions: 4", "n_directions: -1")), Error);
+}
+
+TEST(InputParameters, QuadSetMissingNDirectionsThrows) {
+  const std::string what = ParseErrorMessage(Modified(
+      "{ type: gauss_legendre, n_directions: 4 }", "{ type: gauss_legendre }"));
+  EXPECT_NE(what.find("'n_directions'"), std::string::npos) << what;
 }
 
 TEST(InputParameters, ReadsNumbers) {
@@ -245,6 +298,8 @@ TEST(InputParameters, ReadsLathropExample) {
   ASSERT_EQ(input.sources.size(), 1u);
   EXPECT_EQ(input.sources[0].expression,
             (std::vector<std::string>{"1.0/4.0/pi"}));
+  EXPECT_EQ(input.angular_params.polar_quad_set.n_points, 4u);
+  EXPECT_EQ(input.angular_params.azimuthal_quad_set.n_points, 4u);
   EXPECT_EQ(input.spatial_params.nodes_per_axis, 3u);
   EXPECT_EQ(input.output_params.export_values.size(), 2u);
 }

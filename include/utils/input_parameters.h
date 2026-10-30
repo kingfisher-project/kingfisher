@@ -88,39 +88,43 @@ struct SourceIterParams {
 };
 
 /**
+ * @brief Parameters of a one-dimensional quadrature set.
+ *
+ */
+struct QuadSetParams {
+  /// @brief Type of quadrature set
+  QuadSet type = QuadSet::GaussLegendre;
+
+  /// @brief Number of points in set (`n_directions` in the YAML)
+  std::size_t n_points = 0;
+
+  /// @brief Minimum value (integrate from value). Set by the reader from the
+  /// set's role, not read from the input file.
+  double min = 0.0;
+
+  /// @brief Maximum value (integrate to value). Set by the reader from the
+  /// set's role, not read from the input file.
+  double max = 0.0;
+};
+
+/**
  * @brief `angular` block parameters.
  *
  */
 struct AngularParams {
   /// @brief Angular treatment model
-  AngularModel model;
+  AngularModel model = AngularModel::DiscreteOrdinates;
 
   /// @brief Type of spherical quadrature set
-  SphericalQuadType quad_type;
+  SphericalQuadType quad_type = SphericalQuadType::TensorProduct;
 
-  /// @brief Polar quadrature set
+  /// @brief Polar quadrature set over the polar cosine, [-1, 1]. Only used when
+  /// `quad_type` is `TensorProduct`.
   QuadSetParams polar_quad_set;
 
-  /// @brief Azimuthal quadrature set
+  /// @brief Azimuthal quadrature set over [0, 2*pi]. Only used when `quad_type`
+  /// is `TensorProduct`.
   QuadSetParams azimuthal_quad_set;
-};
-
-/**
- * @brief Quadrature set parameters
- *
- */
-struct QuadSetParams {
-  /// @brief Type of quadrature set
-  QuadSet type;
-
-  /// @brief Number of points in set
-  size_t n_points;
-
-  /// @brief Minimum value (integrate from value)
-  double min;
-
-  /// @brief Maximum value (integrate to value)
-  double max;
 };
 
 /**
@@ -175,6 +179,9 @@ struct InputParameters {
 
   /// @brief Set of all boundaries in simulation
   std::vector<BoundaryParams> boundaries;
+
+  /// @brief Angular discretization parameters
+  AngularParams angular_params;
 
   /// @brief Spatial spectral element parameters
   SpatialParams spatial_params;

@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <fstream>
 #include <initializer_list>
+#include <numbers>
 #include <ryml.hpp>
 #include <ryml_std.hpp>
 #include <sstream>
@@ -77,6 +78,16 @@ constexpr std::array kExportValues = {
 
 constexpr std::array kSourceTypes = {
     Entry<SourceType>{"volumetric", SourceType::Volumetric}};
+
+constexpr std::array kAngularModels = {
+    Entry<AngularModel>{"discrete_ordinates", AngularModel::DiscreteOrdinates}};
+
+constexpr std::array kSphericalQuadTypes = {Entry<SphericalQuadType>{
+    "tensor_product", SphericalQuadType::TensorProduct}};
+
+constexpr std::array kQuadSets = {
+    Entry<QuadSet>{"gauss_legendre", QuadSet::GaussLegendre},
+    Entry<QuadSet>{"trapezoid", QuadSet::Trapezoid}};
 
 // The name to use for `node` in messages: its key, or for a list entry the key
 // of the list it is in.
@@ -149,6 +160,35 @@ void ReadProblem(const ryml::ConstNodeRef& root, ProblemParams& problem) {
 
 void ReadMesh(const ryml::ConstNodeRef& root, MeshParams& mesh) {
   Require(root, {"mesh", "filename"}).load(&mesh.filename);
+}
+
+// Reads a quadrature set from `node`. The input file does not give the
+// integration bounds, so the caller passes them in for the set's role.
+void ReadQuadSet(const ryml::ConstNodeRef& node, double min, double max,
+                 QuadSetParams& quad) {
+  quad.type = ParseEnum(Require(node, {"type"}), kQuadSets);
+  Require(node, {"n_directions"}).load(&quad.n_points);
+  KingfisherError(quad.n_points == 0, "'n_directions' must be at least 1.");
+  quad.min = min;
+  quad.max = max;
+}
+
+void ReadAngular(const ryml::ConstNodeRef& root, AngularParams& angular) {
+  angular.model =
+      ParseEnum(Require(root, {"angular", "model"}), kAngularModels);
+  angular.quad_type =
+      ParseEnum(Require(root, {"angular", "type"}), kSphericalQuadTypes);
+
+  // Which keys are required depends on the quadrature type. Each type gets its
+  // own case, and the compiler flags a type that is not handled here.
+  switch (angular.quad_type) {
+    case SphericalQuadType::TensorProduct:
+      ReadQuadSet(Require(root, {"angular", "polar_quad_set"}), -1.0, 1.0,
+                  angular.polar_quad_set);
+      ReadQuadSet(Require(root, {"angular", "azimuthal_quad_set"}), 0.0,
+                  2.0 * M_PI, angular.azimuthal_quad_set);
+      break;
+  }
 }
 
 void ReadSpatial(const ryml::ConstNodeRef& root, SpatialParams& spatial) {
@@ -267,6 +307,7 @@ InputParameters ParseInputString(std::string yaml) {
   ReadBoundaries(root, input_params.boundaries);
   ReadMaterials(root, input_params.materials);
   ReadSources(root, input_params.sources);
+  ReadAngular(root, input_params.angular_params);
   ReadSpatial(root, input_params.spatial_params);
   ReadSolver(root, input_params.solver_params);
   ReadOutput(root, input_params.output_params);
