@@ -36,7 +36,7 @@ See {doc}`meshes` for more information on how Kingfisher expects meshes to be fo
 
 (input-boundary-conditions)=
 ## Boundary Conditions
-The `boundary_condition` block contains the list of all boundaries in the simulation.
+The `boundary_conditions` block contains the list of all boundaries in the simulation.
 As discussed in {ref}`user-guide/meshes:Boundary Conditions and Regions`, the mesh on which the simulation is run must contain information about where boundary conditions are.
 The `name` field in the boundary condition **must** match the prefix-free name in the mesh.
 For example, if the mesh contains a group named `boundary_condition:reflector`, the name in the block must be `reflector`.
@@ -49,12 +49,14 @@ For example, if the mesh contains a group named `boundary_condition:reflector`, 
 
 The `materials` block contains the list of all available materials in the simulation.
 In addition to a unique name, each material item must hold information about its cross sections.
-Total cross section values, $\Sigma_t$, must be listed in *ascending* energy group order (that is, the cross section corresponding to the lowest-energy group should be listed first).
+Total cross section values, $\Sigma_t$, must be listed in *ascending* energy order (that is, the cross section corresponding to the lowest-energy group is listed first).
+The scattering moments and the source expressions use the same group order.
+All materials must have the same number of energy groups.
 
 The scattering cross sections are more complicated because values must be given as Legendre moments.
 Three nested arrays must be given and are indexed as `[Legendre moment number][from energy group][to energy group]`.
 
-Note that all cross section values must be give in 1/cm!
+Note that all cross section values must be given in 1/cm!
 
 % TODO(you): prose (a {dropdown} suits the scattering moment layout)
 
@@ -122,3 +124,29 @@ All values expected in the output must be included in the `export_values` array 
 
 ```{schema-block} output
 ```
+
+(input-validation)=
+## Validation
+
+Kingfisher checks the whole input file before the simulation starts and stops at the first problem.
+The error message names the file and the offending block or entry, for example:
+
+```text
+Error: input.yaml: Material 'fuel': total_xs[1] = -1.500000 must be finite and >= 0.
+```
+
+The checks are:
+
+- `version` must be `0`.
+- Every required key must be present, and enumerated values (such as `mode` or `type`) must use one of the listed spellings.
+- The top level of the file may only contain the blocks described on this page.
+  An unknown top-level key, such as `source:` instead of `sources:`, is an error rather than being ignored.
+  Extra keys inside a block are not rejected by Kingfisher itself, but the JSON schema for the input file (`python/src/kingfisher/schemas/input-v0.schema.json`) does reject them.
+- Names of boundary conditions, materials, and sources must be unique within their block.
+  A name starts with a lowercase letter and contains only lowercase letters, digits, and underscores.
+- Cross sections must be finite and greater than or equal to zero.
+  Each material needs at least one energy group and one scattering moment, and all materials must have the same number of energy groups.
+- Each source needs exactly one expression per energy group, and no expression may be empty.
+- `nodes_per_axis` must be at least 2.
+- Each quadrature set needs at least one direction (`n_directions`).
+- The `tolerance` must be greater than zero, and `max_iterations` must be at least 1.

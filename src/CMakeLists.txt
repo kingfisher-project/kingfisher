@@ -10,7 +10,6 @@ add_library(
 
 target_compile_features(kingfisher_lib PUBLIC cxx_std_20)
 target_include_directories(kingfisher_lib PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_sources(kingfisher_lib PRIVATE ${SOURCES})
 
 # The dependencies are PUBLIC so that the executable and the tests get them
 # through kingfisher_lib.

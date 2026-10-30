@@ -50,10 +50,11 @@ struct BoundaryParams {
  *
  */
 struct MaterialParams {
+  /// @brief Unique material name (lowercase letters, digits, and underscores).
   std::string name;
 
-  /// @brief Total cross section per group in 1/cm, ordered highest energy to
-  /// lowest.
+  /// @brief Total cross section per group in 1/cm, ordered lowest energy to
+  /// highest.
   std::vector<double> total_xs;
 
   /// @brief Legendre scattering moments in 1/cm, flattened from the YAML
@@ -68,11 +69,14 @@ struct MaterialParams {
  *
  */
 struct SourceParams {
+  /// @brief Unique source name (lowercase letters, digits, and underscores).
   std::string name;
+
+  /// @brief Kind of source
   SourceType type = SourceType::Volumetric;
 
   /// @brief Source strength per group in n/cm^3/s/str, as expressions in terms
-  /// of position, ordered highest energy to lowest.
+  /// of position, ordered lowest energy to highest.
   std::vector<std::string> expression;
 };
 

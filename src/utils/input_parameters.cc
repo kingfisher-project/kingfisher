@@ -8,10 +8,10 @@
 #include <cstddef>
 #include <fstream>
 #include <initializer_list>
+#include <iterator>
 #include <numbers>
 #include <ryml.hpp>
 #include <ryml_std.hpp>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <unordered_set>
@@ -152,6 +152,35 @@ E ParseEnum(const ryml::ConstNodeRef& node,
   }
   throw Error("Unknown " + key + " '" + std::string(text) +
               "'. Available: " + available + ".");
+}
+
+// The blocks allowed at the top level of the input file.
+constexpr std::array<std::string_view, 11> kTopLevelKeys = {
+    "version",   "problem", "mesh",    "boundary_conditions",
+    "materials", "sources", "regions", "angular",
+    "spatial",   "solver",  "output"};
+
+// Throws on a top-level key that is not a known block. Every key inside a block
+// is required, so a typo there already fails as a missing key. A typo at the
+// top level would otherwise be ignored silently, for example `source:` instead
+// of the optional `sources:`.
+void CheckTopLevelKeys(const ryml::ConstNodeRef& root) {
+  if (!root.is_map()) throw Error("The input file must be a map of blocks.");
+  for (const ryml::ConstNodeRef block : root.children()) {
+    const std::string_view key(block.key().str, block.key().len);
+    bool known = false;
+    for (const std::string_view allowed : kTopLevelKeys) {
+      known = known || allowed == key;
+    }
+    if (known) continue;
+
+    std::string available;
+    for (const std::string_view allowed : kTopLevelKeys) {
+      available += (available.empty() ? "" : ", ") + std::string(allowed);
+    }
+    throw Error("Unknown key '" + std::string(key) +
+                "'. Available: " + available + ".");
+  }
 }
 
 void ReadProblem(const ryml::ConstNodeRef& root, ProblemParams& problem) {
@@ -299,6 +328,8 @@ InputParameters ParseInputString(std::string yaml) {
     root = root.first_child();
   }
 
+  CheckTopLevelKeys(root);
+
   int version = -1;
   Require(root, {"version"}).load(&version);
   KingfisherError(version != 0, "Input file must be version 0.");
@@ -324,11 +355,11 @@ InputParameters ReadInputFile(const std::string& filename) {
   KingfisherError(!input_file,
                   "Failed to open yaml input file '" + filename + "'.");
 
-  std::stringstream buffer;
-  buffer << input_file.rdbuf();
+  std::string contents((std::istreambuf_iterator<char>(input_file)),
+                       std::istreambuf_iterator<char>());
 
   try {
-    return ParseInputString(std::move(buffer.str()));
+    return ParseInputString(std::move(contents));
   } catch (const Error& e) {
     throw Error(filename + ": " + e.what());
   }

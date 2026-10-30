@@ -262,6 +262,19 @@ TEST(InputParameters, MissingKeyInListEntryNamesTheList) {
   EXPECT_NE(what.find("'materials'"), std::string::npos) << what;
 }
 
+TEST(InputParameters, UnknownTopLevelKeyThrows) {
+  // A typo in the optional `sources` block would otherwise drop the sources.
+  const std::string what =
+      ParseErrorMessage(Modified("\nsources:\n", "\nsource:\n"));
+  EXPECT_NE(what.find("Unknown key 'source'"), std::string::npos) << what;
+  EXPECT_NE(what.find("sources"), std::string::npos) << what;
+}
+
+TEST(InputParameters, TopLevelMustBeAMap) {
+  EXPECT_THROW(ParseInputString("- a\n- b\n"), Error);
+  EXPECT_THROW(ParseInputString("just a string\n"), Error);
+}
+
 TEST(InputParameters, MalformedYamlThrowsInsteadOfAborting) {
   EXPECT_THROW(ParseInputString("problem: [unclosed\n"), Error);
 }

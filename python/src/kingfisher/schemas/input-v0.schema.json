@@ -112,7 +112,7 @@
             "$ref": "#/$defs/name"
           },
           "total_xs": {
-            "description": "Group-wise total cross section values in 1/cm. Values must be ordered from highest energy to lowest.",
+            "description": "Group-wise total cross section values in 1/cm. Values must be ordered from lowest energy to highest.",
             "type": "array",
             "minItems": 1,
             "items": { "type": "number", "minimum": 0 }
@@ -151,7 +151,7 @@
             "enum": ["volumetric"]
           },
           "expression": {
-            "description": "Group-wise source strength expressions in terms of position. Values must be ordered from highest energy to lowest. Units in n/cm3/s/str.",
+            "description": "Group-wise source strength expressions in terms of position. Values must be ordered from lowest energy to highest. Units in n/cm3/s/str.",
             "type": "array",
             "minItems": 1,
             "items": { "type": "string", "minLength": 1 }
