@@ -17,7 +17,8 @@ struct QuadSet2D {
 
 /**
  * @brief Creates a 2D quadrature by taking a tensor product of two 1D
- * quadrature sets.
+ * quadrature sets. @ first_axis is treated as the "fast" axis (the inner loop
+ * of the tensor product).
  *
  * @param first_axis First axis quadrature set.
  * @param second_axis Second axis quadrature set.
