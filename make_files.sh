@@ -36,7 +36,14 @@ namespace kingfisher {
 EOF
 
 cat > "src/${NAME}.cc" <<EOF
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2026, kingfisher-project
+
 #include "${NAME}.h"
+
+namespace kingfisher {
+
+}
 
 EOF
 
