@@ -328,7 +328,7 @@ InputParameters ReadInputFile(const std::string& filename) {
   buffer << input_file.rdbuf();
 
   try {
-    return ParseInputString(buffer.str());
+    return ParseInputString(std::move(buffer.str()));
   } catch (const Error& e) {
     throw Error(filename + ": " + e.what());
   }
