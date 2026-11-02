@@ -16,14 +16,14 @@ struct QuadSet1D {
   /// @brief Quadrature weights
   mfem::Vector weights;
 
-  /// @brief Quadrature abscissas
-  mfem::Vector abscissas;
+  /// @brief Quadrature nodes
+  mfem::Vector nodes;
 };
 
 /**
  * @brief Integrate a 1D grid function using the supplied quadrature set. The
  * grid function values are expected to be evaluated at the quadrature set's
- * abscissas.
+ * nodes.
  *
  * @param grid_values Grid function values.
  * @param quad_set Quadrature set.
