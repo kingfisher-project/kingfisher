@@ -77,7 +77,7 @@ mfem::Vector AllLegendreRoots(const int n) {
 
 double LegendreRoot(const int n, const int k) {
   double x_old = ApproximateLegendreRoot(n, k);
-  unsigned int safety = 10000;
+  int safety = 10000;
   for (auto i = 0; i < safety; i++) {
     double x_new = x_old - LegendrePolynomial(n, x_old) /
                                LegendrePolynomialPrime(n, x_old);
@@ -110,7 +110,7 @@ mfem::Vector AllLegendrePrimeRoots(const int n) {
 
 double LegendrePrimeRoot(const int n, const int k) {
   double x_old = ApproximateLegendrePrimeRoot(n, k);
-  unsigned int safety = 100;
+  int safety = 100;
 
   double relative_error = std::numeric_limits<double>::infinity();
   for (auto i = 0; i < safety; i++) {
