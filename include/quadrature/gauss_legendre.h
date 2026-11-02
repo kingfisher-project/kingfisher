@@ -25,7 +25,7 @@ QuadSet1D GaussLegendre(const int n_points);
  * @param n_points Number of points desired.
  * @return mfem::Vector
  */
-mfem::Vector GaussLegendreNodes(const int n_points);
+void GaussLegendreNodes(QuadSet1D& gl_quad_set, const int n_points);
 
 /**
  * @brief Compute the Gauss-Legendre quadrature weights corresponding to the
@@ -35,7 +35,7 @@ mfem::Vector GaussLegendreNodes(const int n_points);
  * @param nodes Gauss-Legendre quadrature nodes.
  * @return mfem::Vector
  */
-mfem::Vector GaussLegendreWeights(const mfem::Vector& nodes);
+void GaussLegendreWeights(QuadSet1D& gl_quad_set);
 
 }  // namespace kingfisher
 

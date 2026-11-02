@@ -120,13 +120,32 @@ TEST_P(GaussLegendreTest, NodesAreRootsOfLegendrePolynomial) {
 TEST_P(GaussLegendreTest, GaussLegendreMatchesNodesAndWeightsFunctions) {
   const int n = GetParam();
   const QuadSet1D quad_set = GaussLegendre(n);
-  const mfem::Vector nodes = GaussLegendreNodes(n);
-  const mfem::Vector weights = GaussLegendreWeights(nodes);
-  ASSERT_EQ(quad_set.nodes.Size(), nodes.Size());
-  ASSERT_EQ(quad_set.weights.Size(), weights.Size());
+  QuadSet1D expected;
+  GaussLegendreNodes(expected, n);
+  GaussLegendreWeights(expected);
+  ASSERT_EQ(quad_set.nodes.Size(), expected.nodes.Size());
+  ASSERT_EQ(quad_set.weights.Size(), expected.weights.Size());
   for (int i = 0; i < n; i++) {
-    EXPECT_EQ(quad_set.nodes[i], nodes[i]);
-    EXPECT_EQ(quad_set.weights[i], weights[i]);
+    EXPECT_EQ(quad_set.nodes[i], expected.nodes[i]);
+    EXPECT_EQ(quad_set.weights[i], expected.weights[i]);
+  }
+}
+
+// The in-place functions must fully replace whatever the set held before, even
+// if it had a different size.
+TEST_P(GaussLegendreTest, InPlaceFunctionsOverwriteExistingSet) {
+  const int n = GetParam();
+  const QuadSet1D expected = GaussLegendre(n);
+
+  QuadSet1D reused = GaussLegendre(n + 3);
+  GaussLegendreNodes(reused, n);
+  GaussLegendreWeights(reused);
+
+  ASSERT_EQ(reused.nodes.Size(), n);
+  ASSERT_EQ(reused.weights.Size(), n);
+  for (int i = 0; i < n; i++) {
+    EXPECT_EQ(reused.nodes[i], expected.nodes[i]);
+    EXPECT_EQ(reused.weights[i], expected.weights[i]);
   }
 }
 
@@ -167,8 +186,9 @@ TEST(GaussLegendre, ThreePointRuleMatchesClosedForm) {
 // KINGFISHER_ASSERT is compiled out when NDEBUG is defined.
 #ifndef NDEBUG
 TEST(GaussLegendre, NonPositiveNumberOfPointsThrows) {
-  EXPECT_THROW(GaussLegendreNodes(0), Error);
-  EXPECT_THROW(GaussLegendreNodes(-3), Error);
+  QuadSet1D quad_set;
+  EXPECT_THROW(GaussLegendreNodes(quad_set, 0), Error);
+  EXPECT_THROW(GaussLegendreNodes(quad_set, -3), Error);
   EXPECT_THROW(GaussLegendre(0), Error);
   EXPECT_THROW(GaussLegendre(-3), Error);
 }

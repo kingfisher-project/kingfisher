@@ -12,25 +12,27 @@ namespace kingfisher {
 
 QuadSet1D GaussLegendre(const int n_points) {
   QuadSet1D gauss_legendre;
-  gauss_legendre.nodes = GaussLegendreNodes(n_points);
-  gauss_legendre.weights = GaussLegendreWeights(gauss_legendre.nodes);
+  GaussLegendreNodes(gauss_legendre, n_points);
+  GaussLegendreWeights(gauss_legendre);
   return gauss_legendre;
 }
 
-mfem::Vector GaussLegendreNodes(const int n_points) {
+void GaussLegendreNodes(QuadSet1D& gl_quad_set, const int n_points) {
   KINGFISHER_ASSERT(
       n_points > 0,
       "Number of points passed to GaussLegendreNodes must be > 0.");
-  return AllLegendreRoots(n_points);
+  gl_quad_set.nodes = AllLegendreRoots(n_points);
 }
 
-mfem::Vector GaussLegendreWeights(const mfem::Vector& nodes) {
-  const int n_points = nodes.Size();
-  mfem::Vector weights(n_points);
+void GaussLegendreWeights(QuadSet1D& gl_quad_set) {
+  const int n_points = gl_quad_set.nodes.Size();
+  gl_quad_set.weights.SetSize(n_points);
+
   for (auto k = 0; k < n_points; k++) {
-    double l_prime = LegendrePolynomialPrime(n_points, nodes[k]);
-    weights[k] = 2.0 / (1 - nodes[k] * nodes[k]) / l_prime / l_prime;
+    double l_prime = LegendrePolynomialPrime(n_points, gl_quad_set.nodes[k]);
+    gl_quad_set.weights[k] = 2.0 /
+                             (1 - gl_quad_set.nodes[k] * gl_quad_set.nodes[k]) /
+                             l_prime / l_prime;
   }
-  return weights;
 }
 }  // namespace kingfisher
