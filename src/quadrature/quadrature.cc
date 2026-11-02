@@ -3,6 +3,8 @@
 
 #include "quadrature/quadrature.h"
 
+#include "utils/errors.h"
+
 namespace kingfisher {
 QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis) {
@@ -19,5 +21,13 @@ QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
   quad_set.first_axis_nodes = second_axis.nodes;
 
   return quad_set;
+}
+
+double Integrate(const mfem::Vector& grid_function,
+                 const mfem::Vector& weights) {
+  KINGFISHER_ASSERT(grid_function.Size() == weights.Size(),
+                    "Sizes of grid_function and weights passed to Integrate "
+                    "are not the same.");
+  return InnerProduct(grid_function, weights);
 }
 }  // namespace kingfisher

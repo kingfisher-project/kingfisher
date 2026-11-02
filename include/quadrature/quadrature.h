@@ -41,6 +41,9 @@ struct QuadSet2D {
  */
 QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis);
+
+double Integrate(const mfem::Vector& grid_function,
+                 const mfem::Vector& weights);
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_QUADRATURE_QUADRATURE_H_
