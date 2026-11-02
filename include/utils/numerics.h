@@ -17,7 +17,7 @@ inline constexpr double EXP_NEAR_TOLERANCE = 1e-14;
 
 /**
  * @brief Tests if two double-type numbers are equal using the TOLERANCE
- * value. Taken from https://github.com/hummingbird.
+ * value. Taken from https://github.com/lipohlmann/hummingbird.
  *
  * @param first First number to compare
  * @param second Second number to compare
