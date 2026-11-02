@@ -213,21 +213,21 @@ TEST(LegendrePolynomialRootFinding, P2) {
 }
 TEST(LegendrePolynomialRootFinding, P4) {
   mfem::Vector p4_roots{-0.8611363115940526, -0.3399810435848563,
-                           0.3399810435848563, 0.8611363115940526};
+                        0.3399810435848563, 0.8611363115940526};
   TestRoots(p4_roots);
 }
 
 TEST(LegendrePolynomialRootFinding, P5) {
   mfem::Vector p5_roots{-0.906179845938664, -0.5384693101056831, 0.0,
-                           0.5384693101056831, 0.906179845938664};
+                        0.5384693101056831, 0.906179845938664};
   TestRoots(p5_roots);
 }
 
 TEST(LegendrePolynomialRootFinding, P8) {
   mfem::Vector p8_roots{-0.9602898564975363, -0.7966664774136267,
-                           -0.525532409916329,  -0.18343464249564984,
-                           0.18343464249564984, 0.525532409916329,
-                           0.7966664774136267,  0.9602898564975363};
+                        -0.525532409916329,  -0.18343464249564984,
+                        0.18343464249564984, 0.525532409916329,
+                        0.7966664774136267,  0.9602898564975363};
   TestRoots(p8_roots);
 }
 
@@ -260,31 +260,31 @@ TEST(LegendrePolynomialRootFinding, P32) {
 
 TEST(LegendrePolynomialRootFinding, P51) {
   mfem::Vector p51_roots{-0.9989099908489034,  -0.9942612604367524,
-                            -0.985915991735903,   -0.9739033680193239,
-                            -0.9582678486139082,  -0.9390675440029624,
-                            -0.9163738623097802,  -0.8902712180295274,
-                            -0.8608567111822925,  -0.828239763823065,
-                            -0.7925417120993812,  -0.7538953544853755,
-                            -0.7124444575770366,  -0.66834322117537,
-                            -0.6217557046007232,  -0.5728552163513039,
-                            -0.5218236693661858,  -0.4688509042860411,
-                            -0.4141339832263038,  -0.3578764566884095,
-                            -0.300287606335332,   -0.24158166644779872,
-                            -0.18197702695707751, -0.12169542101888876,
-                            -0.06096110015057879, 0.0,
-                            0.06096110015057879,  0.12169542101888876,
-                            0.18197702695707751,  0.24158166644779872,
-                            0.300287606335332,    0.3578764566884095,
-                            0.4141339832263038,   0.4688509042860411,
-                            0.5218236693661858,   0.5728552163513039,
-                            0.6217557046007232,   0.66834322117537,
-                            0.7124444575770366,   0.7538953544853755,
-                            0.7925417120993812,   0.828239763823065,
-                            0.8608567111822925,   0.8902712180295274,
-                            0.9163738623097802,   0.9390675440029624,
-                            0.9582678486139082,   0.9739033680193239,
-                            0.985915991735903,    0.9942612604367524,
-                            0.9989099908489034};
+                         -0.985915991735903,   -0.9739033680193239,
+                         -0.9582678486139082,  -0.9390675440029624,
+                         -0.9163738623097802,  -0.8902712180295274,
+                         -0.8608567111822925,  -0.828239763823065,
+                         -0.7925417120993812,  -0.7538953544853755,
+                         -0.7124444575770366,  -0.66834322117537,
+                         -0.6217557046007232,  -0.5728552163513039,
+                         -0.5218236693661858,  -0.4688509042860411,
+                         -0.4141339832263038,  -0.3578764566884095,
+                         -0.300287606335332,   -0.24158166644779872,
+                         -0.18197702695707751, -0.12169542101888876,
+                         -0.06096110015057879, 0.0,
+                         0.06096110015057879,  0.12169542101888876,
+                         0.18197702695707751,  0.24158166644779872,
+                         0.300287606335332,    0.3578764566884095,
+                         0.4141339832263038,   0.4688509042860411,
+                         0.5218236693661858,   0.5728552163513039,
+                         0.6217557046007232,   0.66834322117537,
+                         0.7124444575770366,   0.7538953544853755,
+                         0.7925417120993812,   0.828239763823065,
+                         0.8608567111822925,   0.8902712180295274,
+                         0.9163738623097802,   0.9390675440029624,
+                         0.9582678486139082,   0.9739033680193239,
+                         0.985915991735903,    0.9942612604367524,
+                         0.9989099908489034};
   TestRoots(p51_roots);
 }
 
@@ -360,13 +360,13 @@ TEST(LegendrePrimeRootFinding, P4) {
 
 TEST(LegendrePrimeRootFinding, P5) {
   mfem::Vector p5_prime_roots{-0.76505532392946474, -0.2852315164806451,
-                                 0.2852315164806451, 0.76505532392946474};
+                              0.2852315164806451, 0.76505532392946474};
   TestPrimeRoots(p5_prime_roots);
 }
 
 TEST(LegendrePrimeRootFinding, P6) {
-  mfem::Vector p6_prime_roots{-0.83022389627856696, -0.46884879347071423,
-                                 0.0, 0.46884879347071423, 0.83022389627856696};
+  mfem::Vector p6_prime_roots{-0.83022389627856696, -0.46884879347071423, 0.0,
+                              0.46884879347071423, 0.83022389627856696};
   TestPrimeRoots(p6_prime_roots);
 }
 
@@ -593,4 +593,103 @@ TEST(ApproximateLegendrePrimeRoot, ThrowsForRootNumberAtOrAboveNMinusOne) {
 }
 #endif
 
+// =======================================================================
+// Newton solver stress tests
+// =======================================================================
+// LegendreRoot and LegendrePrimeRoot cannot be given a bad starting point, so
+// they are stressed with large n and with checks that do not depend on Newton's
+// method: the power sums of the roots (from the Jacobi matrix of the Legendre
+// recurrence), interlacing of the roots, and the asymptotics of the extreme
+// root. At large n the extreme roots are the hard case: |P_n'| is largest and
+// 1 - x^2 is smallest there, so an absolute residual tolerance can be
+// unattainable in double precision.
+
+namespace {
+
+// Zero of the Bessel function J_0, used in the asymptotics of the largest root.
+constexpr double kBesselJ0FirstZero = 2.404825557695773;
+
+// sum_i x_i^2 over the roots of P_n: the trace of the squared Jacobi matrix,
+// 2 * sum_{k=1}^{n-1} k^2 / (4k^2 - 1).
+double SumOfSquaredRoots(const int n) {
+  double sum = 0.0;
+  for (int k = 1; k < n; ++k) {
+    sum += static_cast<double>(k) * k / (4.0 * k * k - 1.0);
+  }
+  return 2.0 * sum;
+}
+
+}  // namespace
+
+class NewtonStressTest : public ::testing::TestWithParam<int> {};
+
+INSTANTIATE_TEST_SUITE_P(Orders, NewtonStressTest,
+                         ::testing::Values(10, 100, 1000));
+
+TEST_P(NewtonStressTest, RootsSatisfyTheJacobiMatrixPowerSums) {
+  const int n = GetParam();
+  const mfem::Vector roots = AllLegendreRoots(n);
+  double sum = 0.0;
+  double sum_of_squares = 0.0;
+  for (int i = 0; i < n; ++i) {
+    sum += roots[i];
+    sum_of_squares += roots[i] * roots[i];
+  }
+  EXPECT_NEAR(sum, 0.0, 1e-12 * n);
+  EXPECT_NEAR(sum_of_squares, SumOfSquaredRoots(n), 1e-11 * n);
+}
+
+// AllLegendreRoots only runs Newton on one half and mirrors it, so solve every
+// root number directly: the negative half and the middle root of odd n are
+// otherwise never solved for.
+TEST_P(NewtonStressTest, EveryRootNumberConvergesAndMirrors) {
+  const int n = GetParam();
+  double previous = std::numeric_limits<double>::infinity();
+  for (int k = 0; k < n; ++k) {
+    const double root = LegendreRoot(n, k);
+    EXPECT_LT(root, previous) << "n=" << n << " k=" << k;
+    EXPECT_NEAR(root, -LegendreRoot(n, n - 1 - k), 1e-13)
+        << "n=" << n << " k=" << k;
+    previous = root;
+  }
+}
+
+// Rolle: P_n' has exactly one zero between consecutive zeros of P_n.
+TEST_P(NewtonStressTest, PrimeRootsInterlaceTheRoots) {
+  const int n = GetParam();
+  const mfem::Vector roots = AllLegendreRoots(n);
+  const mfem::Vector prime_roots = AllLegendrePrimeRoots(n);
+  ASSERT_EQ(prime_roots.Size(), n - 1);
+  for (int i = 0; i < n - 1; ++i) {
+    EXPECT_LT(roots[i], prime_roots[i]) << "n=" << n << " i=" << i;
+    EXPECT_LT(prime_roots[i], roots[i + 1]) << "n=" << n << " i=" << i;
+  }
+  if (n % 2 == 0) EXPECT_EQ(prime_roots[(n - 2) / 2], 0.0);
+}
+
+// As above, AllLegendrePrimeRoots mirrors one half, so solve every k directly,
+// including the middle root of even n whose seed is ~1e-17.
+TEST_P(NewtonStressTest, EveryPrimeRootNumberConvergesAndMirrors) {
+  const int n = GetParam();
+  double previous = -std::numeric_limits<double>::infinity();
+  for (int k = 0; k < n - 1; ++k) {
+    const double root = LegendrePrimeRoot(n, k);
+    EXPECT_GT(root, previous) << "n=" << n << " k=" << k;
+    EXPECT_NEAR(root, -LegendrePrimeRoot(n, n - 2 - k), 1e-13)
+        << "n=" << n << " k=" << k;
+    previous = root;
+  }
+}
+
+// For large n, 1 - x_max ~ j_{0,1}^2 / (2 (n + 1/2)^2).
+TEST(NewtonStress, ExtremeRootMatchesAsymptotics) {
+  for (const int n : {100, 1000}) {
+    const double nu = n + 0.5;
+    const double expected_gap =
+        kBesselJ0FirstZero * kBesselJ0FirstZero / (2.0 * nu * nu);
+    const double root = LegendreRoot(n, 0);
+    EXPECT_LT(root, 1.0);
+    EXPECT_NEAR((1.0 - root) / expected_gap, 1.0, 1e-2) << "n=" << n;
+  }
+}
 }  // namespace kingfisher
