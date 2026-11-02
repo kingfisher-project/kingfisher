@@ -112,7 +112,6 @@ double LegendrePrimeRoot(const int n, const int k) {
   unsigned int safety = 100;
 
   double relative_error = std::numeric_limits<double>::infinity();
-  double backward_error = std::numeric_limits<double>::infinity();
   for (auto i = 0; i < safety; i++) {
     double x_new = x_old - LegendrePolynomialPrime(n, x_old) /
                                LegendrePolynomialPrimePrime(n, x_old);
@@ -124,8 +123,7 @@ double LegendrePrimeRoot(const int n, const int k) {
   std::ostringstream error_message;
   error_message << std::scientific << std::setprecision(6)
                 << "LegendrePrimeRoot did not converge. "
-                << "Backward Error: " << backward_error
-                << ", Relative Error: " << relative_error;
+                << " Relative Error: " << relative_error;
 
   throw std::runtime_error(error_message.str());
 }
