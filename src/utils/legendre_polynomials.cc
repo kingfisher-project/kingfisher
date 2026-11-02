@@ -21,9 +21,10 @@ double LegendrePolynomial(const int n, const double x) {
     default:
       double previous = 1.0;
       double current = x;
-      for (double j = 1; j < n; j++) {
-        double next =
-            ((2.0 * j + 1.0) * x * current - j * previous) / (j + 1.0);
+      for (int j = 1; j < n; j++) {
+        double next = ((2.0 * static_cast<double>(j) + 1.0) * x * current -
+                       static_cast<double>(j) * previous) /
+                      (static_cast<double>(j) + 1.0);
         previous = current;
         current = next;
       }
