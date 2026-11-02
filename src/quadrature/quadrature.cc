@@ -18,7 +18,7 @@ QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
     }
   }
   quad_set.first_axis_nodes = first_axis.nodes;
-  quad_set.first_axis_nodes = second_axis.nodes;
+  quad_set.second_axis_nodes = second_axis.nodes;
 
   return quad_set;
 }
