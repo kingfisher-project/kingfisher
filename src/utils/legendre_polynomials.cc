@@ -51,6 +51,11 @@ double LegendrePolynomialPrime(const int n, const double x) {
 }
 
 double LegendrePolynomialPrimePrime(const int n, const double x) {
+  if (DoubleEqual(x, 1.0))
+    return n * (n - 1) * (n + 1) * (n + 2) / 8.0;
+  else if (DoubleEqual(x, -1.0))
+    return std::pow(-1.0, n) * n * (n - 1) * (n + 1) * (n + 2) / 8.0;
+
   return (2 * x * LegendrePolynomialPrime(n, x) -
           n * (n + 1) * LegendrePolynomial(n, x)) /
          (1.0 - x * x);
