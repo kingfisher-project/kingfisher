@@ -10,7 +10,7 @@
 
 namespace kingfisher {
 /**
- * @brief Create the 1D Gauss-Legendre quadrature on the intervale \f$\xi\in
+ * @brief Create the 1D Gauss-Legendre quadrature on the interval \f$\xi\in
  * [-1,1]\f$.
  *
  * @param n_points Number of points
@@ -19,21 +19,19 @@ namespace kingfisher {
 QuadSet1D GaussLegendre(const int n_points);
 
 /**
- * @brief Compute the Gauss-Legendre nodes on the standard interval(\f$\xi\in
- * [-1,1]\f$). Note that Gauss-Legendre nodes form an *open* quadrature set.
+ * @brief Sets the Gauss-Legendre nodes on the standard interval \f$\xi\in
+ * [-1,1]\f$ in place.
  *
- * @param n_points Number of points desired.
- * @return mfem::Vector
+ * @param gl_quad_set Quadrature set
+ * @param n_points Number of points
  */
 void GaussLegendreNodes(QuadSet1D& gl_quad_set, const int n_points);
 
 /**
- * @brief Compute the Gauss-Legendre quadrature weights corresponding to the
- * given nodes on the standard interval (\f$\xi\in
- * [-1,1]\f$).
+ * @brief Set the Gauss-Legendre weights corresponding to the given nodes in the
+ * standard interval in place.
  *
- * @param nodes Gauss-Legendre quadrature nodes.
- * @return mfem::Vector
+ * @param gl_quad_set Quadrature set
  */
 void GaussLegendreWeights(QuadSet1D& gl_quad_set);
 
