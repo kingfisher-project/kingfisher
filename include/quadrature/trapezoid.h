@@ -7,11 +7,11 @@
 #include "quadrature/quadrature.h"
 
 namespace kingfisher {
-QuadSet1D Trapezoid(const double a = -1.0, const double b = 1.0,
-                    const int n_points);
+QuadSet1D Trapezoid(const int n_points, const double a = -1.0,
+                    const double b = 1.0);
 
-void TrapezoidNodesAndWeights(QuadSet1D& quad_set, const double a,
-                              const double b, const int n_points);
+void TrapezoidNodesAndWeights(QuadSet1D& quad_set, const int n_points,
+                              const double a, const double b);
 
 }  // namespace kingfisher
 
