@@ -4,8 +4,6 @@
 #ifndef KINGFISHER_QUADRATURE_GAUSS_LEGENDRE_H_
 #define KINGFISHER_QUADRATURE_GAUSS_LEGENDRE_H_
 
-#include <mfem/linalg/vector.hpp>
-
 #include "quadrature/quadrature.h"
 
 namespace kingfisher {
