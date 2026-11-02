@@ -85,7 +85,7 @@ double LegendreRoot(const int n, const int k) {
     if (relative_error < 1e-12) return x_new;
     x_old = x_new;
   }
-  throw std::runtime_error("LegendreRoot did not converge.");
+  KingfisherError("LegendreRoot did not converge.");
 }
 
 double ApproximateLegendreRoot(const int n, const int k) {
@@ -124,8 +124,7 @@ double LegendrePrimeRoot(const int n, const int k) {
   error_message << std::scientific << std::setprecision(6)
                 << "LegendrePrimeRoot did not converge. "
                 << " Relative Error: " << relative_error;
-
-  throw std::runtime_error(error_message.str());
+  KingfisherError(error_message.str());
 }
 
 double ApproximateLegendrePrimeRoot(const int n, const int k) {
