@@ -4,6 +4,7 @@
 
 add_library(
 	kingfisher_lib
+	quadrature/quadrature.cc
 	utils/errors.cc
 	utils/input_parameters.cc
 	utils/legendre_polynomials.cc
