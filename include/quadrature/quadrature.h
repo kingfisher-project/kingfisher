@@ -20,8 +20,13 @@ struct QuadSet1D {
 };
 
 struct QuadSet2D {
+  /// @brief Quadrature weights
   mfem::Vector weights;
+
+  /// @brief First axis' nodes
   mfem::Vector first_axis_nodes;
+
+  /// @brief Second axis' nodes
   mfem::Vector second_axis_nodes;
 };
 
@@ -42,6 +47,15 @@ struct QuadSet2D {
 QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis);
 
+/**
+ * @brief Integrates a grid function that was evaluated on a quadrature set's
+ * nodes using the quadrature's weights. Weights and grid function values are
+ * passed as flattened vectors.
+ *
+ * @param grid_function Grid function values
+ * @param weights Quadrature weights
+ * @return double
+ */
 double Integrate(const mfem::Vector& grid_function,
                  const mfem::Vector& weights);
 }  // namespace kingfisher
