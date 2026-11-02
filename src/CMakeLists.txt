@@ -4,6 +4,7 @@
 
 add_library(
 	kingfisher_lib
+	quadrature/gauss_lobatto_legendre.cc
 	quadrature/gauss_legendre.cc
 	quadrature/quadrature.cc
 	utils/errors.cc
