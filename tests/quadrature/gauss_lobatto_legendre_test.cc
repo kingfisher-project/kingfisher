@@ -141,8 +141,8 @@ TEST_P(GaussLobattoLegendreTest, InPlaceFunctionsOverwriteExistingSet) {
 
 TEST(GaussLobattoLegendre, TwoPointRuleIsTrapezoid) {
   const QuadSet1D quad_set = GaussLobattoLegendre(2);
-  EXPECT_NEAR(quad_set.nodes[0], -1.0, TOLERANCE);
-  EXPECT_NEAR(quad_set.nodes[1], 1.0, TOLERANCE);
+  EXPECT_NEAR(quad_set.nodes[0], -1.0, kTolerance);
+  EXPECT_NEAR(quad_set.nodes[1], 1.0, kTolerance);
   EXPECT_NEAR(quad_set.weights[0], 1.0, EXP_NEAR_TOLERANCE);
   EXPECT_NEAR(quad_set.weights[1], 1.0, EXP_NEAR_TOLERANCE);
 }

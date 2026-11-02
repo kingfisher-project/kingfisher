@@ -45,7 +45,7 @@ TEST(LegendrePolynomial, P2ClosedForm) {
 TEST(LegendrePolynomial, P3ClosedForm) {
   for (double x : kAllX) {
     double expected = 0.5 * (5.0 * x * x * x - 3.0 * x);
-    EXPECT_NEAR(LegendrePolynomial(3, x), expected, TOLERANCE);
+    EXPECT_NEAR(LegendrePolynomial(3, x), expected, kTolerance);
   }
 }
 
@@ -199,7 +199,7 @@ void TestRoots(const mfem::Vector& expected_roots) {
   int order = expected_roots.Size();
   auto computed_roots = AllLegendreRoots(order);
   for (auto i = 0; i < order; i++)
-    EXPECT_NEAR(computed_roots[i], expected_roots[i], TOLERANCE);
+    EXPECT_NEAR(computed_roots[i], expected_roots[i], kTolerance);
 }
 
 TEST(LegendrePolynomialRootFinding, P1) {

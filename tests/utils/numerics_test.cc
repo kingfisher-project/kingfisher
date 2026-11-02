@@ -12,10 +12,10 @@
 namespace kingfisher {
 TEST(UtilsNumerics, DoubleEqual) {
   EXPECT_TRUE(DoubleEqual(1.0, 1.0));
-  EXPECT_TRUE(DoubleEqual(1.0, 1.0 + TOLERANCE / 2.0));
+  EXPECT_TRUE(DoubleEqual(1.0, 1.0 + kTolerance / 2.0));
   EXPECT_FALSE(DoubleEqual(1.0, -1.0));
   EXPECT_FALSE(DoubleEqual(1.0, 2.5));
-  EXPECT_FALSE(DoubleEqual(1.0, 1.0 + TOLERANCE));
+  EXPECT_FALSE(DoubleEqual(1.0, 1.0 + kTolerance));
 }
 
 TEST(UtilsNumerics, DoubleEqualHonorsCustomTolerance) {
@@ -50,8 +50,8 @@ TEST(UtilsNumerics, RelativeErrorIsNonNegativeForNegativeValues) {
 }
 
 TEST(UtilsNumerics, ToleranceConstants) {
-  EXPECT_EQ(TOLERANCE, 1e-15);
+  EXPECT_EQ(kTolerance, 1e-15);
   EXPECT_EQ(EXP_NEAR_TOLERANCE, 1e-14);
-  EXPECT_LT(TOLERANCE, EXP_NEAR_TOLERANCE);
+  EXPECT_LT(kTolerance, EXP_NEAR_TOLERANCE);
 }
 }  // namespace kingfisher

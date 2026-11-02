@@ -135,8 +135,8 @@ TEST_P(GaussLegendreTest, InPlaceFunctionsOverwriteExistingSet) {
 
 TEST(GaussLegendre, OnePointRuleIsMidpoint) {
   const QuadSet1D quad_set = GaussLegendre(1);
-  EXPECT_NEAR(quad_set.nodes[0], 0.0, TOLERANCE);
-  EXPECT_NEAR(quad_set.weights[0], 2.0, TOLERANCE);
+  EXPECT_NEAR(quad_set.nodes[0], 0.0, kTolerance);
+  EXPECT_NEAR(quad_set.weights[0], 2.0, kTolerance);
 }
 
 TEST(GaussLegendre, TwoPointRuleMatchesClosedForm) {

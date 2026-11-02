@@ -10,7 +10,7 @@
 
 namespace kingfisher {
 /// @brief General tolerance value for double comparisons
-inline constexpr double TOLERANCE = 1e-15;
+inline constexpr double kTolerance = 1e-15;
 
 /// @brief Tolerance value for EXPECT_NEAR in tests
 inline constexpr double EXP_NEAR_TOLERANCE = 1e-14;
@@ -27,7 +27,7 @@ inline constexpr double EXP_NEAR_TOLERANCE = 1e-14;
  * @return false
  */
 inline bool DoubleEqual(const double first, const double second,
-                        const double tolerance = TOLERANCE) {
+                        const double tolerance = kTolerance) {
   double difference = second - first;
   return (std::abs(difference) < tolerance);
 }
