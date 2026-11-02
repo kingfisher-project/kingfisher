@@ -6,6 +6,10 @@
 
 #include "quadrature/quadrature.h"
 
+// Formulae for the Gauss-Lobatto-Legendre quadrature set is based on those
+// given by Deville et al. in the textbook "High-Order Methods for
+// Incompressible Fluid Flow" (978-0-521-45309-7).
+
 namespace kingfisher {
 /**
  * @brief Create a 1D Gauss-Lobatto-Legendre quadrature set on the standard
