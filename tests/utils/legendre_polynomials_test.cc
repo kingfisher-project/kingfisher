@@ -7,6 +7,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <stdexcept>
 
 #include "utils/numerics.h"
 
@@ -410,6 +411,171 @@ TEST(AllLegendrePrimeRoots, SymmetricAboutZero) {
           << "n=" << n << " i=" << i;
     }
   }
+}
+
+// =======================================================================
+// LegendrePolynomialPrimePrime(n, x)
+// =======================================================================
+
+TEST(LegendrePolynomialPrimePrime, ClosedFormsForLowOrders) {
+  for (double x : kInteriorX) {
+    EXPECT_NEAR(LegendrePolynomialPrimePrime(2, x), 3.0, 1e-13) << "x=" << x;
+    EXPECT_NEAR(LegendrePolynomialPrimePrime(3, x), 15.0 * x, 1e-13)
+        << "x=" << x;
+    EXPECT_NEAR(LegendrePolynomialPrimePrime(4, x),
+                (105.0 * x * x - 15.0) / 2.0, 1e-13)
+        << "x=" << x;
+    EXPECT_NEAR(LegendrePolynomialPrimePrime(5, x),
+                (315.0 * x * x * x - 105.0 * x) / 2.0, 1e-12)
+        << "x=" << x;
+  }
+}
+
+TEST(LegendrePolynomialPrimePrime, MatchesFiniteDifferenceOfFirstDerivative) {
+  const double h = 1e-5;
+  for (int n = 2; n <= 10; ++n) {
+    for (double x : kInteriorX) {
+      const double fd = (LegendrePolynomialPrime(n, x + h) -
+                         LegendrePolynomialPrime(n, x - h)) /
+                        (2.0 * h);
+      const double scale = std::max(1.0, std::abs(fd));
+      EXPECT_NEAR(LegendrePolynomialPrimePrime(n, x), fd, 1e-6 * scale)
+          << "n=" << n << " x=" << x;
+    }
+  }
+}
+
+// P_n''(1) = (n-1) n (n+1) (n+2) / 8 and P_n''(-1) = (-1)^n P_n''(1). The
+// defining formula divides by 1 - x^2, so the endpoints need special handling.
+TEST(LegendrePolynomialPrimePrime, EndpointValues) {
+  for (int n = 2; n <= 8; ++n) {
+    const double expected = (n - 1.0) * n * (n + 1.0) * (n + 2.0) / 8.0;
+    EXPECT_NEAR(LegendrePolynomialPrimePrime(n, 1.0), expected, 1e-12)
+        << "n=" << n;
+    EXPECT_NEAR(LegendrePolynomialPrimePrime(n, -1.0),
+                (n % 2 == 0 ? 1.0 : -1.0) * expected, 1e-12)
+        << "n=" << n;
+  }
+}
+
+// =======================================================================
+// ApproximateLegendreRoot(n, k) / LegendreRoot(n, k) / AllLegendreRoots(n)
+// =======================================================================
+
+TEST(ApproximateLegendreRoot, MatchesDocumentedFormula) {
+  for (int n : {1, 4, 7}) {
+    for (int k = 0; k < n; ++k) {
+      EXPECT_DOUBLE_EQ(ApproximateLegendreRoot(n, k),
+                       std::cos((4.0 * k + 3.0) / (4.0 * n + 2.0) * M_PI))
+          << "n=" << n << " k=" << k;
+    }
+  }
+}
+
+TEST(ApproximateLegendreRoot, DecreasesInK) {
+  for (int n = 2; n <= 10; ++n) {
+    for (int k = 1; k < n; ++k) {
+      EXPECT_LT(ApproximateLegendreRoot(n, k),
+                ApproximateLegendreRoot(n, k - 1))
+          << "n=" << n << " k=" << k;
+    }
+  }
+}
+
+// The approximation only seeds Newton's method; for n >= 4 it is within 0.02
+// of the converged root (the largest error, n = 4, is about 0.005).
+TEST(ApproximateLegendreRoot, IsCloseToTheTrueRoot) {
+  for (int n = 4; n <= 10; ++n) {
+    for (int k = 0; k < n; ++k) {
+      EXPECT_NEAR(ApproximateLegendreRoot(n, k), AllLegendreRoots(n)[n - 1 - k],
+                  0.02)
+          << "n=" << n << " k=" << k;
+    }
+  }
+}
+
+// Valid root numbers are k = 0, ..., n - 1.
+TEST(ApproximateLegendreRoot, ThrowsForRootNumberAtOrAboveOrder) {
+  EXPECT_THROW(ApproximateLegendreRoot(4, 4), std::invalid_argument);
+  EXPECT_THROW(ApproximateLegendreRoot(4, 5), std::invalid_argument);
+  EXPECT_NO_THROW(ApproximateLegendreRoot(4, 3));
+}
+
+TEST(LegendreRoot, MatchesKnownRoots) {
+  EXPECT_NEAR(LegendreRoot(2, 0), 1.0 / std::sqrt(3.0), 1e-15);
+  EXPECT_NEAR(LegendreRoot(3, 0), std::sqrt(0.6), 1e-15);
+  EXPECT_NEAR(LegendreRoot(4, 0), 0.8611363115940526, 1e-15);
+  EXPECT_NEAR(LegendreRoot(4, 1), 0.3399810435848563, 1e-15);
+}
+
+// k = 0 is the root nearest +1, so root k of order n is entry n - 1 - k of the
+// ascending vector returned by AllLegendreRoots.
+TEST(LegendreRoot, ConsistentWithAllLegendreRootsAndIsARoot) {
+  for (int n = 2; n <= 12; ++n) {
+    const mfem::Vector all_roots = AllLegendreRoots(n);
+    for (int k = 0; k < n / 2; ++k) {
+      const double root = LegendreRoot(n, k);
+      EXPECT_EQ(root, all_roots[n - 1 - k]) << "n=" << n << " k=" << k;
+      EXPECT_NEAR(LegendrePolynomial(n, root), 0.0, 1e-13)
+          << "n=" << n << " k=" << k;
+    }
+  }
+}
+
+TEST(AllLegendreRoots, OnePointIsTheOrigin) {
+  const mfem::Vector roots = AllLegendreRoots(1);
+  ASSERT_EQ(roots.Size(), 1);
+  EXPECT_EQ(roots[0], 0.0);
+}
+
+TEST(AllLegendreRoots, HasNAscendingAntisymmetricRoots) {
+  for (int n = 2; n <= 20; ++n) {
+    const mfem::Vector roots = AllLegendreRoots(n);
+    ASSERT_EQ(roots.Size(), n) << "n=" << n;
+    for (int i = 0; i < n; ++i) {
+      EXPECT_GT(roots[i], -1.0);
+      EXPECT_LT(roots[i], 1.0);
+      if (i > 0) EXPECT_LT(roots[i - 1], roots[i]) << "n=" << n << " i=" << i;
+      EXPECT_DOUBLE_EQ(roots[i], -roots[n - 1 - i]) << "n=" << n << " i=" << i;
+    }
+  }
+}
+
+// =======================================================================
+// ApproximateLegendrePrimeRoot(n, k)
+// =======================================================================
+
+TEST(ApproximateLegendrePrimeRoot,
+     IsTheAverageOfSurroundingRootApproximations) {
+  for (int n : {3, 5, 8}) {
+    for (int k = 0; k < n - 1; ++k) {
+      const double expected = -0.5 * (ApproximateLegendreRoot(n, k) +
+                                      ApproximateLegendreRoot(n, k + 1));
+      EXPECT_DOUBLE_EQ(ApproximateLegendrePrimeRoot(n, k), expected)
+          << "n=" << n << " k=" << k;
+    }
+  }
+}
+
+// Only a Newton seed: the worst case in this range is n = 4 (about 0.05 off),
+// and it improves with n. Note the implementation returns the *negated*
+// average of the cosines, so k = 0 is the most negative root, matching the
+// ascending order of AllLegendrePrimeRoots.
+TEST(ApproximateLegendrePrimeRoot, IsCloseToTheConvergedRoot) {
+  for (int n = 4; n <= 10; ++n) {
+    for (int k = 0; k < n - 1; ++k) {
+      EXPECT_NEAR(ApproximateLegendrePrimeRoot(n, k), LegendrePrimeRoot(n, k),
+                  0.1)
+          << "n=" << n << " k=" << k;
+    }
+  }
+}
+
+// P'_n has n - 1 roots, k = 0, ..., n - 2.
+TEST(ApproximateLegendrePrimeRoot, ThrowsForRootNumberAtOrAboveNMinusOne) {
+  EXPECT_THROW(ApproximateLegendrePrimeRoot(4, 3), std::invalid_argument);
+  EXPECT_THROW(ApproximateLegendrePrimeRoot(4, 10), std::invalid_argument);
+  EXPECT_NO_THROW(ApproximateLegendrePrimeRoot(4, 2));
 }
 
 }  // namespace kingfisher
