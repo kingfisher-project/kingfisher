@@ -23,7 +23,14 @@ struct QuadSet1D {
 /**
  * @brief Integrate a 1D grid function using the supplied quadrature set. The
  * grid function values are expected to be evaluated at the quadrature set's
- * nodes.
+ * nodes. We approximate:
+ *
+ * \f[
+ * \int_{-1}^1 f(x)dx\approx \sum_{i=0}^{N}w_i f(x_i)
+ * \f]
+ *
+ * where \f$ x_i\in \{x_0,x_1,\dots,x_N\}\f$ are the quadrature nodes, and \f$
+ * w_i\in \{w_0,w_1,\dots,w_N\}\f$ are the quadrature weights at the nodes.
  *
  * @param grid_values Grid function values.
  * @param quad_set Quadrature set.
