@@ -7,8 +7,8 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
-#include <stdexcept>
 
+#include "utils/errors.h"
 #include "utils/numerics.h"
 
 namespace kingfisher {
@@ -495,11 +495,19 @@ TEST(ApproximateLegendreRoot, IsCloseToTheTrueRoot) {
 }
 
 // Valid root numbers are k = 0, ..., n - 1.
-TEST(ApproximateLegendreRoot, ThrowsForRootNumberAtOrAboveOrder) {
-  EXPECT_THROW(ApproximateLegendreRoot(4, 4), std::invalid_argument);
-  EXPECT_THROW(ApproximateLegendreRoot(4, 5), std::invalid_argument);
-  EXPECT_NO_THROW(ApproximateLegendreRoot(4, 3));
+TEST(ApproximateLegendreRoot, AcceptsValidRootNumbers) {
+  for (int k = 0; k < 4; ++k) {
+    EXPECT_NO_THROW(ApproximateLegendreRoot(4, k)) << "k=" << k;
+  }
 }
+
+// KINGFISHER_ASSERT is compiled out when NDEBUG is defined.
+#ifndef NDEBUG
+TEST(ApproximateLegendreRoot, ThrowsForRootNumberAtOrAboveOrder) {
+  EXPECT_THROW(ApproximateLegendreRoot(4, 4), Error);
+  EXPECT_THROW(ApproximateLegendreRoot(4, 5), Error);
+}
+#endif
 
 TEST(LegendreRoot, MatchesKnownRoots) {
   EXPECT_NEAR(LegendreRoot(2, 0), 1.0 / std::sqrt(3.0), 1e-15);
@@ -572,10 +580,17 @@ TEST(ApproximateLegendrePrimeRoot, IsCloseToTheConvergedRoot) {
 }
 
 // P'_n has n - 1 roots, k = 0, ..., n - 2.
-TEST(ApproximateLegendrePrimeRoot, ThrowsForRootNumberAtOrAboveNMinusOne) {
-  EXPECT_THROW(ApproximateLegendrePrimeRoot(4, 3), std::invalid_argument);
-  EXPECT_THROW(ApproximateLegendrePrimeRoot(4, 10), std::invalid_argument);
-  EXPECT_NO_THROW(ApproximateLegendrePrimeRoot(4, 2));
+TEST(ApproximateLegendrePrimeRoot, AcceptsValidRootNumbers) {
+  for (int k = 0; k < 3; ++k) {
+    EXPECT_NO_THROW(ApproximateLegendrePrimeRoot(4, k)) << "k=" << k;
+  }
 }
+
+#ifndef NDEBUG
+TEST(ApproximateLegendrePrimeRoot, ThrowsForRootNumberAtOrAboveNMinusOne) {
+  EXPECT_THROW(ApproximateLegendrePrimeRoot(4, 3), Error);
+  EXPECT_THROW(ApproximateLegendrePrimeRoot(4, 10), Error);
+}
+#endif
 
 }  // namespace kingfisher
