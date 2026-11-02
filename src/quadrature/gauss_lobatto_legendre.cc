@@ -3,6 +3,7 @@
 
 #include "quadrature/gauss_lobatto_legendre.h"
 
+#include "utils/errors.h"
 #include "utils/legendre_polynomials.h"
 
 namespace kingfisher {
@@ -15,6 +16,9 @@ QuadSet1D GaussLobattoLegendre(const int n_points) {
 }
 
 void GaussLobattoLegendreNodes(QuadSet1D& gll_quad_set, const int n_points) {
+  KINGFISHER_ASSERT(n_points >= 2,
+                    "Number of points passed to GaussLobattoLegendreNodes must "
+                    "be at least 2.");
   gll_quad_set.nodes.SetSize(n_points);
   gll_quad_set.nodes[0] = -1.0;
   gll_quad_set.nodes[n_points - 1] = 1.0;
