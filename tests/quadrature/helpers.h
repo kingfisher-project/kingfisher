@@ -5,7 +5,7 @@
 #define KINGFISHER_TESTS_QUADRATURE_HELPERS_H_
 
 #include <functional>
-#include <mfem/linalg/vector.hpp>
+#include <mfem.hpp>
 
 #include "quadrature/quadrature.h"
 

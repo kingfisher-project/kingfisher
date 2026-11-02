@@ -4,7 +4,7 @@
 #ifndef KINGFISHER_QUADRATURE_QUADRATURE_H_
 #define KINGFISHER_QUADRATURE_QUADRATURE_H_
 
-#include <mfem/linalg/vector.hpp>
+#include <mfem.hpp>
 
 namespace kingfisher {
 /**

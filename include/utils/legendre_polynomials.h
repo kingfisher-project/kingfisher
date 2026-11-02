@@ -11,7 +11,7 @@
 #ifndef KINGFISHER_UTILS_LEGENDRE_POLYNOMIALS_H_
 #define KINGFISHER_UTILS_LEGENDRE_POLYNOMIALS_H_
 
-#include <mfem/linalg/vector.hpp>
+#include <mfem.hpp>
 
 namespace kingfisher {
 /**
