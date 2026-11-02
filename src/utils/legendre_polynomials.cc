@@ -5,6 +5,7 @@
 
 #include <cmath>
 
+#include "utils/errors.h"
 #include "utils/numerics.h"
 
 namespace kingfisher {
@@ -89,7 +90,7 @@ double LegendreRoot(const int n, const int k) {
 }
 
 double ApproximateLegendreRoot(const int n, const int k) {
-  if (k > n) throw std::invalid_argument("k must be less than n.");
+  KINGFISHER_ASSERT(k < n, "k must be less than n.");
 
   return std::cos((4.0 * static_cast<double>(k) + 3.0) /
                   (4.0 * static_cast<double>(n) + 2.0) * M_PI);
@@ -132,7 +133,7 @@ double LegendrePrimeRoot(const int n, const int k) {
 }
 
 double ApproximateLegendrePrimeRoot(const int n, const int k) {
-  if (k >= n - 1) throw std::invalid_argument("k must be less than n-1.");
+  KINGFISHER_ASSERT(k < n - 1, "k must be less than n-1.");
   return -(ApproximateLegendreRoot(n, k) + ApproximateLegendreRoot(n, k + 1)) /
          2.0;
 }
