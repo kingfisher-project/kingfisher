@@ -11,9 +11,9 @@
 namespace kingfisher {
 QuadSet1D GaussLobattoLegendre(const int n_points);
 
-mfem::Vector GaussLobattoLegendreNodes(const int n_points);
+void GaussLobattoLegendreNodes(QuadSet1D& gll_quad_set, const int n_points);
 
-mfem::Vector GaussLobattoLegendreWeights(const mfem::Vector& gll_nodes);
+void GaussLobattoLegendreWeights(QuadSet1D& gll_quad_set);
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_QUADRATURE_GAUSS_LOBATTO_LEGENDRE_H_
