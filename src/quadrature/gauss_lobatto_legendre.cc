@@ -3,6 +3,8 @@
 
 #include "quadrature/gauss_lobatto_legendre.h"
 
+#include <mfem/linalg/vector.hpp>
+
 #include "utils/errors.h"
 #include "utils/legendre_polynomials.h"
 
