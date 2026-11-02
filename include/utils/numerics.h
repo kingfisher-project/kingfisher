@@ -2,6 +2,9 @@
 // Copyright (c) 2026, Liam Pohlmann
 // Copyright (c) 2026, kingfisher-project
 
+#ifndef KINGFISHER_UTILS_NUMERICS_H_
+#define KINGFISHER_UTILS_NUMERICS_H_
+
 #include <cmath>
 #include <limits>
 
@@ -42,3 +45,5 @@ inline double RelativeError(const double new_val, const double old_val) {
   return std::abs((new_val - old_val) / new_val);
 }
 }  // namespace kingfisher
+
+#endif  // KINGFISHER_UTILS_NUMERICS_H_
