@@ -6,35 +6,15 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
-#include <functional>
 #include <limits>
 
+#include "helpers.h"
 #include "quadrature/quadrature.h"
 #include "utils/errors.h"
 #include "utils/legendre_polynomials.h"
 #include "utils/numerics.h"
 
 namespace kingfisher {
-namespace {
-
-// \int_{-1}^{1} x^k dx
-double AnalyticMonomialIntegral(const int k) {
-  return k % 2 == 0 ? 2.0 / (k + 1) : 0.0;
-}
-
-mfem::Vector Evaluate(const std::function<double(double)>& f,
-                      const mfem::Vector& nodes) {
-  mfem::Vector values(nodes.Size());
-  for (int i = 0; i < nodes.Size(); i++) values[i] = f(nodes[i]);
-  return values;
-}
-
-double IntegrateFunction(const std::function<double(double)>& f,
-                         const QuadSet1D& quad_set) {
-  return Integrate(Evaluate(f, quad_set.nodes), quad_set.weights);
-}
-
-}  // namespace
 
 // =======================================================================
 // Properties that must hold for every number of points
