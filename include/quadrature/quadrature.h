@@ -19,6 +19,10 @@ struct QuadSet1D {
   mfem::Vector nodes;
 };
 
+/**
+ * @brief Defines a quadrature set in 2D.
+ *
+ */
 struct QuadSet2D {
   /// @brief Quadrature weights
   mfem::Vector weights;
