@@ -73,6 +73,13 @@ double LegendrePolynomialPrime(const int n, const double x);
  * (1-x^2)P_n''(x)-2xP_n'(x)+n(n+1)P_n(x)=0.
  * \f]
  *
+ * The second derivative at the boundaries is special:
+ *
+ * \f[
+ * P''_n(x)=\begin{cases} (-1)^{n}\frac{(n-1)n(n+1)(n+2)}{8} & x=-1
+ * \\ \frac{(n-1)n(n+1)(n+2)}{8} & x=1 \end{cases}.
+ * \f]
+ *
  * @param n Order
  * @param x Location to evaluate at
  * @return double
