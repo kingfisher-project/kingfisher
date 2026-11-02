@@ -16,6 +16,10 @@ void KingfisherError(bool condition, std::string_view message,
   }
 }
 
+void KingfisherError(std::string_view message, std::source_location location) {
+  KingfisherError(true, message, location);
+}
+
 namespace detail {
 
 void AssertFailed(const char* condition, std::string_view message,

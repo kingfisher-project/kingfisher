@@ -42,6 +42,22 @@ void KingfisherError(
     bool condition, std::string_view message,
     std::source_location location = std::source_location::current());
 
+/**
+ * Throws an Error when called.
+ *
+ * Use this to check user input and other conditions that can fail in a
+ * correct program. It is always active. Format the message with
+ * `fmt::format` if it needs values. Do not call it in hot loops.
+ *
+ * @param message Describes what went wrong and, if possible, how to fix it.
+ * @param location The call site, filled in by the compiler.
+ * @throws Error If `condition` is true. `what()` is
+ *   `<file>:<line>: <message>`.
+ */
+void KingfisherError(
+    std::string_view message,
+    std::source_location location = std::source_location::current());
+
 namespace detail {
 
 /** Throws the Error for a failed KINGFISHER_ASSERT(). */
