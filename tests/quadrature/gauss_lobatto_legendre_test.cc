@@ -8,6 +8,7 @@
 #include <cmath>
 #include <limits>
 
+#include "../tests/constants.h"
 #include "helpers.h"
 #include "quadrature/quadrature.h"
 #include "utils/errors.h"
@@ -40,7 +41,7 @@ TEST_P(GaussLobattoLegendreTest, ExactForMonomialsUpToDegree2NMinus3) {
   for (int k = 0; k <= 2 * n - 3; k++) {
     const double result =
         IntegrateFunction([k](double x) { return std::pow(x, k); }, quad_set);
-    EXPECT_NEAR(result, AnalyticMonomialIntegral(k), EXP_NEAR_TOLERANCE)
+    EXPECT_NEAR(result, AnalyticMonomialIntegral(k), kExpNearTolerance)
         << "n=" << n << ", k=" << k;
   }
 }
@@ -66,7 +67,7 @@ TEST_P(GaussLobattoLegendreTest, WeightsArePositiveAndSumToTwo) {
     EXPECT_GT(quad_set.weights[i], 0.0) << "n=" << n << ", i=" << i;
     sum += quad_set.weights[i];
   }
-  EXPECT_NEAR(sum, 2.0, EXP_NEAR_TOLERANCE) << "n=" << n;
+  EXPECT_NEAR(sum, 2.0, kExpNearTolerance) << "n=" << n;
 }
 
 // Lobatto sets are *closed*: both endpoints are nodes.
@@ -83,10 +84,10 @@ TEST_P(GaussLobattoLegendreTest, NodesAreOrderedAndSymmetric) {
   for (int i = 0; i < n; i++) {
     if (i > 0) EXPECT_LT(quad_set.nodes[i - 1], quad_set.nodes[i]) << "i=" << i;
     EXPECT_NEAR(quad_set.nodes[i], -quad_set.nodes[n - 1 - i],
-                EXP_NEAR_TOLERANCE)
+                kExpNearTolerance)
         << "i=" << i;
     EXPECT_NEAR(quad_set.weights[i], quad_set.weights[n - 1 - i],
-                EXP_NEAR_TOLERANCE)
+                kExpNearTolerance)
         << "i=" << i;
   }
   if (n % 2 == 1) EXPECT_EQ(quad_set.nodes[n / 2], 0.0);
@@ -98,7 +99,7 @@ TEST_P(GaussLobattoLegendreTest, InteriorNodesAreRootsOfLegendrePrime) {
   const QuadSet1D quad_set = GaussLobattoLegendre(n);
   for (int i = 1; i < n - 1; i++) {
     EXPECT_NEAR(LegendrePolynomialPrime(n - 1, quad_set.nodes[i]), 0.0,
-                EXP_NEAR_TOLERANCE * n * n)
+                kExpNearTolerance * n * n)
         << "n=" << n << ", i=" << i;
   }
 }
@@ -143,8 +144,8 @@ TEST(GaussLobattoLegendre, TwoPointRuleIsTrapezoid) {
   const QuadSet1D quad_set = GaussLobattoLegendre(2);
   EXPECT_NEAR(quad_set.nodes[0], -1.0, kTolerance);
   EXPECT_NEAR(quad_set.nodes[1], 1.0, kTolerance);
-  EXPECT_NEAR(quad_set.weights[0], 1.0, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.weights[1], 1.0, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(quad_set.weights[0], 1.0, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.weights[1], 1.0, kExpNearTolerance);
 }
 
 TEST(GaussLobattoLegendre, ThreePointRuleIsSimpson) {
@@ -152,8 +153,8 @@ TEST(GaussLobattoLegendre, ThreePointRuleIsSimpson) {
   const double expected_nodes[] = {-1.0, 0.0, 1.0};
   const double expected_weights[] = {1.0 / 3.0, 4.0 / 3.0, 1.0 / 3.0};
   for (int i = 0; i < 3; i++) {
-    EXPECT_NEAR(quad_set.nodes[i], expected_nodes[i], EXP_NEAR_TOLERANCE);
-    EXPECT_NEAR(quad_set.weights[i], expected_weights[i], EXP_NEAR_TOLERANCE);
+    EXPECT_NEAR(quad_set.nodes[i], expected_nodes[i], kExpNearTolerance);
+    EXPECT_NEAR(quad_set.weights[i], expected_weights[i], kExpNearTolerance);
   }
 }
 
@@ -164,8 +165,8 @@ TEST(GaussLobattoLegendre, FourPointRuleMatchesClosedForm) {
   const double expected_weights[] = {1.0 / 6.0, 5.0 / 6.0, 5.0 / 6.0,
                                      1.0 / 6.0};
   for (int i = 0; i < 4; i++) {
-    EXPECT_NEAR(quad_set.nodes[i], expected_nodes[i], EXP_NEAR_TOLERANCE);
-    EXPECT_NEAR(quad_set.weights[i], expected_weights[i], EXP_NEAR_TOLERANCE);
+    EXPECT_NEAR(quad_set.nodes[i], expected_nodes[i], kExpNearTolerance);
+    EXPECT_NEAR(quad_set.weights[i], expected_weights[i], kExpNearTolerance);
   }
 }
 
@@ -176,8 +177,8 @@ TEST(GaussLobattoLegendre, FivePointRuleMatchesClosedForm) {
   const double expected_weights[] = {1.0 / 10.0, 49.0 / 90.0, 32.0 / 45.0,
                                      49.0 / 90.0, 1.0 / 10.0};
   for (int i = 0; i < 5; i++) {
-    EXPECT_NEAR(quad_set.nodes[i], expected_nodes[i], EXP_NEAR_TOLERANCE);
-    EXPECT_NEAR(quad_set.weights[i], expected_weights[i], EXP_NEAR_TOLERANCE);
+    EXPECT_NEAR(quad_set.nodes[i], expected_nodes[i], kExpNearTolerance);
+    EXPECT_NEAR(quad_set.weights[i], expected_weights[i], kExpNearTolerance);
   }
 }
 

@@ -8,6 +8,7 @@
 #include <cmath>
 #include <limits>
 
+#include "../tests/constants.h"
 #include "helpers.h"
 #include "quadrature/quadrature.h"
 #include "utils/errors.h"
@@ -39,7 +40,7 @@ TEST_P(GaussLegendreTest, ExactForMonomialsUpToDegree2NMinus1) {
   for (int k = 0; k <= 2 * n - 1; k++) {
     const double result =
         IntegrateFunction([k](double x) { return std::pow(x, k); }, quad_set);
-    EXPECT_NEAR(result, AnalyticMonomialIntegral(k), EXP_NEAR_TOLERANCE)
+    EXPECT_NEAR(result, AnalyticMonomialIntegral(k), kExpNearTolerance)
         << "n=" << n << ", k=" << k;
   }
 }
@@ -67,7 +68,7 @@ TEST_P(GaussLegendreTest, WeightsArePositiveAndSumToTwo) {
     EXPECT_GT(quad_set.weights[i], 0.0) << "n=" << n << ", i=" << i;
     sum += quad_set.weights[i];
   }
-  EXPECT_NEAR(sum, 2.0, EXP_NEAR_TOLERANCE) << "n=" << n;
+  EXPECT_NEAR(sum, 2.0, kExpNearTolerance) << "n=" << n;
 }
 
 TEST_P(GaussLegendreTest, NodesAreOrderedSymmetricAndInsideTheInterval) {
@@ -80,9 +81,9 @@ TEST_P(GaussLegendreTest, NodesAreOrderedSymmetricAndInsideTheInterval) {
     // Antisymmetric nodes, symmetric weights. Exact: the implementation
     // mirrors the nodes, and the weights are even in x.
     EXPECT_NEAR(quad_set.nodes[i], -quad_set.nodes[n - 1 - i],
-                EXP_NEAR_TOLERANCE);
+                kExpNearTolerance);
     EXPECT_NEAR(quad_set.weights[i], quad_set.weights[n - 1 - i],
-                EXP_NEAR_TOLERANCE);
+                kExpNearTolerance);
   }
   if (n % 2 == 1) EXPECT_EQ(quad_set.nodes[n / 2], 0.0);
 }
@@ -92,7 +93,7 @@ TEST_P(GaussLegendreTest, NodesAreRootsOfLegendrePolynomial) {
   const QuadSet1D quad_set = GaussLegendre(n);
   for (int i = 0; i < n; i++) {
     EXPECT_NEAR(LegendrePolynomial(n, quad_set.nodes[i]), 0.0,
-                EXP_NEAR_TOLERANCE)
+                kExpNearTolerance)
         << "n=" << n << ", i=" << i;
   }
 }
@@ -142,21 +143,21 @@ TEST(GaussLegendre, OnePointRuleIsMidpoint) {
 TEST(GaussLegendre, TwoPointRuleMatchesClosedForm) {
   const QuadSet1D quad_set = GaussLegendre(2);
   const double x = 1.0 / std::sqrt(3.0);
-  EXPECT_NEAR(quad_set.nodes[0], -x, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.nodes[1], x, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.weights[0], 1.0, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.weights[1], 1.0, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(quad_set.nodes[0], -x, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.nodes[1], x, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.weights[0], 1.0, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.weights[1], 1.0, kExpNearTolerance);
 }
 
 TEST(GaussLegendre, ThreePointRuleMatchesClosedForm) {
   const QuadSet1D quad_set = GaussLegendre(3);
   const double x = std::sqrt(0.6);
-  EXPECT_NEAR(quad_set.nodes[0], -x, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.nodes[1], 0.0, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.nodes[2], x, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.weights[0], 5.0 / 9.0, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.weights[1], 8.0 / 9.0, EXP_NEAR_TOLERANCE);
-  EXPECT_NEAR(quad_set.weights[2], 5.0 / 9.0, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(quad_set.nodes[0], -x, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.nodes[1], 0.0, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.nodes[2], x, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.weights[0], 5.0 / 9.0, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.weights[1], 8.0 / 9.0, kExpNearTolerance);
+  EXPECT_NEAR(quad_set.weights[2], 5.0 / 9.0, kExpNearTolerance);
 }
 
 // =======================================================================

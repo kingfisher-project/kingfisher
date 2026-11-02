@@ -12,9 +12,6 @@ namespace kingfisher {
 /// @brief General tolerance value for double comparisons
 inline constexpr double kTolerance = 1e-15;
 
-/// @brief Tolerance value for EXPECT_NEAR in tests
-inline constexpr double EXP_NEAR_TOLERANCE = 1e-14;
-
 /**
  * @brief Tests if two double-type numbers are equal using the TOLERANCE
  * value. Taken from https://github.com/lipohlmann/hummingbird.

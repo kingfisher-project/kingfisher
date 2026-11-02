@@ -8,6 +8,7 @@
 #include <cmath>
 #include <numbers>
 
+#include "../tests/constants.h"
 #include "helpers.h"
 #include "quadrature/quadrature.h"
 #include "utils/errors.h"
@@ -37,12 +38,12 @@ TEST_P(TrapezoidTest, NodesAreUniformlySpacedFromMinusOneToOne) {
   const QuadSet1D quad_set = Trapezoid(n);
   const double h = 2.0 / (n - 1);
   EXPECT_EQ(quad_set.nodes[0], -1.0);
-  EXPECT_NEAR(quad_set.nodes[n - 1], 1.0, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(quad_set.nodes[n - 1], 1.0, kExpNearTolerance);
   for (int i = 0; i < n; i++) {
-    EXPECT_NEAR(quad_set.nodes[i], -1.0 + h * i, EXP_NEAR_TOLERANCE)
+    EXPECT_NEAR(quad_set.nodes[i], -1.0 + h * i, kExpNearTolerance)
         << "i=" << i;
     EXPECT_NEAR(quad_set.nodes[i], -quad_set.nodes[n - 1 - i],
-                EXP_NEAR_TOLERANCE)
+                kExpNearTolerance)
         << "i=" << i;
     if (i > 0) EXPECT_LT(quad_set.nodes[i - 1], quad_set.nodes[i]);
   }
@@ -57,11 +58,11 @@ TEST_P(TrapezoidTest, WeightsArePositiveAndHalvedAtTheEnds) {
   for (int i = 0; i < n; i++) {
     const double expected = (i == 0 || i == n - 1) ? 0.5 * h : h;
     EXPECT_GT(quad_set.weights[i], 0.0) << "i=" << i;
-    EXPECT_NEAR(quad_set.weights[i], expected, EXP_NEAR_TOLERANCE)
+    EXPECT_NEAR(quad_set.weights[i], expected, kExpNearTolerance)
         << "n=" << n << ", i=" << i;
     sum += quad_set.weights[i];
   }
-  EXPECT_NEAR(sum, 2.0, EXP_NEAR_TOLERANCE) << "n=" << n;
+  EXPECT_NEAR(sum, 2.0, kExpNearTolerance) << "n=" << n;
 }
 
 // Degree of exactness is 1: constants and linear functions are integrated
@@ -72,7 +73,7 @@ TEST_P(TrapezoidTest, ExactForDegreeZeroAndOneButNotTwo) {
   for (int k = 0; k <= 1; k++) {
     const double result =
         IntegrateFunction([k](double x) { return std::pow(x, k); }, quad_set);
-    EXPECT_NEAR(result, AnalyticMonomialIntegral(k), EXP_NEAR_TOLERANCE)
+    EXPECT_NEAR(result, AnalyticMonomialIntegral(k), kExpNearTolerance)
         << "n=" << n << ", k=" << k;
   }
   const double result =
@@ -88,7 +89,7 @@ TEST_P(TrapezoidTest, QuadraticErrorMatchesTheory) {
   const double h = 2.0 / (n - 1);
   const double result =
       IntegrateFunction([](double x) { return x * x; }, quad_set);
-  EXPECT_NEAR(result - 2.0 / 3.0, h * h / 3.0, EXP_NEAR_TOLERANCE) << "n=" << n;
+  EXPECT_NEAR(result - 2.0 / 3.0, h * h / 3.0, kExpNearTolerance) << "n=" << n;
 }
 
 TEST_P(TrapezoidTest, TrapezoidMatchesInPlaceFunction) {
@@ -162,10 +163,10 @@ TEST(Trapezoid, AzimuthalIntervalEndpointsAndWeightSum) {
   const double two_pi = 2.0 * std::numbers::pi;
   const QuadSet1D quad_set = Trapezoid(9, 0.0, two_pi);
   EXPECT_EQ(quad_set.nodes[0], 0.0);
-  EXPECT_NEAR(quad_set.nodes[8], two_pi, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(quad_set.nodes[8], two_pi, kExpNearTolerance);
   double sum = 0.0;
   for (int i = 0; i < 9; i++) sum += quad_set.weights[i];
-  EXPECT_NEAR(sum, two_pi, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(sum, two_pi, kExpNearTolerance);
 }
 
 // For periodic integrands the trapezoid rule is exact for trigonometric
@@ -173,13 +174,13 @@ TEST(Trapezoid, AzimuthalIntervalEndpointsAndWeightSum) {
 TEST(Trapezoid, ExactForPeriodicTrigonometricPolynomialsOnZeroToTwoPi) {
   const QuadSet1D quad_set = Trapezoid(9, 0.0, 2.0 * std::numbers::pi);
   EXPECT_NEAR(IntegrateFunction([](double x) { return std::sin(x); }, quad_set),
-              0.0, EXP_NEAR_TOLERANCE);
+              0.0, kExpNearTolerance);
   EXPECT_NEAR(IntegrateFunction(
                   [](double x) { return std::cos(x) * std::cos(x); }, quad_set),
-              std::numbers::pi, EXP_NEAR_TOLERANCE);
+              std::numbers::pi, kExpNearTolerance);
   EXPECT_NEAR(
       IntegrateFunction([](double x) { return std::cos(3.0 * x); }, quad_set),
-      0.0, EXP_NEAR_TOLERANCE);
+      0.0, kExpNearTolerance);
 }
 
 // Asymmetric interval that does not contain zero: catches swapped a/b or a
@@ -187,11 +188,11 @@ TEST(Trapezoid, ExactForPeriodicTrigonometricPolynomialsOnZeroToTwoPi) {
 TEST(Trapezoid, LinearFunctionOnAsymmetricInterval) {
   const QuadSet1D quad_set = Trapezoid(7, 2.0, 5.0);
   EXPECT_EQ(quad_set.nodes[0], 2.0);
-  EXPECT_NEAR(quad_set.nodes[6], 5.0, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(quad_set.nodes[6], 5.0, kExpNearTolerance);
   // \int_2^5 (3x - 1) dx = 1.5 (25 - 4) - 3 = 28.5
   EXPECT_NEAR(
       IntegrateFunction([](double x) { return 3.0 * x - 1.0; }, quad_set), 28.5,
-      EXP_NEAR_TOLERANCE);
+      kExpNearTolerance);
 }
 
 // =======================================================================

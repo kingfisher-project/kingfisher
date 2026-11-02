@@ -7,6 +7,7 @@
 
 #include <functional>
 
+#include "../tests/constants.h"
 #include "helpers.h"
 #include "quadrature/gauss_legendre.h"
 #include "quadrature/trapezoid.h"
@@ -33,7 +34,7 @@ TEST(Integrate, EmptyVectorsIntegrateToZero) {
 TEST(Integrate, IntegratesQuadraticWithTwoPointGaussLegendre) {
   EXPECT_NEAR(
       IntegrateFunction([](double x) { return x * x; }, GaussLegendre(2)),
-      2.0 / 3.0, EXP_NEAR_TOLERANCE);
+      2.0 / 3.0, kExpNearTolerance);
 }
 
 // KINGFISHER_ASSERT is compiled out when NDEBUG is defined.
@@ -99,7 +100,7 @@ TEST_F(Create2DQuadSetTest, WeightsSumToProductOfAxisIntervals) {
   const QuadSet2D quad_set = Create2DQuadSet(first_axis_, second_axis_);
   double sum = 0.0;
   for (int k = 0; k < quad_set.weights.Size(); k++) sum += quad_set.weights[k];
-  EXPECT_NEAR(sum, 4.0, EXP_NEAR_TOLERANCE);
+  EXPECT_NEAR(sum, 4.0, kExpNearTolerance);
 }
 
 // x^2 y^0 is not symmetric under x <-> y, so this fails if the grid ordering
@@ -117,7 +118,7 @@ TEST_F(Create2DQuadSetTest, IntegratesSeparablePolynomialsExactly) {
           first_axis_, second_axis_);
       EXPECT_NEAR(Integrate(values, quad_set.weights),
                   AnalyticMonomialIntegral(a) * AnalyticMonomialIntegral(b),
-                  EXP_NEAR_TOLERANCE)
+                  kExpNearTolerance)
           << "a=" << a << ", b=" << b;
     }
   }
@@ -130,7 +131,7 @@ TEST_F(Create2DQuadSetTest, IntegratesNonSeparableFunctionExactly) {
       [](double x, double y) { return x * x + 3.0 * x * y + y + 1.0; },
       first_axis_, second_axis_);
   EXPECT_NEAR(Integrate(values, quad_set.weights), 16.0 / 3.0,
-              EXP_NEAR_TOLERANCE);
+              kExpNearTolerance);
 }
 
 TEST_F(Create2DQuadSetTest, StoresEachAxisNodes) {

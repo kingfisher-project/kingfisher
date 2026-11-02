@@ -9,6 +9,8 @@
 #include <cmath>
 #include <limits>
 
+#include "../tests/constants.h"
+
 namespace kingfisher {
 TEST(UtilsNumerics, DoubleEqual) {
   EXPECT_TRUE(DoubleEqual(1.0, 1.0));
@@ -51,7 +53,7 @@ TEST(UtilsNumerics, RelativeErrorIsNonNegativeForNegativeValues) {
 
 TEST(UtilsNumerics, ToleranceConstants) {
   EXPECT_EQ(kTolerance, 1e-15);
-  EXPECT_EQ(EXP_NEAR_TOLERANCE, 1e-14);
-  EXPECT_LT(kTolerance, EXP_NEAR_TOLERANCE);
+  EXPECT_EQ(kExpNearTolerance, 1e-14);
+  EXPECT_LT(kTolerance, kExpNearTolerance);
 }
 }  // namespace kingfisher
