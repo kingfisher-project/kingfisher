@@ -10,6 +10,7 @@
 
 #include "helpers.h"
 #include "quadrature/quadrature.h"
+#include "utils/errors.h"
 #include "utils/legendre_polynomials.h"
 #include "utils/numerics.h"
 
@@ -179,6 +180,22 @@ TEST(GaussLobattoLegendre, FivePointRuleMatchesClosedForm) {
     EXPECT_NEAR(quad_set.weights[i], expected_weights[i], EXP_NEAR_TOLERANCE);
   }
 }
+
+// =======================================================================
+// Invalid input
+// =======================================================================
+
+// KINGFISHER_ASSERT is compiled out when NDEBUG is defined.
+#ifndef NDEBUG
+TEST(GaussLobattoLegendre, FewerThanTwoPointsThrows) {
+  QuadSet1D quad_set;
+  EXPECT_THROW(GaussLobattoLegendreNodes(quad_set, 1), Error);
+  EXPECT_THROW(GaussLobattoLegendreNodes(quad_set, 0), Error);
+  EXPECT_THROW(GaussLobattoLegendreNodes(quad_set, -3), Error);
+  EXPECT_THROW(GaussLobattoLegendre(1), Error);
+  EXPECT_THROW(GaussLobattoLegendre(0), Error);
+}
+#endif
 
 // =======================================================================
 // Non-polynomial integrand
