@@ -9,7 +9,7 @@ namespace kingfisher {
 QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis) {
   QuadSet2D quad_set;
-  quad_set.weights.Reserve(first_axis.weights.Size() *
+  quad_set.weights.SetSize(first_axis.weights.Size() *
                            second_axis.weights.Size());
   for (auto j = 0; j < second_axis.weights.Size(); j++) {
     for (auto i = 0; i < first_axis.weights.Size(); i++) {
