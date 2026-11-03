@@ -29,4 +29,5 @@ struct QuadSetParams {
   double max = 0.0;
 };
 }  // namespace kingfisher
-#endif  //
+
+#endif  // KINGFISHER_QUADRATURE_QUAD_SET_PARAMS_H_
