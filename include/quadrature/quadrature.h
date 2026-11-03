@@ -88,6 +88,9 @@ QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
  * \sum_{i=1}^{N_{\varphi}}\sum_{j=1}^{N_{\theta}} w_{ij} f(\theta_i,\mu_j).
  * \f]
  *
+ * @note For a tensor product, we demand the change of variables occur on
+ * the polar angle to remove the Jacobian weighting.
+ *
  * @param quad_set_params
  * @return QuadSet1D
  */
