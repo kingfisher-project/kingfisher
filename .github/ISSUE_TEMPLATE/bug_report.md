@@ -8,26 +8,58 @@ type: Bug
 
 ---
 
-**Describe the bug**
+## Describe the bug
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## YAML Input file
+Include your input file below.
 
-**Expected behavior**
+```yaml
+---
+# Description
+
+version: 0
+
+problem:
+
+mesh:
+
+boundary_conditions:
+
+materials:
+
+sources:
+
+regions:
+
+angular:
+
+spatial:
+
+solver:
+
+output:
+
+...
+
+```
+
+## To Reproduce
+Steps to reproduce the behavior:
+1. Step 1
+2. Step 2
+3. ...
+
+## Expected behavior
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
+## Screenshots
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
+## Desktop (please complete the following information):
  - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+ - Kingfisher version/commit: [e.g. v0.1.0]
+ - Build type: [e.g. release]:
 
-**Additional context**
+## Additional context
 Add any other context about the problem here.
