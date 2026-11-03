@@ -3,6 +3,8 @@
 
 #include "quadrature/quadrature.h"
 
+#include <numbers>
+
 #include "quadrature/gauss_legendre.h"
 #include "quadrature/gauss_lobatto_legendre.h"
 #include "quadrature/trapezoid.h"
@@ -53,6 +55,16 @@ QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
 QuadSet2D SphericalQuadSet(const AngularParams& angular_params) {
   switch (angular_params.quad_type) {
     case SphericalQuadType::TensorProduct: {
+      KingfisherError(!(DoubleEqual(angular_params.polar_quad_set.min, -1.0) &&
+                        DoubleEqual(angular_params.polar_quad_set.max, 1.0)),
+                      "The polar quadrature set of a spherical quadrature must "
+                      "be on [-1, 1].");
+      KingfisherError(
+          !(DoubleEqual(angular_params.azimuthal_quad_set.min, 0.0) &&
+            DoubleEqual(angular_params.azimuthal_quad_set.max,
+                        2.0 * std::numbers::pi)),
+          "The azimuthal quadrature set of a spherical quadrature must be on "
+          "[0, 2 pi].");
       auto azim_quad_set = Create1DQuadSet(angular_params.azimuthal_quad_set);
       auto polar_quad_set = Create1DQuadSet(angular_params.polar_quad_set);
       return Create2DQuadSet(azim_quad_set, polar_quad_set);
