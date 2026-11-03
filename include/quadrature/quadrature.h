@@ -5,6 +5,9 @@
 #define KINGFISHER_QUADRATURE_QUADRATURE_H_
 
 #include <mfem.hpp>
+#include <vector>
+
+#include "utils/enums.h"
 
 namespace kingfisher {
 /**
@@ -18,6 +21,19 @@ struct QuadSet1D {
   /// @brief Quadrature nodes
   mfem::Vector nodes;
 };
+
+/**
+ * @brief Create a 1D quadrature set of a given type with `n_points`, which
+ * integrates a function from \f$a\f$ to \f$b\f$.
+ *
+ * @param type Type of quadrature set
+ * @param n_points Number of points
+ * @param a Integrate from
+ * @param b Integrate to
+ * @return QuadSet1D
+ */
+QuadSet1D Create1DQuadSet(const QuadSetType type, const int n_points,
+                          const double a = -1.0, const double b = 1.0);
 
 /**
  * @brief Defines a quadrature set in 2D.

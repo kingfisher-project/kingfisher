@@ -3,9 +3,28 @@
 
 #include "quadrature/quadrature.h"
 
+#include "quadrature/gauss_legendre.h"
+#include "quadrature/trapezoid.h"
 #include "utils/errors.h"
+#include "utils/numerics.h"
 
 namespace kingfisher {
+QuadSet1D Create1DQuadSet(const QuadSetType type, const int n_points,
+                          const double a = -1.0, const double b = 1.0) {
+  QuadSet1D quad_set;
+  switch (type) {
+    case QuadSetType::Trapezoid:
+      return Trapezoid(n_points, a, b);
+    case QuadSetType::GaussLegendre:
+      KingfisherError(DoubleEqual(a, -1.0) && DoubleEqual(b, 1.0),
+                      "GaussLegendre quadrature set can only be created on the "
+                      "unit interval");
+      return GaussLegendre(n_points);
+    default:
+      KingfisherError("QuadSetType passed to Create1DQuadSet not supported.");
+  }
+}
+
 QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis) {
   QuadSet2D quad_set;
