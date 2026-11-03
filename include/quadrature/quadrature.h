@@ -79,6 +79,33 @@ struct QuadSet2D {
 QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis);
 
+/**
+ * @brief Creates a quadrature set on the unit sphere. Specfically, we
+ * approximate the integral:
+ *
+ * \f[
+ * \int_{4\pi}f(\hat{\Omega})d\hat{\Omega}=\int_{0}^{\pi}\int_{0}^{2\pi}f(\theta,\varphi)
+ * \sin\varphi d\theta d\varphi=\int_{-1}^1\int_{0}^{2\pi}f(\theta,\mu)d\theta
+ * d\mu \f]
+ *
+ * where \f$\mu\equiv \cos\varphi\f$ for \f$\varphi\in [0,\pi]\f$ and
+ * \f$\theta\in [0,2\pi]\f$, with a summation:
+ *
+ * \f[
+ * \int_{4\pi}f(\hat{\Omega})d\hat{\Omega} \approx \sum_{n=0}^N w_n
+ * f(\hat{\Omega}_n). \f]
+ *
+ * If the quadrature set is specified to be approximated with a tensor product
+ * along the azimuthal and polar axes, then we have:
+ *
+ * \f[
+ * \int_{-1}^1\int_{0}^{2\pi}f(\theta,\mu)d\theta d\mu \approx
+ * \sum_{i=1}^{N_{\varphi}}\sum_{j=1}^{N_{\theta}} w_{ij} f(\theta_i,\mu_j).
+ * \f]
+ *
+ * @param quad_set_params
+ * @return QuadSet1D
+ */
 QuadSet2D SphericalQuadSet(const AngularParams& angular_params);
 
 /**
