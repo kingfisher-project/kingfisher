@@ -23,8 +23,6 @@ QuadSet1D Create1DQuadSet(const QuadSetParams& quad_set_params) {
       return GaussLegendre(quad_set_params.n_points);
     default:
       KingfisherError("QuadSetType passed to Create1DQuadSet not supported.");
-      QuadSet1D empty;
-      return empty;
   }
 }
 
@@ -55,7 +53,6 @@ QuadSet2D SphericalQuadSet(const AngularParams& angular_params) {
 
     default:
       KingfisherError("Angular parameters quadrature type not supported.");
-      break;
   }
 }
 

@@ -17,7 +17,8 @@ void KingfisherError(bool condition, std::string_view message,
 }
 
 void KingfisherError(std::string_view message, std::source_location location) {
-  KingfisherError(true, message, location);
+  throw Error(std::string(location.file_name()) + ":" +
+              std::to_string(location.line()) + ": " + std::string(message));
 }
 
 namespace detail {
