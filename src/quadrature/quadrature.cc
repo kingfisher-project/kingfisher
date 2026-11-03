@@ -4,6 +4,7 @@
 #include "quadrature/quadrature.h"
 
 #include "quadrature/gauss_legendre.h"
+#include "quadrature/gauss_lobatto_legendre.h"
 #include "quadrature/trapezoid.h"
 #include "utils/errors.h"
 #include "utils/input_parameters.h"
@@ -13,14 +14,20 @@ namespace kingfisher {
 QuadSet1D Create1DQuadSet(const QuadSetParams& quad_set_params) {
   switch (quad_set_params.type) {
     case QuadSetType::Trapezoid:
-      return Trapezoid(quad_set_params.n_points, quad_set_params.min,
-                       quad_set_params.max);
+      return Trapezoid(static_cast<int>(quad_set_params.n_points),
+                       quad_set_params.min, quad_set_params.max);
     case QuadSetType::GaussLegendre:
-      KingfisherError(DoubleEqual(quad_set_params.min, -1.0) &&
-                          DoubleEqual(quad_set_params.max, 1.0),
+      KingfisherError(!(DoubleEqual(quad_set_params.min, -1.0) &&
+                        DoubleEqual(quad_set_params.max, 1.0)),
                       "GaussLegendre quadrature set can only be created on the "
                       "unit interval");
-      return GaussLegendre(quad_set_params.n_points);
+      return GaussLegendre(static_cast<int>(quad_set_params.n_points));
+    case QuadSetType::GaussLobattoLegendre:
+      KingfisherError(!(DoubleEqual(quad_set_params.min, -1.0) &&
+                        DoubleEqual(quad_set_params.max, 1.0)),
+                      "GaussLobattoLegendre quadrature set can only be created "
+                      "on the unit interval");
+      return GaussLobattoLegendre(static_cast<int>(quad_set_params.n_points));
     default:
       KingfisherError("QuadSetType passed to Create1DQuadSet not supported.");
   }
