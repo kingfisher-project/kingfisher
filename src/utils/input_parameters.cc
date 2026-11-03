@@ -88,8 +88,8 @@ constexpr std::array kSphericalQuadTypes = {Entry<SphericalQuadType>{
     "tensor_product", SphericalQuadType::TensorProduct}};
 
 constexpr std::array kQuadSets = {
-    Entry<QuadSet>{"gauss_legendre", QuadSet::GaussLegendre},
-    Entry<QuadSet>{"trapezoid", QuadSet::Trapezoid}};
+    Entry<QuadSetType>{"gauss_legendre", QuadSetType::GaussLegendre},
+    Entry<QuadSetType>{"trapezoid", QuadSetType::Trapezoid}};
 
 // The name to use for `node` in messages: its key, or for a list entry the key
 // of the list it is in.

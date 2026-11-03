@@ -4,8 +4,13 @@
 
 add_library(
 	kingfisher_lib
+	quadrature/trapezoid.cc
+	quadrature/gauss_lobatto_legendre.cc
+	quadrature/gauss_legendre.cc
+	quadrature/quadrature.cc
 	utils/errors.cc
 	utils/input_parameters.cc
+	utils/legendre_polynomials.cc
 )
 
 target_compile_features(kingfisher_lib PUBLIC cxx_std_20)

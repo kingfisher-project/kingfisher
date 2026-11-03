@@ -57,7 +57,7 @@ enum class SphericalQuadType { TensorProduct };
  * @brief Available generic quadrature sets.
  *
  */
-enum class QuadSet { GaussLegendre, Trapezoid };
+enum class QuadSetType { GaussLegendre, Trapezoid };
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_UTILS_ENUMS_H_
