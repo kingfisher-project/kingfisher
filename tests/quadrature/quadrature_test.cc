@@ -240,24 +240,24 @@ double AnalyticMonomialIntegral(const int k, const double a, const double b) {
 
 }  // namespace
 
-// AllQuadSetTypes() must list every enumerator TraitsFor() handles. TraitsFor()
-// itself is forced to handle every enumerator by -Werror=switch. Unknown
-// values make it throw, which is how we find the end of the enumerators.
 TEST(QuadTypeTraits, AllQuadSetTypesListsEveryEnumerator) {
   const std::vector<QuadSetType> listed = AllQuadSetTypes();
   int handled = 0;
   for (int value = 0; value < 64; value++) {
     const auto type = static_cast<QuadSetType>(value);
+    std::optional<QuadTypeTraits> maybe;
     try {
-      const QuadTypeTraits traits = TraitsFor(type);
-      handled++;
-      EXPECT_EQ(traits.type, type) << traits.name;
-      EXPECT_NE(std::find(listed.begin(), listed.end(), type), listed.end())
-          << traits.name << " is missing from AllQuadSetTypes()";
-      EXPECT_GE(traits.min_points, 1) << traits.name;
-      EXPECT_GE(traits.exact_degree(traits.min_points), 0) << traits.name;
+      maybe = TraitsFor(type);
     } catch (const Error&) {
+      continue;  // past the last enumerator
     }
+    const QuadTypeTraits& traits = *maybe;
+    handled++;
+    EXPECT_EQ(traits.type, type) << traits.name;
+    EXPECT_NE(std::find(listed.begin(), listed.end(), type), listed.end())
+        << traits.name << " is missing from AllQuadSetTypes()";
+    EXPECT_GE(traits.min_points, 1) << traits.name;
+    EXPECT_GE(traits.exact_degree(traits.min_points), 0) << traits.name;
   }
   EXPECT_EQ(handled, static_cast<int>(listed.size()));
 }
