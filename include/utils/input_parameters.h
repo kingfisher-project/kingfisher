@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 
+#include "quadrature/quad_set_params.h"
 #include "quadrature/quadrature.h"
 #include "utils/enums.h"
 

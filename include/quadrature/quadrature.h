@@ -5,33 +5,12 @@
 #define KINGFISHER_QUADRATURE_QUADRATURE_H_
 
 #include <mfem.hpp>
-#include <vector>
 
-#include "utils/enums.h"
+#include "quadrature/quad_set_params.h"
 
 namespace kingfisher {
 
 struct AngularParams;
-
-/**
- * @brief Parameters of a one-dimensional quadrature set.
- *
- */
-struct QuadSetParams {
-  /// @brief Type of quadrature set
-  QuadSetType type = QuadSetType::GaussLegendre;
-
-  /// @brief Number of points in set (`n_directions` in the YAML)
-  std::size_t n_points = 0;
-
-  /// @brief Minimum value (integrate from value). Set by the reader from the
-  /// set's role, not read from the input file.
-  double min = 0.0;
-
-  /// @brief Maximum value (integrate to value). Set by the reader from the
-  /// set's role, not read from the input file.
-  double max = 0.0;
-};
 
 /**
  * @brief Defines a quadrature set in 1D.
