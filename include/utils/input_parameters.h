@@ -137,8 +137,10 @@ struct AngularParams {
  *
  */
 struct SpatialParams {
-  /// @brief Node placement strategy within spectral elements
-  SENodePlacement se_node_placement = SENodePlacement::GaussLobattoLegendre;
+  /// @brief Node placement strategy within spectral elements. This can be based
+  /// on any of the available quadrature sets, but we almost always go with the
+  /// GaussLobattoLegendre set.
+  QuadSetType se_node_placement = QuadSetType::GaussLobattoLegendre;
 
   /// @brief Number of nodes along each axis of an element (at least 2).
   std::size_t nodes_per_axis = 2;

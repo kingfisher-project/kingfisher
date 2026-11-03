@@ -134,7 +134,7 @@ TEST(InputParameters, ReadsNumbers) {
   const InputParameters input = ParseInputString(kValidYaml);
   EXPECT_EQ(input.spatial_params.nodes_per_axis, 3u);
   EXPECT_EQ(input.spatial_params.se_node_placement,
-            SENodePlacement::GaussLobattoLegendre);
+            QuadSetType::GaussLobattoLegendre);
   EXPECT_DOUBLE_EQ(input.solver_params.source_iter_params.tolerance, 1.0e-6);
   EXPECT_EQ(input.solver_params.source_iter_params.max_iterations, 50u);
 }

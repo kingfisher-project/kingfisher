@@ -12,12 +12,6 @@ namespace kingfisher {
 enum class RunMode { FixedSource };
 
 /**
- * @brief Available spectral element ("SE") node placement choices.
- *
- */
-enum class SENodePlacement { GaussLobattoLegendre };
-
-/**
  * @brief Available output file formats.
  *
  */
@@ -57,7 +51,7 @@ enum class SphericalQuadType { TensorProduct };
  * @brief Available generic quadrature sets.
  *
  */
-enum class QuadSetType { GaussLegendre, Trapezoid };
+enum class QuadSetType { GaussLegendre, Trapezoid, GaussLobattoLegendre };
 }  // namespace kingfisher
 
 #endif  // KINGFISHER_UTILS_ENUMS_H_
