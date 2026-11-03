@@ -10,8 +10,7 @@
 
 namespace kingfisher {
 QuadSet1D Create1DQuadSet(const QuadSetType type, const int n_points,
-                          const double a = -1.0, const double b = 1.0) {
-  QuadSet1D quad_set;
+                          const double a, const double b) {
   switch (type) {
     case QuadSetType::Trapezoid:
       return Trapezoid(n_points, a, b);
@@ -22,6 +21,8 @@ QuadSet1D Create1DQuadSet(const QuadSetType type, const int n_points,
       return GaussLegendre(n_points);
     default:
       KingfisherError("QuadSetType passed to Create1DQuadSet not supported.");
+      QuadSet1D empty;
+      return empty;
   }
 }
 
