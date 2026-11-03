@@ -45,6 +45,12 @@ struct QuadSet1D {
   mfem::Vector nodes;
 };
 
+/**
+ * @brief Create a 1D quadrature set given a set of parameters.
+ *
+ * @param quad_set_params Quadrature parameters
+ * @return QuadSet1D
+ */
 QuadSet1D Create1DQuadSet(const QuadSetParams& quad_set_params);
 
 /**
