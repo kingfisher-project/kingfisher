@@ -65,7 +65,7 @@ QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis);
 
 /**
- * @brief Creates a quadrature set on the unit sphere. Specfically, we
+ * @brief Creates a quadrature set on the unit sphere. Specifically, we
  * approximate the integral:
  *
  * \f[
@@ -89,10 +89,15 @@ QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
  * \f]
  *
  * @note For a tensor product, we demand the change of variables occur on
- * the polar angle to remove the Jacobian weighting.
+ * the polar angle to remove the Jacobian weighting. Additionally, the azimuthal
+ * angle is "fast" index.
  *
- * @param quad_set_params
+ * @param angular_params Angular quadrature parameters
  * @return QuadSet1D
+ * @throws KingfisherError The polar quadrature set of a spherical quadrature
+ * must be on [-1,1].
+ * @throws KingfisherError The azimuthal quadrature set of a spherical
+ * quadrature set must be on [0,2\f$pi\f$].
  */
 QuadSet2D SphericalQuadSet(const AngularParams& angular_params);
 
