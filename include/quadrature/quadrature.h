@@ -6,7 +6,12 @@
 
 #include <mfem.hpp>
 
+#include "quadrature/quad_set_params.h"
+
 namespace kingfisher {
+
+struct AngularParams;
+
 /**
  * @brief Defines a quadrature set in 1D.
  *
@@ -18,6 +23,14 @@ struct QuadSet1D {
   /// @brief Quadrature nodes
   mfem::Vector nodes;
 };
+
+/**
+ * @brief Create a 1D quadrature set given a set of parameters.
+ *
+ * @param quad_set_params Quadrature parameters
+ * @return QuadSet1D
+ */
+QuadSet1D Create1DQuadSet(const QuadSetParams& quad_set_params);
 
 /**
  * @brief Defines a quadrature set in 2D.
@@ -50,6 +63,43 @@ struct QuadSet2D {
  */
 QuadSet2D Create2DQuadSet(const QuadSet1D& first_axis,
                           const QuadSet1D& second_axis);
+
+/**
+ * @brief Creates a quadrature set on the unit sphere. Specifically, we
+ * approximate the integral:
+ *
+ * \f[
+ * \int_{4\pi}f(\hat{\Omega})d\hat{\Omega}=\int_{0}^{\pi}\int_{0}^{2\pi}f(\theta,\varphi)
+ * \sin\varphi d\theta d\varphi=\int_{-1}^1\int_{0}^{2\pi}f(\theta,\mu)d\theta
+ * d\mu \f]
+ *
+ * where \f$\mu\equiv \cos\varphi\f$ for \f$\varphi\in [0,\pi]\f$ and
+ * \f$\theta\in [0,2\pi]\f$, with a summation:
+ *
+ * \f[
+ * \int_{4\pi}f(\hat{\Omega})d\hat{\Omega} \approx \sum_{n=0}^N w_n
+ * f(\hat{\Omega}_n). \f]
+ *
+ * If the quadrature set is specified to be approximated with a tensor product
+ * along the azimuthal and polar axes, then we have:
+ *
+ * \f[
+ * \int_{-1}^1\int_{0}^{2\pi}f(\theta,\mu)d\theta d\mu \approx
+ * \sum_{i=1}^{N_{\varphi}}\sum_{j=1}^{N_{\theta}} w_{ij} f(\theta_i,\mu_j).
+ * \f]
+ *
+ * @note For a tensor product, we demand the change of variables occur on
+ * the polar angle to remove the Jacobian weighting. Additionally, the azimuthal
+ * angle is "fast" index.
+ *
+ * @param angular_params Angular quadrature parameters
+ * @return QuadSet1D
+ * @throws KingfisherError The polar quadrature set of a spherical quadrature
+ * must be on [-1,1].
+ * @throws KingfisherError The azimuthal quadrature set of a spherical
+ * quadrature set must be on [0,2\f$pi\f$].
+ */
+QuadSet2D SphericalQuadSet(const AngularParams& angular_params);
 
 /**
  * @brief Integrates a grid function that was evaluated on a quadrature set's

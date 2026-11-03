@@ -68,9 +68,6 @@ constexpr std::array kBoundaryTypes = {
     Entry<BoundaryType>{"vacuum", BoundaryType::Vacuum},
     Entry<BoundaryType>{"reflective", BoundaryType::Reflective}};
 
-constexpr std::array kSENodePlacementStrats = {Entry<SENodePlacement>{
-    "gauss_lobatto_legendre", SENodePlacement::GaussLobattoLegendre}};
-
 constexpr std::array kOutputFormats = {
     Entry<OutputFormat>{"vtkhdf", OutputFormat::VTKHDF}};
 
@@ -89,7 +86,12 @@ constexpr std::array kSphericalQuadTypes = {Entry<SphericalQuadType>{
 
 constexpr std::array kQuadSets = {
     Entry<QuadSetType>{"gauss_legendre", QuadSetType::GaussLegendre},
-    Entry<QuadSetType>{"trapezoid", QuadSetType::Trapezoid}};
+    Entry<QuadSetType>{"trapezoid", QuadSetType::Trapezoid},
+    Entry<QuadSetType>{"gauss_lobatto_legendre",
+                       QuadSetType::GaussLobattoLegendre}};
+
+constexpr std::array kAllowedSpatialQuad = {Entry<QuadSetType>{
+    "gauss_lobatto_legendre", QuadSetType::GaussLobattoLegendre}};
 
 // The name to use for `node` in messages: its key, or for a list entry the key
 // of the list it is in.
@@ -224,7 +226,7 @@ void ReadAngular(const ryml::ConstNodeRef& root, AngularParams& angular) {
 
 void ReadSpatial(const ryml::ConstNodeRef& root, SpatialParams& spatial) {
   spatial.se_node_placement = ParseEnum(
-      Require(root, {"spatial", "node_placement"}), kSENodePlacementStrats);
+      Require(root, {"spatial", "node_placement"}), kAllowedSpatialQuad);
   Require(root, {"spatial", "nodes_per_axis"}).load(&spatial.nodes_per_axis);
 }
 

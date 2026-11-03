@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include "quadrature/quad_set_params.h"
+#include "quadrature/quadrature.h"
 #include "utils/enums.h"
 
 namespace kingfisher {
@@ -93,26 +95,6 @@ struct SourceIterParams {
 };
 
 /**
- * @brief Parameters of a one-dimensional quadrature set.
- *
- */
-struct QuadSetParams {
-  /// @brief Type of quadrature set
-  QuadSetType type = QuadSetType::GaussLegendre;
-
-  /// @brief Number of points in set (`n_directions` in the YAML)
-  std::size_t n_points = 0;
-
-  /// @brief Minimum value (integrate from value). Set by the reader from the
-  /// set's role, not read from the input file.
-  double min = 0.0;
-
-  /// @brief Maximum value (integrate to value). Set by the reader from the
-  /// set's role, not read from the input file.
-  double max = 0.0;
-};
-
-/**
  * @brief `angular` block parameters.
  *
  */
@@ -137,8 +119,10 @@ struct AngularParams {
  *
  */
 struct SpatialParams {
-  /// @brief Node placement strategy within spectral elements
-  SENodePlacement se_node_placement = SENodePlacement::GaussLobattoLegendre;
+  /// @brief Node placement strategy within spectral elements. This can be based
+  /// on any of the available quadrature sets, but we almost always go with the
+  /// GaussLobattoLegendre set.
+  QuadSetType se_node_placement = QuadSetType::GaussLobattoLegendre;
 
   /// @brief Number of nodes along each axis of an element (at least 2).
   std::size_t nodes_per_axis = 2;

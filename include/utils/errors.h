@@ -51,10 +51,9 @@ void KingfisherError(
  *
  * @param message Describes what went wrong and, if possible, how to fix it.
  * @param location The call site, filled in by the compiler.
- * @throws Error If `condition` is true. `what()` is
- *   `<file>:<line>: <message>`.
+ * @throws Error Always. `what()` is `<file>:<line>: <message>`.
  */
-void KingfisherError(
+[[noreturn]] void KingfisherError(
     std::string_view message,
     std::source_location location = std::source_location::current());
 
