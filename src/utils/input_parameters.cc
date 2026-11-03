@@ -90,6 +90,9 @@ constexpr std::array kQuadSets = {
     Entry<QuadSetType>{"gauss_lobatto_legendre",
                        QuadSetType::GaussLobattoLegendre}};
 
+constexpr std::array kAllowedSpatialQuad = {Entry<QuadSetType>{
+    "gauss_lobatto_legendre", QuadSetType::GaussLobattoLegendre}};
+
 // The name to use for `node` in messages: its key, or for a list entry the key
 // of the list it is in.
 std::string KeyName(const ryml::ConstNodeRef& node) {
@@ -222,8 +225,8 @@ void ReadAngular(const ryml::ConstNodeRef& root, AngularParams& angular) {
 }
 
 void ReadSpatial(const ryml::ConstNodeRef& root, SpatialParams& spatial) {
-  spatial.se_node_placement =
-      ParseEnum(Require(root, {"spatial", "node_placement"}), kQuadSets);
+  spatial.se_node_placement = ParseEnum(
+      Require(root, {"spatial", "node_placement"}), kAllowedSpatialQuad);
   Require(root, {"spatial", "nodes_per_axis"}).load(&spatial.nodes_per_axis);
 }
 
