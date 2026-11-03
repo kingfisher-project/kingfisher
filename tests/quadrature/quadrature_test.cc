@@ -641,6 +641,7 @@ TEST_P(SphericalQuadSetConvergenceTest, ErrorDecreasesAsPointsAreAdded) {
 TEST(SphericalQuadSet, TrapezoidPolarAxisConvergesAtSecondOrder) {
   const std::vector<int> polar_counts = {9, 17, 33, 65};
   std::vector<double> errors;
+  errors.reserve(polar_counts.size());
   for (const int n_polar : polar_counts) {
     errors.push_back(ExponentialError(
         {QuadSetType::Trapezoid, QuadSetType::Trapezoid, n_polar, 41}));
